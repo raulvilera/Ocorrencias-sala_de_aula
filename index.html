@@ -720,151 +720,153 @@
     </footer>
 
     <script>
-// ====== CONFIGURAÇÕES ====== 
-const SPREADSHEET_ID = "1u7qMsMHkZT47OZdar5qvshQDRA8XJrLgDjAZVOViAio";
-const SCRIPT_BASE_URL = "https://script.google.com/macros/s/AKfycbwr2-R9puLSqIOlwx1BHMxIul9iM1bbHdYNxBsgjSksFgOPf09oXzIU64u2ppaxwUnx/exec";
+        // ====== CONFIGURAÇÕES ====== 
+        const SPREADSHEET_ID = "1u7qMsMHkZT47OZdar5qvshQDRA8XJrLgDjAZVOViAio";
+        const SCRIPT_BASE_URL = "SUA_URL_DO_WEB_APP";
 
-// Elementos DOM
-const form = document.getElementById('occurrenceForm');
-const professorSelect = document.getElementById('professor');
-const classSelect = document.getElementById('studentClass');
-const studentSelect = document.getElementById('student');
-const registrosTableBody = document.querySelector('#registrosTable tbody');
-const notification = document.getElementById('notification');
-const notificationIcon = notification.querySelector('.icon');
-const notificationContent = notification.querySelector('.content');
-const notificationClose = notification.querySelector('.close');
-const exportBtn = document.getElementById('exportBtn');
+        // Elementos DOM
+        const form = document.getElementById('occurrenceForm');
+        const professorSelect = document.getElementById('professor');
+        const classSelect = document.getElementById('studentClass');
+        const studentSelect = document.getElementById('student');
+        const registrosTableBody = document.querySelector('#registrosTable tbody');
+        const notification = document.getElementById('notification');
+        const notificationIcon = notification.querySelector('.icon');
+        const notificationContent = notification.querySelector('.content');
+        const notificationClose = notification.querySelector('.close');
+        const exportBtn = document.getElementById('exportBtn');
 
-// Lista de professores
-const teacherEmails = {
-    "ALEX LUTH PEREIRA MARANHAO": "luth@prof.educacao.sp.gov.br",
-    "ALEXSANDRA PAULA VARELLA DE SOUZA": "avarella@prof.educacao.sp.gov.br",
-    "ALISON VASCONCELOS BESERRA": "alisonv@prof.educacao.sp.gov.br",
-    "AMAURI TEODORO DE OLIVEIRA": "amaurit@prof.educacao.sp.gov.br",
-    "ANA PAULA DOS SANTOS": "paulasantosa@prof.educacao.sp.gov.br",
-    "ANDREIA DOS SANTOS FREITAS": "sanfreitas@prof.educacao.sp.gov.br",
-    "ANDREIA MADUREIRA REIS": "andreiamadureira@prof.educacao.sp.gov.br",
-    "ANTONIO CARLOS DE OLIVEIRA": "antoniocarloso@prof.educacao.sp.gov.br",
-    "ANTONIO RAMOS DE ARAUJO": "antonioramosaraujo@prof.educacao.sp.gov.br",
-    "ANTONIO WILTON WANDERLEY CABRAL": "antoniowilton@prof.educacao.sp.gov.br",
-    "AUGUSTO LINO PESSOA NETO": "augustolino@prof.educacao.sp.gov.br",
-    "AUREA MARIA DE JESUS MARQUES": "aureamaria@prof.educacao.sp.gov.br",
-    "CAROLINA PERNOMIAN PARUSSOLO": "carolinapernomian@prof.educacao.sp.gov.br",
-    "CASSIA OLIVEIRA ANTONIAZI": "cassiaosilva@prof.educacao.sp.gov.br",
-    "CLAUDINEIA DE AGUIAR LIMA": "aguiarl@prof.educacao.sp.gov.br",
-    "DANIEL DE FREITAS ALMEIDA": "danielalmeida@prof.educacao.sp.gov.br",
-    "DANIEL LOPES BARBOSA": "daniellopesbarbosa@prof.educacao.sp.gov.br",
-    "DANIELA FERREIRA LIMA": "danielafilma@prof.educacao.sp.gov.br",
-    "DANIELLE LUCIA BATISTA DE ALMEIDA": "danieleLucia@prof.educacao.sp.gov.br",
-    "EDIANE VIEIRA DA SILVA": "ediane@prof.educacao.sp.gov.br",
-    "EDILEUSA NUNES PEREIRA": "edileusa@prof.educacao.sp.gov.br",
-    "EDUARDO HENRIQUE DA FONSECA": "henriquefonseca@prof.educacao.sp.gov.br",
-    "ELIANE SANTOS SILVA": "essantos@prof.educacao.sp.gov.br",
-    "ELIAS MONTEIRO DA SILVA": "elias1@prof.educacao.sp.gov.br",
-    "ELISABETE APARECIDA PIRES": "elisabetepires@prof.educacao.sp.gov.br",
-    "ELZA DE FARIA PEREIRA": "elzafariapereira@prof.educacao.sp.gov.br",
-    "EMERSON GABLER DE ALMEIDA": "egabler@prof.educacao.sp.gov.br",
-    "EUZELI ARAUJO DE OLIVEIRA": "euzeli@prof.educacao.sp.gov.br",
-    "FABIANO AUGUSTO PIEDADE": "fabianoaugusto@prof.educacao.sp.gov.br",
-    "FABIO CAMILO": "camilof@prof.educacao.sp.gov.br",
-    "FERNANDO JOSE DA SILVA FILHO": "fernandojs@prof.educacao.sp.gov.br",
-    "FLAVIA CRISTINA APARECIDA BICHLER": "flaviacri@prof.educacao.sp.gov.br",
-    "FLAVIO CARDOSO FLEURY": "flaviofleury@prof.educacao.sp.gov.br",
-    "FRANCISCA EDIVANIA DE MORAIS COSTA": "fedivania@prof.educacao.sp.gov.br",
-    "GABRIELA SERIGHELLI DE MELO": "gabrielaserighelli@prof.educacao.sp.gov.br",
-    "GELSON DE ALMEIDA BATISTA": "gelsonalmeida@prof.educacao.sp.gov.br",
-    "GENILTON DE OLIVEIRA SILVA": "genilton@prof.educacao.sp.gov.br",
-    "GIANI CRISTINA DO PRADO": "gianiprado@prof.educacao.sp.gov.br",
-    "INGRYD CAROLINA SUGUIMOTO VIEIRA": "ingryd@prof.educacao.sp.gov.br",
-    "IVANILDES DOS SANTOS OSHIKAWA": "oshikawa@prof.educacao.sp.gov.br",
-    "JANINA DOS PASSOS BRAGA DE ALMEIDA": "janinabraga@prof.educacao.sp.gov.br",
-    "JOSE APARECIDO DA SILVA": "joseaparecidosilva@prof.educacao.sp.gov.br",
-    "JUAREZ GOMES DE MAGALHAES FILHO": "juarezgomes@prof.educacao.sp.gov.br",
-    "JUREMA SOLEDADE FURINI SANTOS": "juremas@prof.educacao.sp.gov.br",
-    "KATIUSCIA ALVES BOMFIM": "katiusciabornfim@prof.educacao.sp.gov.br",
-    "LUANA CAROLINE ALVES LIMA": "luanalima01@prof.educacao.sp.gov.br",
-    "LUANA DE FREITAS SILVA": "luanafreitas@prof.educacao.sp.gov.br",
-    "LUCIANA NOVAIS CORREIA SANTOS": "novaiscorreia@prof.educacao.sp.gov.br",
-    "LUCIANO MOREIRA DE AZEVEDO": "lucianomoreira@prof.educacao.sp.gov.br",
-    "MARCIEL DA SILVA": "marcielsilva@prof.educacao.sp.gov.br",
-    "MARIA HELENA CUNHA MORO": "marcunha@prof.educacao.sp.gov.br",
-    "MARIA QUITÉRIA FERREIRA DOS SANTOS": "quiteriasantos@prof.educacao.sp.gov.br",
-    "MARINA DA CONCEICAO FRANCISCO SILVA": "marinafrancisco@prof.educacao.sp.gov.br",
-    "MAURICIO DE BARROS SANTOS": "mauriciobsantos@prof.educacao.sp.gov.br",
-    "MICHELE DE PINHO MORAES": "michelepinho@prof.educacao.sp.gov.br",
-    "MOISES ANTONIO DE BARROS": "moisesbarros@prof.educacao.sp.gov.br",
-    "PAULA ARMANI VILA": "paulaarmani@prof.educacao.sp.gov.br",
-    "PAULO ROBERTO DA SILVA ITO": "pauloito@prof.educacao.sp.gov.br",
-    "PEDRO ZANOTTI FILHO": "pedrozanotti@prof.educacao.sp.gov.br",
-    "RAUL PEREIRA VILERA JUNIOR": "vilera@prof.educacao.sp.gov.br",
-    "REGIANE CURTI DE SOUZA OLIVEIRA": "regianecurti@prof.educacao.sp.gov.br",
-    "REGINA DA SILVA CASTRO": "reginasilvacastro@prof.educacao.sp.gov.br",
-    "RICARDO AMERICO DA SILVA": "ricardoamerico@prof.educacao.sp.gov.br",
-    "ROBERTO SALGADO": "robertosalgado@prof.educacao.sp.gov.br",
-    "RODRIGO VIEIRA": "rodrigovieira1@prof.educacao.sp.gov.br",
-    "ROSANGELA CAFASSO MOREIRA": "cafasso@prof.educacao.sp.gov.br",
-    "ROSIMERY DE SOUZA PESSOA": "rosimerypessoa@prof.educacao.sp.gov.br",
-    "ROSMARA DA SILVA CARDOSO": "rosmaracardoso@prof.educacao.sp.gov.br",
-    "SANDRA CRISTINA MACEDO MORAES": "sandracristinamacedo@prof.educacao.sp.gov.br",
-    "SELMA GOMES DA SILVA": "selmagomess@prof.educacao.sp.gov.br",
-    "SERGIO AGRIPINO VILLA NOVA": "sergioagripino@prof.educacao.sp.gov.br",
-    "SOLANGE ALMEIDA DA SILVA": "almeidafazio@prof.educacao.sp.gov.br",
-    "SUZINEIDE SILVA DE FREITAS": "suzineidefreitas@prof.educacao.sp.gov.br",
-    "THIAGO FABIANO BRITO": "thiagofabiano@prof.educacao.sp.gov.br",
-    "TITTO AUGUSTO NASCIMENTO SILVA": "titto@prof.educacao.sp.gov.br",
-    "VANDERSON HYPPOLITO": "vhypolito@prof.educacao.sp.gov.br",
-    "VANESSA IVETE GOMES DOS SANTOS": "vanessaivete@prof.educacao.sp.gov.br",
-    "VANIA PENHA DE BARROS": "vaniapenha@prof.educacao.sp.gov.br",
-    "VIVIANE LEAL CAMERA DE MORAES": "camera@prof.educacao.sp.gov.br",
-    "WILSON RODRIGUES MOTA": "wmota@prof.educacao.sp.gov.br"
-};
+        // Lista de professores
+        const teacherEmails = {
+            "ALEX LUTH PEREIRA MARANHAO": "luth@prof.educacao.sp.gov.br",
+            "ALEXSANDRA PAULA VARELLA DE SOUZA": "avarella@prof.educacao.sp.gov.br",
+            "ALISON VASCONCELOS BESERRA": "alisonv@prof.educacao.sp.gov.br",
+            "AMAURI TEODORO DE OLIVEIRA": "amaurit@prof.educacao.sp.gov.br",
+            "ANA PAULA DOS SANTOS": "paulasantosa@prof.educacao.sp.gov.br",
+            "ANDREIA DOS SANTOS FREITAS": "sanfreitas@prof.educacao.sp.gov.br",
+            "ANDREIA MADUREIRA REIS": "andreiamadureira@prof.educacao.sp.gov.br",
+            "ANTONIO CARLOS DE OLIVEIRA": "antoniocarloso@prof.educacao.sp.gov.br",
+            "ANTONIO RAMOS DE ARAUJO": "antonioramosaraujo@prof.educacao.sp.gov.br",
+            "ANTONIO WILTON WANDERLEY CABRAL": "antoniowilton@prof.educacao.sp.gov.br",
+            "AUGUSTO LINO PESSOA NETO": "augustolino@prof.educacao.sp.gov.br",
+            "AUREA MARIA DE JESUS MARQUES": "aureamaria@prof.educacao.sp.gov.br",
+            "CAROLINA PERNOMIAN PARUSSOLO": "carolinapernomian@prof.educacao.sp.gov.br",
+            "CASSIA OLIVEIRA ANTONIAZI": "cassiaosilva@prof.educacao.sp.gov.br",
+            "CLAUDINEIA DE AGUIAR LIMA": "aguiarl@prof.educacao.sp.gov.br",
+            "DANIEL DE FREITAS ALMEIDA": "danielalmeida@prof.educacao.sp.gov.br",
+            "DANIEL LOPES BARBOSA": "daniellopesbarbosa@prof.educacao.sp.gov.br",
+            "DANIELA FERREIRA LIMA": "danielafilma@prof.educacao.sp.gov.br",
+            "DANIELLE LUCIA BATISTA DE ALMEIDA": "danieleLucia@prof.educacao.sp.gov.br",
+            "EDIANE VIEIRA DA SILVA": "ediane@prof.educacao.sp.gov.br",
+            "EDILEUSA NUNES PEREIRA": "edileusa@prof.educacao.sp.gov.br",
+            "EDUARDO HENRIQUE DA FONSECA": "henriquefonseca@prof.educacao.sp.gov.br",
+            "ELIANE SANTOS SILVA": "essantos@prof.educacao.sp.gov.br",
+            "ELIAS MONTEIRO DA SILVA": "elias1@prof.educacao.sp.gov.br",
+            "ELISABETE APARECIDA PIRES": "elisabetepires@prof.educacao.sp.gov.br",
+            "ELZA DE FARIA PEREIRA": "elzafariapereira@prof.educacao.sp.gov.br",
+            "EMERSON GABLER DE ALMEIDA": "egabler@prof.educacao.sp.gov.br",
+            "EUZELI ARAUJO DE OLIVEIRA": "euzeli@prof.educacao.sp.gov.br",
+            "FABIANO AUGUSTO PIEDADE": "fabianoaugusto@prof.educacao.sp.gov.br",
+            "FABIO CAMILO": "camilof@prof.educacao.sp.gov.br",
+            "FERNANDO JOSE DA SILVA FILHO": "fernandojs@prof.educacao.sp.gov.br",
+            "FLAVIA CRISTINA APARECIDA BICHLER": "flaviacri@prof.educacao.sp.gov.br",
+            "FLAVIO CARDOSO FLEURY": "flaviofleury@prof.educacao.sp.gov.br",
+            "FRANCISCA EDIVANIA DE MORAIS COSTA": "fedivania@prof.educacao.sp.gov.br",
+            "GABRIELA SERIGHELLI DE MELO": "gabrielaserighelli@prof.educacao.sp.gov.br",
+            "GELSON DE ALMEIDA BATISTA": "gelsonalmeida@prof.educacao.sp.gov.br",
+            "GENILTON DE OLIVEIRA SILVA": "genilton@prof.educacao.sp.gov.br",
+            "GIANI CRISTINA DO PRADO": "gianiprado@prof.educacao.sp.gov.br",
+            "INGRYD CAROLINA SUGUIMOTO VIEIRA": "ingryd@prof.educacao.sp.gov.br",
+            "IVANILDES DOS SANTOS OSHIKAWA": "oshikawa@prof.educacao.sp.gov.br",
+            "JANINA DOS PASSOS BRAGA DE ALMEIDA": "janinabraga@prof.educacao.sp.gov.br",
+            "JOSE APARECIDO DA SILVA": "joseaparecidosilva@prof.educacao.sp.gov.br",
+            "JUAREZ GOMES DE MAGALHAES FILHO": "juarezgomes@prof.educacao.sp.gov.br",
+            "JUREMA SOLEDADE FURINI SANTOS": "juremas@prof.educacao.sp.gov.br",
+            "KATIUSCIA ALVES BOMFIM": "katiusciabornfim@prof.educacao.sp.gov.br",
+            "LUANA CAROLINE ALVES LIMA": "luanalima01@prof.educacao.sp.gov.br",
+            "LUANA DE FREITAS SILVA": "luanafreitas@prof.educacao.sp.gov.br",
+            "LUCIANA NOVAIS CORREIA SANTOS": "novaiscorreia@prof.educacao.sp.gov.br",
+            "LUCIANO MOREIRA DE AZEVEDO": "lucianomoreira@prof.educacao.sp.gov.br",
+            "MARCIEL DA SILVA": "marcielsilva@prof.educacao.sp.gov.br",
+            "MARIA HELENA CUNHA MORO": "marcunha@prof.educacao.sp.gov.br",
+            "MARIA QUITÉRIA FERREIRA DOS SANTOS": "quiteriasantos@prof.educacao.sp.gov.br",
+            "MARINA DA CONCEICAO FRANCISCO SILVA": "marinafrancisco@prof.educacao.sp.gov.br",
+            "MAURICIO DE BARROS SANTOS": "mauriciobsantos@prof.educacao.sp.gov.br",
+            "MICHELE DE PINHO MORAES": "michelepinho@prof.educacao.sp.gov.br",
+            "MOISES ANTONIO DE BARROS": "moisesbarros@prof.educacao.sp.gov.br",
+            "PAULA ARMANI VILA": "paulaarmani@prof.educacao.sp.gov.br",
+            "PAULO ROBERTO DA SILVA ITO": "pauloito@prof.educacao.sp.gov.br",
+            "PEDRO ZANOTTI FILHO": "pedrozanotti@prof.educacao.sp.gov.br",
+            "RAUL PEREIRA VILERA JUNIOR": "vilera@prof.educacao.sp.gov.br",
+            "REGIANE CURTI DE SOUZA OLIVEIRA": "regianecurti@prof.educacao.sp.gov.br",
+            "REGINA DA SILVA CASTRO": "reginasilvacastro@prof.educacao.sp.gov.br",
+            "RICARDO AMERICO DA SILVA": "ricardoamerico@prof.educacao.sp.gov.br",
+            "ROBERTO SALGADO": "robertosalgado@prof.educacao.sp.gov.br",
+            "RODRIGO VIEIRA": "rodrigovieira1@prof.educacao.sp.gov.br",
+            "ROSANGELA CAFASSO MOREIRA": "cafasso@prof.educacao.sp.gov.br",
+            "ROSIMERY DE SOUZA PESSOA": "rosimerypessoa@prof.educacao.sp.gov.br",
+            "ROSMARA DA SILVA CARDOSO": "rosmaracardoso@prof.educacao.sp.gov.br",
+            "SANDRA CRISTINA MACEDO MORAES": "sandracristinamacedo@prof.educacao.sp.gov.br",
+            "SELMA GOMES DA SILVA": "selmagomess@prof.educacao.sp.gov.br",
+            "SERGIO AGRIPINO VILLA NOVA": "sergioagripino@prof.educacao.sp.gov.br",
+            "SOLANGE ALMEIDA DA SILVA": "almeidafazio@prof.educacao.sp.gov.br",
+            "SUZINEIDE SILVA DE FREITAS": "suzineidefreitas@prof.educacao.sp.gov.br",
+            "THIAGO FABIANO BRITO": "thiagofabiano@prof.educacao.sp.gov.br",
+            "TITTO AUGUSTO NASCIMENTO SILVA": "titto@prof.educacao.sp.gov.br",
+            "VANDERSON HYPPOLITO": "vhypolito@prof.educacao.sp.gov.br",
+            "VANESSA IVETE GOMES DOS SANTOS": "vanessaivete@prof.educacao.sp.gov.br",
+            "VANIA PENHA DE BARROS": "vaniapenha@prof.educacao.sp.gov.br",
+            "VIVIANE LEAL CAMERA DE MORAES": "camera@prof.educacao.sp.gov.br",
+            "WILSON RODRIGUES MOTA": "wmota@prof.educacao.sp.gov.br"
+        };
 
-// Preencher dropdown de professores
-const teacherNames = Object.keys(teacherEmails);
-teacherNames.forEach(name => {
-    const opt = document.createElement('option');
-    opt.value = name;
-    opt.textContent = name;
-    professorSelect.appendChild(opt);
-});
-document.getElementById('totalTeachers').textContent = teacherNames.length;
-
-// Ajuste de data padrão
-document.getElementById('occurrenceDate').value = new Date().toISOString().split('T')[0];
-
-// Helpers - notificações
-function showNotification(type, message) {
-    notification.className = 'notification show ' + (type === 'success' ? 'success' : 'error');
-    notificationContent.textContent = message;
-    notificationIcon.className = type === 'success' ? 'fas fa-check-circle icon' : 'fas fa-exclamation-circle icon';
-    setTimeout(() => notification.classList.remove('show'), 7000);
-}
-notificationClose.addEventListener('click', () => notification.classList.remove('show'));
-
-// Funções de API (corrigidas para usar sempre SCRIPT_BASE_URL)
-async function apiGet(action, params = {}) {
-    const query = new URLSearchParams(params).toString();
-    try {
-        const res = await fetch(`${SCRIPT_BASE_URL}?action=${action}&${query}`);
-        return await res.json();
-    } catch (error) {
-        return { status: 'error', message: 'Falha na conexão: ' + error.message };
-    }
-}
-
-async function apiPost(action, payload) {
-    try {
-        const res = await fetch(SCRIPT_BASE_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action, ...payload })
+        // Preencher dropdown de professores
+        const teacherNames = Object.keys(teacherEmails);
+        teacherNames.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            professorSelect.appendChild(opt);
         });
-        return await res.json();
-    } catch (error) {
-        return { status: 'error', message: 'Falha na conexão: ' + error.message };
-    }
-}
+        document.getElementById('totalTeachers').textContent = teacherNames.length;
+
+        // Ajuste de data padrão
+        const today = new Date();
+        document.getElementById('occurrenceDate').value = today.toISOString().split('T')[0];
+
+        // Helpers - notificações
+        function showNotification(type, message) {
+            notification.className = 'notification show ' + (type === 'success' ? 'success' : 'error');
+            notificationContent.textContent = message;
+            notificationIcon.className = type === 'success' ? 'fas fa-check-circle icon' : 'fas fa-exclamation-circle icon';
+            setTimeout(() => notification.classList.remove('show'), 7000);
+        }
+        notificationClose.addEventListener('click', () => notification.classList.remove('show'));
+
+        // Funções de API
+        async function apiGet(action, params = {}) {
+            const query = new URLSearchParams(params).toString();
+            const url = `${SCRIPT_BASE_URL}?action=${action}&${query}`;
+            try {
+                const res = await fetch(url);
+                return await res.json();
+            } catch (error) {
+                return { status: 'error', message: 'Falha na conexão: ' + error.message };
+            }
+        }
+
+        async function apiPost(action, payload) {
+            try {
+                const res = await fetch(SCRIPT_BASE_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action, ...payload })
+                });
+                return await res.json();
+            } catch (error) {
+                return { status: 'error', message: 'Falha na conexão: ' + error.message };
+            }
+        }
 
         // Carregar alunos ao trocar a turma
         classSelect.addEventListener('change', async function () {
@@ -1086,8 +1088,3 @@ async function apiPost(action, payload) {
     </script>
 </body>
 </html>
-
-
-
-
-

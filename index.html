@@ -659,7 +659,7 @@ notification.classList.remove('show'));
         // Check if SCRIPT_BASE_URL configured 
         function isScriptUrlValid() { 
             return SCRIPT_BASE_URL && !SCRIPT_BASE_URL.includes('https://script.google.com/macros/s/AKfycbxRDiyiWuX4YaHyoaxQzOnh8Gs48wR8Pwsrr9qjbDP04lyOxRKGJLb6Y5IenGvP3JwU/exec') && 
-SCRIPT_BASE_URL.trim() !== ''; 
+"https://script.google.com/macros/s/AKfycbxRDiyiWuX4YaHyoaxQzOnh8Gs48wR8Pwsrr9qjbDP04lyOxRKGJLb6Y5IenGvP3JwU/exec"L.trim() !== ''; 
         } 
  
         // Robust API helpers: handle non-JSON responses (HTML/XML) gracefully 
@@ -670,7 +670,7 @@ SCRIPT_BASE_URL.trim() !== '';
                 return { status: 'error', message: msg }; 
             } 
  
-            const url = SCRIPT_BASE_URL + '?' + new URLSearchParams({ ...params, 
+            const url = "https://script.google.com/macros/s/AKfycbxRDiyiWuX4YaHyoaxQzOnh8Gs48wR8Pwsrr9qjbDP04lyOxRKGJLb6Y5IenGvP3JwU/exec" + '?' + new URLSearchParams({ ...params, 
 spreadsheetId: SPREADSHEET_ID }); 
             try { 
                 const res = await fetch(url, { mode: 'cors', headers: { 'Accept': 
@@ -964,4 +964,5 @@ arquivo HTML.</td></tr>';
 </body> 
 
 </html> 
+
 

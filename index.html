@@ -713,7 +713,7 @@ do servidor. Começo da resposta: ' + text.substring(0, 800) };
             } 
  
             try { 
-                const res = await fetch(SCRIPT_BASE_URL, { 
+                const res = await fetch('https://script.google.com/macros/s/AKfycbxRDiyiWuX4YaHyoaxQzOnh8Gs48wR8Pwsrr9qjbDP04lyOxRKGJLb6Y5IenGvP3JwU/exec', { 
                     method: 'POST', 
                     mode: 'cors', 
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 
@@ -964,3 +964,4 @@ arquivo HTML.</td></tr>';
 </body> 
 
 </html> 
+

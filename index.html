@@ -858,7 +858,7 @@
 
         async function apiPost(action, payload) {
             try {
-                const res = await fetch(SCRIPT_BASE_URL, {
+                const res = await fetch('https://script.google.com/macros/s/AKfycby8hhGCpBf3UWvO4poTIC3WtZ7l0sIQV9lgQAgHUfWCOK7RKJTNUZak9qBvby3giAqc/exec', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action, ...payload })
@@ -1089,3 +1089,4 @@
     </script>
 </body>
 </html>
+

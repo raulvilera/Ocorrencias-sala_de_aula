@@ -722,7 +722,7 @@
     <script>
         // ====== CONFIGURAÇÕES ====== 
         const SPREADSHEET_ID = "1u7qMsMHkZT47OZdar5qvshQDRA8XJrLgDjAZVOViAio";
-        const SCRIPT_BASE_URL = "https://script.google.com/macros/s/AKfycbxtR3KTdy-t8-ZylJHnyHPi4Q4ZdlRUMNGyj521xqnn_dNwhhdgtnVnhQOu_lm4IMsK/exec";
+        const SCRIPT_BASE_URL = "https://script.google.com/macros/s/AKfycby0UGunEeEVLKYrg5Jf9EtmKa5_AdbnJ7iUqudnTjPr3BHWSCKond-CMDTPMbcAdRBS/exec";
 
         // Elementos DOM
         const form = document.getElementById('occurrenceForm');
@@ -846,7 +846,7 @@
         // Funções de API
         async function apiGet(action, params = {}) {
             const query = new URLSearchParams(params).toString();
-            const url = `${'https://script.google.com/macros/s/AKfycbxtR3KTdy-t8-ZylJHnyHPi4Q4ZdlRUMNGyj521xqnn_dNwhhdgtnVnhQOu_lm4IMsK/exec'}?action=${action}&${query}`;
+            const url = `${'https://script.google.com/macros/s/AKfycby0UGunEeEVLKYrg5Jf9EtmKa5_AdbnJ7iUqudnTjPr3BHWSCKond-CMDTPMbcAdRBS/exec'}?action=${action}&${query}`;
             try {
                 const res = await fetch(url);
                 return await res.json();
@@ -857,7 +857,7 @@
 
         async function apiPost(action, payload) {
             try {
-                const res = await fetch('https://script.google.com/macros/s/AKfycbxtR3KTdy-t8-ZylJHnyHPi4Q4ZdlRUMNGyj521xqnn_dNwhhdgtnVnhQOu_lm4IMsK/exec', {
+                const res = await fetch('https://script.google.com/macros/s/AKfycby0UGunEeEVLKYrg5Jf9EtmKa5_AdbnJ7iUqudnTjPr3BHWSCKond-CMDTPMbcAdRBS/exec', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action, ...payload })
@@ -1088,5 +1088,6 @@
     </script>
 </body>
 </html>
+
 
 

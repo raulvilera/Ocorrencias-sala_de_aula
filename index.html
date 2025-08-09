@@ -722,7 +722,7 @@
     <script>
         // ====== CONFIGURAÇÕES ====== 
         const SPREADSHEET_ID = "1u7qMsMHkZT47OZdar5qvshQDRA8XJrLgDjAZVOViAio";
-        const SCRIPT_BASE_URL = "https://script.google.com/macros/s/AKfycby8hhGCpBf3UWvO4poTIC3WtZ7l0sIQV9lgQAgHUfWCOK7RKJTNUZak9qBvby3giAqc/exec";
+        const SCRIPT_BASE_URL = "https://script.google.com/macros/s/AKfycbwr2-R9puLSqIOlwx1BHMxIul9iM1bbHdYNxBsgjSksFgOPf09oXzIU64u2ppaxwUnx/exec";
 
         // Elementos DOM
         const form = document.getElementById('occurrenceForm');
@@ -846,7 +846,7 @@
         // Funções de API
         async function apiGet(action, params = {}) {
             const query = new URLSearchParams(params).toString();
-            const url = `${'https://script.google.com/macros/s/AKfycby8hhGCpBf3UWvO4poTIC3WtZ7l0sIQV9lgQAgHUfWCOK7RKJTNUZak9qBvby3giAqc/exec'
+            const url = `${'https://script.google.com/macros/s/AKfycbwr2-R9puLSqIOlwx1BHMxIul9iM1bbHdYNxBsgjSksFgOPf09oXzIU64u2ppaxwUnx/exec'
 }?action=${action}&${query}`;
             try {
                 const res = await fetch(url);
@@ -858,7 +858,7 @@
 
         async function apiPost(action, payload) {
             try {
-                const res = await fetch('https://script.google.com/macros/s/AKfycby8hhGCpBf3UWvO4poTIC3WtZ7l0sIQV9lgQAgHUfWCOK7RKJTNUZak9qBvby3giAqc/exec', {
+                const res = await fetch('https://script.google.com/macros/s/AKfycbwr2-R9puLSqIOlwx1BHMxIul9iM1bbHdYNxBsgjSksFgOPf09oXzIU64u2ppaxwUnx/exec', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action, ...payload })
@@ -1089,5 +1089,6 @@
     </script>
 </body>
 </html>
+
 
 

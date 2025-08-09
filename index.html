@@ -856,7 +856,7 @@
         // Robust API helpers
         async function apiGet(params) {
             if (!isScriptUrlValid()) {
-                const msg = 'URL do Web App não configurada. Por favor, defina a constante SCRIPT_BASE_URL com o URL do seu Web App do Google.';
+                const msg = 'https://script.google.com/macros/s/AKfycbxRDiyiWuX4YaHyoaxQzOnh8Gs48wR8Pwsrr9qjbDP04lyOxRKGJLb6Y5IenGvP3JwU/exec';
                 console.warn(msg);
                 return { status: 'error', message: msg };
             }
@@ -888,13 +888,13 @@
 
         async function apiPost(action, payload) {
             if (!isScriptUrlValid()) {
-                const msg = 'URL do Web App não configurada. Por favor, defina a constante SCRIPT_BASE_URL com o URL do seu Web App do Google.';
+                const msg = 'https://script.google.com/macros/s/AKfycbxRDiyiWuX4YaHyoaxQzOnh8Gs48wR8Pwsrr9qjbDP04lyOxRKGJLb6Y5IenGvP3JwU/exec';
                 console.warn(msg);
                 return { status: 'error', message: msg };
             }
 
             try {
-                const res = await fetch(SCRIPT_BASE_URL, {
+                const res = await fetch('https://script.google.com/macros/s/AKfycbxRDiyiWuX4YaHyoaxQzOnh8Gs48wR8Pwsrr9qjbDP04lyOxRKGJLb6Y5IenGvP3JwU/exec', {
                     method: 'POST',
                     mode: 'cors',
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -1150,10 +1150,10 @@
         if (isScriptUrlValid()) {
             carregarOcorrencias();
         } else {
-            showNotification('error', 'URL do Web App não configurada. Por favor, defina a constante SCRIPT_BASE_URL com o URL do seu Web App do Google.');
+            showNotification('error','https://script.google.com/macros/s/AKfycbxRDiyiWuX4YaHyoaxQzOnh8Gs48wR8Pwsrr9qjbDP04lyOxRKGJLb6Y5IenGvP3JwU/exec');
             registrosTableBody.innerHTML = '<tr><td colspan="7" class="no-records">URL do Web App não configurada. Defina a constante SCRIPT_BASE_URL no arquivo HTML.</td></tr>';
-        }
     </script>
 </body>
 </html>
+
 

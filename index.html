@@ -1504,7 +1504,7 @@
             const SHEET_NAME = "OCORRENCIASDOSPROFESSORES";
             const LOG_SHEET_NAME = "REGISTRO_OCORRENCIAS";
             const STUDENT_SHEET_NAME = "BANCODEDADOSGERAL";
-            const SCRIPT_BASE_URL = "https://script.google.com/macros/s/AKfycbyk006UFEwl0GLR2CKnMa7J-u7K-Wx6DTvlw--hvnaUSMqmTTACm7mhjmwDZ_5bqI7p/exec";
+            const SCRIPT_BASE_URL = "https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec";
 
             // Armazenar gráficos
             const charts = {};
@@ -1697,7 +1697,7 @@
                     studentOccurrencesCount.textContent = "Carregando...";
                     
                     // Buscar estatísticas do aluno
-                    const url = `${SCRIPT_BASE_URL}?action=getStudentStats&student=${encodeURIComponent(this.value)}&spreadsheetId=${SPREADSHEET_ID}`;
+                    const url = `${"https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec"}?action=getStudentStats&student=${encodeURIComponent(this.value)}&spreadsheetId=${SPREADSHEET_ID}`;
                     
                     safeFetch(url)
                         .then(data => {
@@ -2079,7 +2079,7 @@
             // Carregar estatísticas de alunos por período
             async function loadStudentPeriodStats() {
                 try {
-                    const url = `${SCRIPT_BASE_URL}?action=getStudentPeriodStats&spreadsheetId=${SPREADSHEET_ID}&sheetName=${STUDENT_SHEET_NAME}`;
+                    const url = `${"https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec"}?action=getStudentPeriodStats&spreadsheetId=${SPREADSHEET_ID}&sheetName=${STUDENT_SHEET_NAME}`;
                     const data = await safeFetch(url);
                     
                     if (data && data.status === "success") {
@@ -2218,7 +2218,7 @@
             // Função para excluir ocorrência
             async function deleteOccurrence(occurrenceId) {
                 try {
-                    const response = await safeFetch(SCRIPT_BASE_URL, {
+                    const response = await safeFetch("https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'

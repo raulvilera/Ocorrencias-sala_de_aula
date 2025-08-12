@@ -1091,7 +1091,50 @@
                                             <div class="student-select-container">
                                                 <select id="studentClass" required>
                                                     <option value="">Selecione a turma</option>
-                                                    <!-- Turmas serão preenchidas via JS -->
+                                                    <option value="6° ANO A MANHA">6° ANO A MANHA</option>
+                                                    <option value="6° ANO B MANHA">6° ANO B MANHA</option>
+                                                    <option value="6° ANO C MANHA">6° ANO C MANHA</option>
+                                                    <option value="6° ANO D MANHA">6° ANO D MANHA</option>
+                                                    <option value="6° ANO E TARDE">6° ANO E TARDE</option>
+                                                    <option value="6° ANO F TARDE">6° ANO F TARDE</option>
+                                                    <option value="7° ANO A TARDE">7° ANO A TARDE</option>
+                                                    <option value="7° ANO B TARDE">7° ANO B TARDE</option>
+                                                    <option value="7° ANO C TARDE">7° ANO C TARDE</option>
+                                                    <option value="7° ANO D TARDE">7° ANO D TARDE</option>
+                                                    <option value="7° ANO E TARDE">7° ANO E TARDE</option>
+                                                    <option value="7° ANO F TARDE">7° ANO F TARDE</option>
+                                                    <option value="8° ANO A TARDE">8° ANO A TARDE</option>
+                                                    <option value="8° ANO B TARDE">8° ANO B TARDE</option>
+                                                    <option value="8° ANO C TARDE">8° ANO C TARDE</option>
+                                                    <option value="8° ANO D TARDE">8° ANO D TARDE</option>
+                                                    <option value="9° ANO A TARDE">9° ANO A TARDE</option>
+                                                    <option value="9° ANO B TARDE">9° ANO B TARDE</option>
+                                                    <option value="9° ANO C TARDE">9° ANO C TARDE</option>
+                                                    <option value="9° ANO D TARDE">9° ANO D TARDE</option>
+                                                    <option value="1ª SERIE A MANHA">1ª SERIE A MANHA</option>
+                                                    <option value="1ª SERIE B MANHA">1ª SERIE B MANHA</option>
+                                                    <option value="1ª SERIE C MANHA">1ª SERIE C MANHA</option>
+                                                    <option value="1ª SERIE D MANHA">1ª SERIE D MANHA</option>
+                                                    <option value="1ª SERIE E MANHA">1ª SERIE E MANHA</option>
+                                                    <option value="1ª SERIE F MANHA">1ª SERIE F MANHA</option>
+                                                    <option value="1ª SERIE G TARDE">1ª SERIE G TARDE</option>
+                                                    <option value="1ª SERIE H NOITE">1ª SERIE H NOITE</option>
+                                                    <option value="1ª SERIE I NOITE">1ª SERIE I NOITE</option>
+                                                    <option value="2ª SERIE A MANHA">2ª SERIE A MANHA</option>
+                                                    <option value="2ª SERIE B MANHA">2ª SERIE B MANHA</option>
+                                                    <option value="2ª SERIE C MANHA">2ª SERIE C MANHA</option>
+                                                    <option value="2ª SERIE D MANHA">2ª SERIE D MANHA</option>
+                                                    <option value="2ª SERIE E MANHA">2ª SERIE E MANHA</option>
+                                                    <option value="2ª SERIE F NOITE">2ª SERIE F NOITE</option>
+                                                    <option value="2ª SERIE G NOITE">2ª SERIE G NOITE</option>
+                                                    <option value="2ª SERIE H NOITE">2ª SERIE H NOITE</option>
+                                                    <option value="3ª SERIE A MANHA">3ª SERIE A MANHA</option>
+                                                    <option value="3ª SERIE B MANHA">3ª SERIE B MANHA</option>
+                                                    <option value="3ª SERIE C MANHA">3ª SERIE C MANHA</option>
+                                                    <option value="3ª SERIE D NOITE">3ª SERIE D NOITE</option>
+                                                    <option value="3ª SERIE E NOITE">3ª SERIE E NOITE</option>
+                                                    <option value="3ª SERIE F NOITE">3ª SERIE F NOITE</option>
+                                                    <option value="4050 - ADMINISTRAÇÃO - 2ª SERIE A MANHA">4050 - ADMINISTRAÇÃO - 2ª SERIE A MANHA</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -1222,7 +1265,7 @@
                                                     <th>Ações</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody id="registrosTableBody">
                                                 <!-- Os registros serão carregados via JavaScript -->
                                             </tbody>
                                         </table>
@@ -1342,6 +1385,7 @@
             Sistema de Gestão Escolar © 2025
         </div>
     </footer>
+    
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {

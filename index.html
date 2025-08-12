@@ -1504,7 +1504,7 @@
             const SPREADSHEET_ID = "1u7qMsMHkZT47OZdar5qvshQDRA8XJrLgDjAZVOViAio";
             const SHEET_NAME = "OCORRENCIASDOSPROFESSORES";
             const STUDENT_SHEET_NAME = "TURMAS";
-            const SCRIPT_BASE_URL = "https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec";
+            const SCRIPT_BASE_URL = "https://script.google.com/macros/s/AKfycbwr2-R9puLSqIOlwx1BHMxIul9iM1bbHdYNxBsgjSksFgOPf09oXzIU64u2ppaxwUnx/exec";
 
             // Armazenar gráficos
             const charts = {};
@@ -1682,7 +1682,7 @@
                 }
 
                 // Buscar alunos reais da planilha
-                const url = `${"https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec"}?action=getStudents&class=${encodeURIComponent(selectedClass)}`;
+                const url = `${"https://script.google.com/macros/s/AKfycbwr2-R9puLSqIOlwx1BHMxIul9iM1bbHdYNxBsgjSksFgOPf09oXzIU64u2ppaxwUnx/exec"}?action=getStudents&class=${encodeURIComponent(selectedClass)}`;
                 
                 safeFetch(url)
                     .then(data => {
@@ -1728,7 +1728,7 @@
                     studentOccurrencesCount.textContent = "Carregando...";
                     
                     // Buscar estatísticas do aluno
-                    const url = `${"https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec"}?action=getStudentStats&student=${encodeURIComponent(this.value)}`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbwr2-R9puLSqIOlwx1BHMxIul9iM1bbHdYNxBsgjSksFgOPf09oXzIU64u2ppaxwUnx/exec"}?action=getStudentStats&student=${encodeURIComponent(this.value)}`;
                     
                     safeFetch(url)
                         .then(data => {
@@ -1803,7 +1803,7 @@
             async function sendFormData(formData, retries = 3) {
                 for (let attempt = 1; attempt <= retries; attempt++) {
                     try {
-                        const response = await safeFetch("https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec", {
+                        const response = await safeFetch("https://script.google.com/macros/s/AKfycbwr2-R9puLSqIOlwx1BHMxIul9iM1bbHdYNxBsgjSksFgOPf09oXzIU64u2ppaxwUnx/exec", {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -1836,7 +1836,7 @@
                 registrosTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Carregando registros...</td></tr>';
                 
                 try {
-                    const url = `${"https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec"}?action=getAllOccurrences`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbwr2-R9puLSqIOlwx1BHMxIul9iM1bbHdYNxBsgjSksFgOPf09oXzIU64u2ppaxwUnx/exec"}?action=getAllOccurrences`;
                     const data = await safeFetch(url);
                     
                     if (data && data.status === "success" && Array.isArray(data.occurrences)) {
@@ -1889,7 +1889,7 @@
                                 row.parentNode.insertBefore(historyRow, row.nextSibling);
                                 
                                 try {
-                                    const historyUrl = `${"https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec"}?action=getStudentHistory&student=${encodeURIComponent(occurrence.student)}`;
+                                    const historyUrl = `${"https://script.google.com/macros/s/AKfycbwr2-R9puLSqIOlwx1BHMxIul9iM1bbHdYNxBsgjSksFgOPf09oXzIU64u2ppaxwUnx/exec"}?action=getStudentHistory&student=${encodeURIComponent(occurrence.student)}`;
                                     const historyData = await safeFetch(historyUrl);
                                     
                                     if (historyData && historyData.status === "success" && Array.isArray(historyData.history)) {
@@ -2108,7 +2108,7 @@
             // Carregar estatísticas de alunos por período
             async function loadStudentPeriodStats() {
                 try {
-                    const url = `${"https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec"}?action=getStudentPeriodStats`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbwr2-R9puLSqIOlwx1BHMxIul9iM1bbHdYNxBsgjSksFgOPf09oXzIU64u2ppaxwUnx/exec"}?action=getStudentPeriodStats`;
                     const data = await safeFetch(url);
                     
                     if (data && data.status === "success") {
@@ -2196,7 +2196,7 @@
             // Função para editar ocorrência
             async function editOccurrence(occurrenceId) {
                 try {
-                    const url = `${"https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec"}?action=getOccurrenceById&id=${occurrenceId}`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbwr2-R9puLSqIOlwx1BHMxIul9iM1bbHdYNxBsgjSksFgOPf09oXzIU64u2ppaxwUnx/exec"}?action=getOccurrenceById&id=${occurrenceId}`;
                     const response = await safeFetch(url);
                     
                     if (response && response.status === "success" && response.occurrence) {

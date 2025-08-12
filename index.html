@@ -1638,7 +1638,7 @@
                 }
 
                 // Buscar alunos reais da planilha
-                const url = `${SCRIPT_BASE_URL}?action=getStudents&class=${encodeURIComponent(selectedClass)}`;
+                const url = `${"https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec"}?action=getStudents&class=${encodeURIComponent(selectedClass)}`;
                 
                 safeFetch(url)
                     .then(data => {
@@ -1684,7 +1684,7 @@
                     studentOccurrencesCount.textContent = "Carregando...";
                     
                     // Buscar estatísticas do aluno
-                    const url = `${SCRIPT_BASE_URL}?action=getStudentStats&student=${encodeURIComponent(this.value)}`;
+                    const url = `${"https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec"}?action=getStudentStats&student=${encodeURIComponent(this.value)}`;
                     
                     safeFetch(url)
                         .then(data => {
@@ -1759,7 +1759,7 @@
             async function sendFormData(formData, retries = 3) {
                 for (let attempt = 1; attempt <= retries; attempt++) {
                     try {
-                        const response = await safeFetch(SCRIPT_BASE_URL, {
+                        const response = await safeFetch("https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec", {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -1792,7 +1792,7 @@
                 registrosTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Carregando registros...</td></tr>';
                 
                 try {
-                    const url = `${SCRIPT_BASE_URL}?action=getAllOccurrences`;
+                    const url = `${"https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec"}?action=getAllOccurrences`;
                     const data = await safeFetch(url);
                     
                     if (data && data.status === "success" && Array.isArray(data.occurrences)) {
@@ -1845,7 +1845,7 @@
                                 row.parentNode.insertBefore(historyRow, row.nextSibling);
                                 
                                 try {
-                                    const historyUrl = `${SCRIPT_BASE_URL}?action=getStudentHistory&student=${encodeURIComponent(occurrence.student)}`;
+                                    const historyUrl = `${"https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec"}?action=getStudentHistory&student=${encodeURIComponent(occurrence.student)}`;
                                     const historyData = await safeFetch(historyUrl);
                                     
                                     if (historyData && historyData.status === "success" && Array.isArray(historyData.history)) {
@@ -2064,7 +2064,7 @@
             // Carregar estatísticas de alunos por período
             async function loadStudentPeriodStats() {
                 try {
-                    const url = `${SCRIPT_BASE_URL}?action=getStudentPeriodStats`;
+                    const url = `${"https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec"}?action=getStudentPeriodStats`;
                     const data = await safeFetch(url);
                     
                     if (data && data.status === "success") {
@@ -2152,7 +2152,7 @@
             // Função para editar ocorrência
             async function editOccurrence(occurrenceId) {
                 try {
-                    const url = `${SCRIPT_BASE_URL}?action=getOccurrenceById&id=${occurrenceId}`;
+                    const url = `${"https://script.google.com/macros/s/AKfycby9XLQKXMcoVXx44if57ZyKmZkfjS3nQy9jlwJCh0oqtYwWfABbkHUTtGOMdw-bEFg/exec"}?action=getOccurrenceById&id=${occurrenceId}`;
                     const response = await safeFetch(url);
                     
                     if (response && response.status === "success" && response.occurrence) {

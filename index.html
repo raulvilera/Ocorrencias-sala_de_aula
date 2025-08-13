@@ -27,6 +27,8 @@
             --morning-color: #3498db;
             --afternoon-color: #f39c12;
             --night-color: #9b59b6;
+            --tab-active: #1a73e8;
+            --tab-inactive: #e0e0e0;
         }
         
         * {
@@ -965,6 +967,87 @@
             font-size: 1.2rem;
         }
         
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .tab-button {
+            flex: 1;
+            padding: 15px 20px;
+            background: var(--tab-inactive);
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            color: var(--light-text);
+        }
+        
+        .tab-button.active {
+            background: var(--tab-active);
+            color: white;
+            box-shadow: 0 0 10px rgba(26, 115, 232, 0.3);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .occurrence-details {
+            background-color: #f9f9f9;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin: 10px 0;
+        }
+        
+        .occurrence-details p {
+            margin: 5px 0;
+        }
+        
+        .occurrence-details strong {
+            color: var(--primary-dark);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--light-text);
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #d0d0d0;
+        }
+        
+        .empty-state h3 {
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+        
+        .empty-state p {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
         @media (max-width: 992px) {
             .dashboard {
                 grid-template-columns: 1fr;
@@ -1027,6 +1110,10 @@
                 flex-direction: column;
                 gap: 10px;
             }
+            
+            .tabs {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -1047,320 +1134,399 @@
     
     <div class="container">
         <main>
-            <div class="dashboard">
-                <div>
-                    <div class="integration-status">
-                        <i class="fas fa-plug"></i>
-                        <div>
-                            <strong>Status de integração:</strong> 
-                            <span class="status-indicator status-connected"></span>
-                            Conectado à planilha Google Sheets
+            <div class="tabs">
+                <button class="tab-button active" data-tab="form-tab">Cadastrar Ocorrência</button>
+                <button class="tab-button" data-tab="records-tab">Registros de Ocorrências</button>
+                <button class="tab-button" data-tab="stats-tab">Estatísticas</button>
+            </div>
+            
+            <!-- Formulário de Cadastro -->
+            <div id="form-tab" class="tab-content active">
+                <div class="dashboard">
+                    <div>
+                        <div class="integration-status">
+                            <i class="fas fa-plug"></i>
+                            <div>
+                                <strong>Status de integração:</strong> 
+                                <span class="status-indicator status-connected"></span>
+                                Conectado à planilha Google Sheets
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-clipboard-list"></i> Informações da Ocorrência
+                            </div>
+                            <div class="card-body">
+                                <form id="occurrenceForm">
+                                    <div class="form-row">
+                                        <div class="form-col">
+                                            <div class="form-group">
+                                                <label for="professor" class="required">Nome do professor</label>
+                                                <div class="student-select-container">
+                                                    <select id="professor" required>
+                                                        <option value="">Selecione seu nome</option>
+                                                        <!-- Professores serão preenchidos via JS -->
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-col">
+                                            <div class="form-group date-input-container">
+                                                <label for="occurrenceDate" class="required">Data da ocorrência</label>
+                                                <input type="date" id="occurrenceDate" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-col">
+                                            <div class="form-group">
+                                                <label for="studentClass" class="required">Turma</label>
+                                                <div class="student-select-container">
+                                                    <select id="studentClass" required>
+                                                        <option value="">Selecione a turma</option>
+                                                        <option value="6° ANO A MANHA">6° ANO A MANHA</option>
+                                                        <option value="6° ANO B MANHA">6° ANO B MANHA</option>
+                                                        <option value="6° ANO C MANHA">6° ANO C MANHA</option>
+                                                        <option value="6° ANO D MANHA">6° ANO D MANHA</option>
+                                                        <option value="6° ANO E TARDE">6° ANO E TARDE</option>
+                                                        <option value="6° ANO F TARDE">6° ANO F TARDE</option>
+                                                        <option value="7° ANO A TARDE">7° ANO A TARDE</option>
+                                                        <option value="7° ANO B TARDE">7° ANO B TARDE</option>
+                                                        <option value="7° ANO C TARDE">7° ANO C TARDE</option>
+                                                        <option value="7° ANO D TARDE">7° ANO D TARDE</option>
+                                                        <option value="7° ANO E TARDE">7° ANO E TARDE</option>
+                                                        <option value="7° ANO F TARDE">7° ANO F TARDE</option>
+                                                        <option value="8° ANO A TARDE">8° ANO A TARDE</option>
+                                                        <option value="8° ANO B TARDE">8° ANO B TARDE</option>
+                                                        <option value="8° ANO C TARDE">8° ANO C TARDE</option>
+                                                        <option value="8° ANO D TARDE">8° ANO D TARDE</option>
+                                                        <option value="9° ANO A TARDE">9° ANO A TARDE</option>
+                                                        <option value="9° ANO B TARDE">9° ANO B TARDE</option>
+                                                        <option value="9° ANO C TARDE">9° ANO C TARDE</option>
+                                                        <option value="9° ANO D TARDE">9° ANO D TARDE</option>
+                                                        <option value="1ª SERIE A MANHA">1ª SERIE A MANHA</option>
+                                                        <option value="1ª SERIE B MANHA">1ª SERIE B MANHA</option>
+                                                        <option value="1ª SERIE C MANHA">1ª SERIE C MANHA</option>
+                                                        <option value="1ª SERIE D MANHA">1ª SERIE D MANHA</option>
+                                                        <option value="1ª SERIE E MANHA">1ª SERIE E MANHA</option>
+                                                        <option value="1ª SERIE F MANHA">1ª SERIE F MANHA</option>
+                                                        <option value="1ª SERIE G TARDE">1ª SERIE G TARDE</option>
+                                                        <option value="1ª SERIE H NOITE">1ª SERIE H NOITE</option>
+                                                        <option value="1ª SERIE I NOITE">1ª SERIE I NOITE</option>
+                                                        <option value="2ª SERIE A MANHA">2ª SERIE A MANHA</option>
+                                                        <option value="2ª SERIE B MANHA">2ª SERIE B MANHA</option>
+                                                        <option value="2ª SERIE C MANHA">2ª SERIE C MANHA</option>
+                                                        <option value="2ª SERIE D MANHA">2ª SERIE D MANHA</option>
+                                                        <option value="2ª SERIE E MANHA">2ª SERIE E MANHA</option>
+                                                        <option value="2ª SERIE F NOITE">2ª SERIE F NOITE</option>
+                                                        <option value="2ª SERIE G NOITE">2ª SERIE G NOITE</option>
+                                                        <option value="2ª SERIE H NOITE">2ª SERIE H NOITE</option>
+                                                        <option value="3ª SERIE A MANHA">3ª SERIE A MANHA</option>
+                                                        <option value="3ª SERIE B MANHA">3ª SERIE B MANHA</option>
+                                                        <option value="3ª SERIE C MANHA">3ª SERIE C MANHA</option>
+                                                        <option value="3ª SERIE D NOITE">3ª SERIE D NOITE</option>
+                                                        <option value="3ª SERIE E NOITE">3ª SERIE E NOITE</option>
+                                                        <option value="3ª SERIE F NOITE">3ª SERIE F NOITE</option>
+                                                        <option value="4050 - ADMINISTRAÇÃO - 2ª SERIE A MANHA">4050 - ADMINISTRAÇÃO - 2ª SERIE A MANHA</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-col">
+                                            <div class="form-group">
+                                                <label for="student" class="required">Nome do aluno</label>
+                                                <div class="student-select-container">
+                                                    <select id="student" required disabled>
+                                                        <option value="">Selecione primeiro a turma</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="section-title">
+                                        <i class="fas fa-exclamation-triangle"></i> Irregularidades
+                                    </div>
+                                    
+                                    <div class="checkbox-group">
+                                        <label>Selecione as irregularidades (opcional):</label>
+                                        <div class="checkbox-container">
+                                            <div class="checkbox-item">
+                                                <div class="chart-container">
+                                                    <canvas class="donut-chart" width="50" height="50" data-irregularity="Não fez a lição"></canvas>
+                                                    <span class="chart-value">0</span>
+                                                </div>
+                                                <input type="checkbox" id="irregularity1" name="irregularity" value="Não fez a lição">
+                                                <label for="irregularity1">Não fez a lição</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <div class="chart-container">
+                                                    <canvas class="donut-chart" width="50" height="50" data-irregularity="Não trouxe material"></canvas>
+                                                    <span class="chart-value">0</span>
+                                                </div>
+                                                <input type="checkbox" id="irregularity2" name="irregularity" value="Não trouxe material">
+                                                <label for="irregularity2">Não trouxe material</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <div class="chart-container">
+                                                    <canvas class="donut-chart" width="50" height="50" data-irregularity="Fora do lugar constantemente durante a aula"></canvas>
+                                                    <span class="chart-value">0</span>
+                                                </div>
+                                                <input type="checkbox" id="irregularity3" name="irregularity" value="Fora do lugar constantemente durante a aula">
+                                                <label for="irregularity3">Fora do lugar durante a aula</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <div class="chart-container">
+                                                    <canvas class="donut-chart" width="50" height="50" data-irregularity="Chegou atrasado"></canvas>
+                                                    <span class="chart-value">0</span>
+                                                </div>
+                                                <input type="checkbox" id="irregularity4" name="irregularity" value="Chegou atrasado">
+                                                <label for="irregularity4">Chegou atrasado</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <div class="chart-container">
+                                                    <canvas class="donut-chart" width="50" height="50" data-irregularity="Circulando no corredor durante a aula"></canvas>
+                                                    <span class="chart-value">0</span>
+                                                </div>
+                                                <input type="checkbox" id="irregularity5" name="irregularity" value="Circulando no corredor durante a aula">
+                                                <label for="irregularity5">Circulando no corredor</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <div class="chart-container">
+                                                    <canvas class="donut-chart" width="50" height="50" data-irregularity="Uso indevido do celular durante a aula"></canvas>
+                                                    <span class="chart-value">0</span>
+                                                </div>
+                                                <input type="checkbox" id="irregularity6" name="irregularity" value="Uso indevido do celular durante a aula">
+                                                <label for="irregularity6">Uso indevido do celular</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <div class="chart-container">
+                                                    <canvas class="donut-chart" width="50" height="50" data-irregularity="Interrompe a aula constantemente"></canvas>
+                                                    <span class="chart-value">0</span>
+                                                </div>
+                                                <input type="checkbox" id="irregularity7" name="irregularity" value="Interrompe a aula constantemente">
+                                                <label for="irregularity7">Interrompe a aula constantemente</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <div class="chart-container">
+                                                    <canvas class="donut-chart" width="50" height="50" data-irregularity="Falta de cuidado com o ambiente e o material"></canvas>
+                                                    <span class="chart-value">0</span>
+                                                </div>
+                                                <input type="checkbox" id="irregularity8" name="irregularity" value="Falta de cuidado com o ambiente e o material">
+                                                <label for="irregularity8">Falta de cuidado com ambiente/material</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <div class="chart-container">
+                                                    <canvas class="donut-chart" width="50" height="50" data-irregularity="Vestimenta inadequada"></canvas>
+                                                    <span class="chart-value">0</span>
+                                                </div>
+                                                <input type="checkbox" id="irregularity9" name="irregularity" value="Vestimenta inadequada">
+                                                <label for="irregularity9">Vestimenta inadequada</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="description">Breve relato do ocorrido</label>
+                                        <textarea id="description" placeholder="Descreva detalhadamente a ocorrência..."></textarea>
+                                    </div>
+                                    
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                                            <i class="fas fa-paper-plane"></i> CADASTRAR
+                                        </button>
+                                        <button type="button" id="clearBtn" class="btn btn-secondary">
+                                            <i class="fas fa-broom"></i> Limpar formulário
+                                        </button>
+                                        <button type="button" id="exportBtn" class="btn btn-secondary">
+                                            <i class="fas fa-file-export"></i> Exportar Dados
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-clipboard-list"></i> Informações da Ocorrência
+                    <div>
+                        <div class="stats-card">
+                            <div class="card-header">
+                                <i class="fas fa-chart-line"></i> Estatísticas do Sistema
+                            </div>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-value" id="totalOccurrences">0</div>
+                                    <div class="stat-label">Ocorrências registradas</div>
+                                </div>
+                                
+                                <div class="stat-item" id="classStudentsCard" style="display: none;">
+                                    <div class="stat-value" id="classStudentsCount">0</div>
+                                    <div class="stat-label">Alunos na turma</div>
+                                    <div class="period-stats">
+                                        <div class="period-item">
+                                            <div class="period-value" id="selectedClassPeriod">-</div>
+                                            <div class="period-label">Período</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="stat-item">
+                                    <div class="stat-value" id="totalStudents">0</div>
+                                    <div class="stat-label">Total de alunos</div>
+                                    <div class="period-stats">
+                                        <div class="period-item">
+                                            <div class="period-value period-manha" id="morningCount">0</div>
+                                            <div class="period-label">Manhã</div>
+                                        </div>
+                                        <div class="period-item">
+                                            <div class="period-value period-tarde" id="afternoonCount">0</div>
+                                            <div class="period-label">Tarde</div>
+                                        </div>
+                                        <div class="period-item">
+                                            <div class="period-value period-noite" id="nightCount">0</div>
+                                            <div class="period-label">Noite</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="totalClasses">40</div>
+                                    <div class="stat-label">Turmas monitoradas</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="totalTeachers">64</div>
+                                    <div class="stat-label">Professores ativos</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <form id="occurrenceForm">
-                                <div class="form-row">
-                                    <div class="form-col">
-                                        <div class="form-group">
-                                            <label for="professor" class="required">Nome do professor</label>
-                                            <div class="student-select-container">
-                                                <select id="professor" required>
-                                                    <option value="">Selecione seu nome</option>
-                                                    <!-- Professores serão preenchidos via JS -->
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-col">
-                                        <div class="form-group date-input-container">
-                                            <label for="occurrenceDate" class="required">Data da ocorrência</label>
-                                            <input type="date" id="occurrenceDate" required>
-                                        </div>
-                                    </div>
+                        
+                        <div class="student-occurrences-card" id="studentOccurrencesCard">
+                            <div class="student-occurrences-content">
+                                <div class="student-occurrences-name" id="studentOccurrencesName">Nome do Aluno</div>
+                                <div class="student-occurrences-count" id="studentOccurrencesCount">0</div>
+                                <div class="student-occurrences-label">Ocorrências registradas</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-chart-bar"></i> Distribuição de Alunos por Período
+                            </div>
+                            <div class="card-body">
+                                <div class="stats-chart-container">
+                                    <canvas id="studentsPeriodChart"></canvas>
                                 </div>
-                                
-                                <div class="form-row">
-                                    <div class="form-col">
-                                        <div class="form-group">
-                                            <label for="studentClass" class="required">Turma</label>
-                                            <div class="student-select-container">
-                                                <select id="studentClass" required>
-                                                    <option value="">Selecione a turma</option>
-                                                    <option value="6° ANO A MANHA">6° ANO A MANHA</option>
-                                                    <option value="6° ANO B MANHA">6° ANO B MANHA</option>
-                                                    <option value="6° ANO C MANHA">6° ANO C MANHA</option>
-                                                    <option value="6° ANO D MANHA">6° ANO D MANHA</option>
-                                                    <option value="6° ANO E TARDE">6° ANO E TARDE</option>
-                                                    <option value="6° ANO F TARDE">6° ANO F TARDE</option>
-                                                    <option value="7° ANO A TARDE">7° ANO A TARDE</option>
-                                                    <option value="7° ANO B TARDE">7° ANO B TARDE</option>
-                                                    <option value="7° ANO C TARDE">7° ANO C TARDE</option>
-                                                    <option value="7° ANO D TARDE">7° ANO D TARDE</option>
-                                                    <option value="7° ANO E TARDE">7° ANO E TARDE</option>
-                                                    <option value="7° ANO F TARDE">7° ANO F TARDE</option>
-                                                    <option value="8° ANO A TARDE">8° ANO A TARDE</option>
-                                                    <option value="8° ANO B TARDE">8° ANO B TARDE</option>
-                                                    <option value="8° ANO C TARDE">8° ANO C TARDE</option>
-                                                    <option value="8° ANO D TARDE">8° ANO D TARDE</option>
-                                                    <option value="9° ANO A TARDE">9° ANO A TARDE</option>
-                                                    <option value="9° ANO B TARDE">9° ANO B TARDE</option>
-                                                    <option value="9° ANO C TARDE">9° ANO C TARDE</option>
-                                                    <option value="9° ANO D TARDE">9° ANO D TARDE</option>
-                                                    <option value="1ª SERIE A MANHA">1ª SERIE A MANHA</option>
-                                                    <option value="1ª SERIE B MANHA">1ª SERIE B MANHA</option>
-                                                    <option value="1ª SERIE C MANHA">1ª SERIE C MANHA</option>
-                                                    <option value="1ª SERIE D MANHA">1ª SERIE D MANHA</option>
-                                                    <option value="1ª SERIE E MANHA">1ª SERIE E MANHA</option>
-                                                    <option value="1ª SERIE F MANHA">1ª SERIE F MANHA</option>
-                                                    <option value="1ª SERIE G TARDE">1ª SERIE G TARDE</option>
-                                                    <option value="1ª SERIE H NOITE">1ª SERIE H NOITE</option>
-                                                    <option value="1ª SERIE I NOITE">1ª SERIE I NOITE</option>
-                                                    <option value="2ª SERIE A MANHA">2ª SERIE A MANHA</option>
-                                                    <option value="2ª SERIE B MANHA">2ª SERIE B MANHA</option>
-                                                    <option value="2ª SERIE C MANHA">2ª SERIE C MANHA</option>
-                                                    <option value="2ª SERIE D MANHA">2ª SERIE D MANHA</option>
-                                                    <option value="2ª SERIE E MANHA">2ª SERIE E MANHA</option>
-                                                    <option value="2ª SERIE F NOITE">2ª SERIE F NOITE</option>
-                                                    <option value="2ª SERIE G NOITE">2ª SERIE G NOITE</option>
-                                                    <option value="2ª SERIE H NOITE">2ª SERIE H NOITE</option>
-                                                    <option value="3ª SERIE A MANHA">3ª SERIE A MANHA</option>
-                                                    <option value="3ª SERIE B MANHA">3ª SERIE B MANHA</option>
-                                                    <option value="3ª SERIE C MANHA">3ª SERIE C MANHA</option>
-                                                    <option value="3ª SERIE D NOITE">3ª SERIE D NOITE</option>
-                                                    <option value="3ª SERIE E NOITE">3ª SERIE E NOITE</option>
-                                                    <option value="3ª SERIE F NOITE">3ª SERIE F NOITE</option>
-                                                    <option value="4050 - ADMINISTRAÇÃO - 2ª SERIE A MANHA">4050 - ADMINISTRAÇÃO - 2ª SERIE A MANHA</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-col">
-                                        <div class="form-group">
-                                            <label for="student" class="required">Nome do aluno</label>
-                                            <div class="student-select-container">
-                                                <select id="student" required disabled>
-                                                    <option value="">Selecione primeiro a turma</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="section-title">
-                                    <i class="fas fa-exclamation-triangle"></i> Irregularidades
-                                </div>
-                                
-                                <div class="checkbox-group">
-                                    <label>Selecione as irregularidades (opcional):</label>
-                                    <div class="checkbox-container">
-                                        <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Não fez a lição"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity1" name="irregularity" value="Não fez a lição">
-                                            <label for="irregularity1">Não fez a lição</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Não trouxe material"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity2" name="irregularity" value="Não trouxe material">
-                                            <label for="irregularity2">Não trouxe material</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Fora do lugar constantemente durante a aula"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity3" name="irregularity" value="Fora do lugar constantemente durante a aula">
-                                            <label for="irregularity3">Fora do lugar durante a aula</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Chegou atrasado"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity4" name="irregularity" value="Chegou atrasado">
-                                            <label for="irregularity4">Chegou atrasado</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Circulando no corredor durante a aula"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity5" name="irregularity" value="Circulando no corredor durante a aula">
-                                            <label for="irregularity5">Circulando no corredor</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Uso indevido do celular durante a aula"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity6" name="irregularity" value="Uso indevido do celular durante a aula">
-                                            <label for="irregularity6">Uso indevido do celular</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Interrompe a aula constantemente"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity7" name="irregularity" value="Interrompe a aula constantemente">
-                                            <label for="irregularity7">Interrompe a aula constantemente</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Falta de cuidado com o ambiente e o material"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity8" name="irregularity" value="Falta de cuidado com o ambiente e o material">
-                                            <label for="irregularity8">Falta de cuidado com ambiente/material</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Vestimenta inadequada"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity9" name="irregularity" value="Vestimenta inadequada">
-                                            <label for="irregularity9">Vestimenta inadequada</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="description">Breve relato do ocorrido</label>
-                                    <textarea id="description" placeholder="Descreva detalhadamente a ocorrência..."></textarea>
-                                </div>
-                                
-                                <div class="form-actions">
-                                    <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
-                                        <i class="fas fa-paper-plane"></i> CADASTRAR
-                                    </button>
-                                    <button type="button" id="clearBtn" class="btn btn-secondary">
-                                        <i class="fas fa-broom"></i> Limpar formulário
-                                    </button>
-                                    <button type="button" id="exportBtn" class="btn btn-secondary">
-                                        <i class="fas fa-file-export"></i> Exportar Dados
-                                    </button>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label>Registros de Ocorrências</label>
-                                    <div class="table-container" style="overflow-x: auto;">
-                                        <table id="registrosTable" class="registros-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Data</th>
-                                                    <th>Professor</th>
-                                                    <th>Turma</th>
-                                                    <th>Aluno</th>
-                                                    <th>Irregularidades</th>
-                                                    <th>Descrição</th>
-                                                    <th>Ações</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="registrosTableBody">
-                                                <!-- Os registros serão carregados via JavaScript -->
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </form>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-info-circle"></i> Sobre o Sistema
+                            </div>
+                            <div class="card-body">
+                                <p>Este sistema permite o registro de ocorrências escolares com integração direta ao Google Sheets.</p>
+                                <br>
+                                <p><strong>Funcionalidades:</strong></p>
+                                <ul style="padding-left: 20px; margin-top: 10px;">
+                                    <li>Seleção de turma com carregamento automático dos alunos</li>
+                                    <li>Registro detalhado de ocorrências</li>
+                                    <li>Integração em tempo real com planilha Google</li>
+                                    <li>Estatísticas atualizadas</li>
+                                    <li>Interface amigável e responsiva</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <div>
-                    <div class="stats-card">
-                        <div class="card-header">
-                            <i class="fas fa-chart-line"></i> Estatísticas do Sistema
+            </div>
+            
+            <!-- Registros de Ocorrências -->
+            <div id="records-tab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-list"></i> Registros de Ocorrências
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container" style="overflow-x: auto;">
+                            <table id="registrosTable" class="registros-table">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Professor</th>
+                                        <th>Turma</th>
+                                        <th>Aluno</th>
+                                        <th>Irregularidades</th>
+                                        <th>Descrição</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="registrosTableBody">
+                                    <!-- Registros serão carregados via JavaScript -->
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-value" id="totalOccurrences">0</div>
-                                <div class="stat-label">Ocorrências registradas</div>
-                            </div>
-                            
-                            <div class="stat-item" id="classStudentsCard" style="display: none;">
-                                <div class="stat-value" id="classStudentsCount">0</div>
-                                <div class="stat-label">Alunos na turma</div>
-                                <div class="period-stats">
-                                    <div class="period-item">
-                                        <div class="period-value" id="selectedClassPeriod">-</div>
-                                        <div class="period-label">Período</div>
+                        <div id="noRecordsMessage" class="empty-state" style="display: none;">
+                            <i class="fas fa-clipboard-list"></i>
+                            <h3>Nenhuma ocorrência registrada</h3>
+                            <p>Quando você registrar ocorrências, elas aparecerão aqui para todos os professores visualizarem.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Estatísticas -->
+            <div id="stats-tab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-pie"></i> Estatísticas Gerais
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="stats-card">
+                                    <div class="stats-grid">
+                                        <div class="stat-item">
+                                            <div class="stat-value" id="totalOccurrencesStats">0</div>
+                                            <div class="stat-label">Total de Ocorrências</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-value" id="mostFrequentIrregularity">-</div>
+                                            <div class="stat-label">Irregularidade mais frequente</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-value" id="mostAffectedClass">-</div>
+                                            <div class="stat-label">Turma com mais ocorrências</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="stat-item">
-                                <div class="stat-value" id="totalStudents">0</div>
-                                <div class="stat-label">Total de alunos</div>
-                                <div class="period-stats">
-                                    <div class="period-item">
-                                        <div class="period-value period-manha" id="morningCount">0</div>
-                                        <div class="period-label">Manhã</div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-bar"></i> Ocorrências por Turma
                                     </div>
-                                    <div class="period-item">
-                                        <div class="period-value period-tarde" id="afternoonCount">0</div>
-                                        <div class="period-label">Tarde</div>
-                                    </div>
-                                    <div class="period-item">
-                                        <div class="period-value period-noite" id="nightCount">0</div>
-                                        <div class="period-label">Noite</div>
+                                    <div class="card-body">
+                                        <div class="stats-chart-container">
+                                            <canvas id="classOccurrencesChart"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="stat-item">
-                                <div class="stat-value" id="totalClasses">40</div>
-                                <div class="stat-label">Turmas monitoradas</div>
+                            <div class="form-col">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-pie"></i> Distribuição de Irregularidades
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="stats-chart-container">
+                                            <canvas id="irregularitiesChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="stat-item">
-                                <div class="stat-value" id="totalTeachers">64</div>
-                                <div class="stat-label">Professores ativos</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="student-occurrences-card" id="studentOccurrencesCard">
-                        <div class="student-occurrences-content">
-                            <div class="student-occurrences-name" id="studentOccurrencesName">Nome do Aluno</div>
-                            <div class="student-occurrences-count" id="studentOccurrencesCount">0</div>
-                            <div class="student-occurrences-label">Ocorrências registradas</div>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-chart-bar"></i> Distribuição de Alunos por Período
-                        </div>
-                        <div class="card-body">
-                            <div class="stats-chart-container">
-                                <canvas id="studentsPeriodChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-info-circle"></i> Sobre o Sistema
-                        </div>
-                        <div class="card-body">
-                            <p>Este sistema permite o registro de ocorrências escolares com integração direta ao Google Sheets.</p>
-                            <br>
-                            <p><strong>Funcionalidades:</strong></p>
-                            <ul style="padding-left: 20px; margin-top: 10px;">
-                                <li>Seleção de turma com carregamento automático dos alunos</li>
-                                <li>Registro detalhado de ocorrências</li>
-                                <li>Integração em tempo real com planilha Google</li>
-                                <li>Estatísticas atualizadas</li>
-                                <li>Interface amigável e responsiva</li>
-                            </ul>
                         </div>
                     </div>
                 </div>
@@ -1497,6 +1663,14 @@
             const notificationIcon = notification.querySelector('.icon');
             const notificationContent = notification.querySelector('.content');
             const notificationClose = notification.querySelector('.close');
+            const noRecordsMessage = document.getElementById('noRecordsMessage');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const totalOccurrencesStats = document.getElementById('totalOccurrencesStats');
+            const mostFrequentIrregularity = document.getElementById('mostFrequentIrregularity');
+            const mostAffectedClass = document.getElementById('mostAffectedClass');
+            const classOccurrencesChartCanvas = document.getElementById('classOccurrencesChart');
+            const irregularitiesChartCanvas = document.getElementById('irregularitiesChart');
 
             // Configurações da planilha
             const SPREADSHEET_ID = "1u7qMsMHkZT47OZdar5qvshQDRA8XJrLgDjAZVOViAio";
@@ -1507,6 +1681,8 @@
             // Armazenar gráficos
             const charts = {};
             let studentsPeriodChart = null;
+            let classOccurrencesChart = null;
+            let irregularitiesChart = null;
             let currentEditId = null; // Para controlar a edição
 
             // Preencher dropdown de professores
@@ -1529,6 +1705,31 @@
             // Contar turmas disponíveis
             const turmasCount = document.querySelectorAll('#studentClass option').length - 1;
             document.getElementById('totalClasses').textContent = turmasCount;
+
+            // Configurar tabs
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab');
+                    
+                    // Remover classe ativa de todos os botões e conteúdos
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Adicionar classe ativa ao botão e conteúdo clicados
+                    button.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                    
+                    // Se for a aba de registros, recarregar a tabela
+                    if (tabId === 'records-tab') {
+                        loadRegistrosTable();
+                    }
+                    
+                    // Se for a aba de estatísticas, recarregar as estatísticas
+                    if (tabId === 'stats-tab') {
+                        loadStatistics();
+                    }
+                });
+            });
 
             // Função para mostrar notificações
             function showNotification(type, message) {
@@ -1842,6 +2043,14 @@
                 
                 // Adicionar como primeira linha da tabela
                 registrosTableBody.insertBefore(row, registrosTableBody.firstChild);
+                
+                // Atualizar contagem de ocorrências
+                const currentTotal = parseInt(totalOccurrencesEl.textContent);
+                totalOccurrencesEl.textContent = currentTotal + 1;
+                totalOccurrencesStats.textContent = currentTotal + 1;
+                
+                // Esconder mensagem de nenhum registro
+                noRecordsMessage.style.display = 'none';
             }
 
             // Função para carregar registros na tabela
@@ -1856,9 +2065,12 @@
                         registrosTableBody.innerHTML = '';
                         
                         if (data.occurrences.length === 0) {
-                            registrosTableBody.innerHTML = '<tr><td colspan="7" class="no-records">Nenhum registro encontrado</td></tr>';
+                            registrosTableBody.innerHTML = '';
+                            noRecordsMessage.style.display = 'block';
                             return;
                         }
+                        
+                        noRecordsMessage.style.display = 'none';
                         
                         data.occurrences.forEach(occurrence => {
                             const row = document.createElement('tr');
@@ -1890,12 +2102,18 @@
                             
                             registrosTableBody.appendChild(row);
                         });
+                        
+                        // Atualizar contagem de ocorrências
+                        totalOccurrencesEl.textContent = data.occurrences.length;
+                        totalOccurrencesStats.textContent = data.occurrences.length;
                     } else {
-                        registrosTableBody.innerHTML = '<tr><td colspan="7" class="no-records">Nenhum registro encontrado</td></tr>';
+                        registrosTableBody.innerHTML = '';
+                        noRecordsMessage.style.display = 'block';
                     }
                 } catch (error) {
                     console.error('Erro ao carregar registros:', error);
-                    registrosTableBody.innerHTML = '<tr><td colspan="7" class="no-records">Erro ao carregar registros</td></tr>';
+                    registrosTableBody.innerHTML = '';
+                    noRecordsMessage.style.display = 'block';
                 }
             }
 
@@ -1998,6 +2216,9 @@
                     
                     // Recarregar estatísticas de alunos por período
                     loadStudentPeriodStats();
+                    
+                    // Recarregar estatísticas gerais
+                    loadStatistics();
                 } catch (error) {
                     console.error('Erro ao enviar ocorrência:', error);
                     showNotification('error', `Erro ao registrar ocorrência: ${error.message || 'Erro desconhecido'}`);
@@ -2240,6 +2461,10 @@
                         // Atualizar estatísticas
                         const currentTotal = parseInt(totalOccurrencesEl.textContent);
                         totalOccurrencesEl.textContent = currentTotal - 1;
+                        totalOccurrencesStats.textContent = currentTotal - 1;
+                        
+                        // Recarregar estatísticas gerais
+                        loadStatistics();
                     } else {
                         throw new Error(data?.message || "Erro ao excluir ocorrência");
                     }
@@ -2249,6 +2474,118 @@
                 }
             }
 
+            // Carregar estatísticas gerais
+            async function loadStatistics() {
+                try {
+                    const url = `${SCRIPT_URL}?action=getStatistics&spreadsheetId=${SPREADSHEET_ID}&sheetName=${SHEET_NAME}`;
+                    const data = await safeFetch(url);
+                    
+                    if (data && data.status === "success") {
+                        // Atualizar estatísticas principais
+                        totalOccurrencesStats.textContent = data.totalOccurrences;
+                        mostFrequentIrregularity.textContent = data.mostFrequentIrregularity || '-';
+                        mostAffectedClass.textContent = data.mostAffectedClass || '-';
+                        
+                        // Atualizar gráfico de ocorrências por turma
+                        updateClassOccurrencesChart(data.classOccurrences);
+                        
+                        // Atualizar gráfico de distribuição de irregularidades
+                        updateIrregularitiesChart(data.irregularitiesStats);
+                    } else {
+                        throw new Error(data?.message || "Erro ao carregar estatísticas");
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar estatísticas:', error);
+                }
+            }
+            
+            // Atualizar gráfico de ocorrências por turma
+            function updateClassOccurrencesChart(data) {
+                if (classOccurrencesChart) {
+                    classOccurrencesChart.destroy();
+                }
+                
+                const ctx = classOccurrencesChartCanvas.getContext('2d');
+                const labels = data.map(item => item.class);
+                const values = data.map(item => item.count);
+                
+                classOccurrencesChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Ocorrências',
+                            data: values,
+                            backgroundColor: 'rgba(52, 152, 219, 0.8)',
+                            borderColor: 'rgb(52, 152, 219)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Número de Ocorrências'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Turma'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Atualizar gráfico de distribuição de irregularidades
+            function updateIrregularitiesChart(data) {
+                if (irregularitiesChart) {
+                    irregularitiesChart.destroy();
+                }
+                
+                const ctx = irregularitiesChartCanvas.getContext('2d');
+                const labels = data.map(item => item.irregularity);
+                const values = data.map(item => item.count);
+                
+                // Gerar cores aleatórias
+                const backgroundColors = labels.map(() => {
+                    return `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.8)`;
+                });
+                
+                irregularitiesChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Ocorrências',
+                            data: values,
+                            backgroundColor: backgroundColors,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right'
+                            }
+                        }
+                    }
+                });
+            }
+
             // Inicializar gráficos com valores zero
             document.querySelectorAll('.donut-chart').forEach(canvas => {
                 createDonutChart(canvas, 0);
@@ -2256,9 +2593,8 @@
             
             // Carregar estatísticas iniciais
             loadStudentPeriodStats();
-            
-            // Carregar tabela de registros
             loadRegistrosTable();
+            loadStatistics();
         });
     </script>
 </body>

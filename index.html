@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1407,14 +1406,13 @@
                         <div class="card-body">
                             <p>Este sistema permite o registro de ocorrências escolares com integração direta ao Google Sheets.</p>
                             <br>
-                            <p><strong>Funcionalidades:</strong></p>
+                            <p><strong>Novas funcionalidades:</strong></p>
                             <ul style="padding-left: 20px; margin-top: 10px;">
-                                <li>Seleção de turma com carregamento automático dos alunos</li>
-                                <li>Registro detalhado de ocorrências</li>
-                                <li>Integração em tempo real com planilha Google</li>
-                                <li>Estatísticas atualizadas</li>
-                                <li>Interface amigável e responsiva</li>
-                                <li>Funcionamento offline com sincronização automática</li>
+                                <li>Registros salvos na aba "Ocorrência LKM"</li>
+                                <li>Formatação automática com cores alternadas</li>
+                                <li>Primeiro registro na linha A2</li>
+                                <li>Uso otimizado do Google Sheets</li>
+                                <li>Melhor desempenho e sincronização</li>
                             </ul>
                         </div>
                     </div>
@@ -1563,6 +1561,7 @@
             // Configurações da planilha
             const SPREADSHEET_ID = "1u7qMsMHkZT47OZdar5qvshQDRA8XJrLgDjAZVOViAio";
             const SHEET_NAME = "OCORRENCIASDOSPROFESSORES";
+            const NEW_SHEET_NAME = "Ocorrência LKM";  // Nova aba conforme solicitado
             const STUDENT_SHEET_NAME = "BANCODEDADOSGERAL";
             const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwr2-R9puLSqIOlwx1BHMxIul9iM1bbHdYNxBsgjSksFgOPf09oXzIU64u2ppaxwUnx/exec";
 
@@ -2014,6 +2013,7 @@
                                     action: 'addOccurrence',
                                     spreadsheetId: SPREADSHEET_ID,
                                     sheetName: SHEET_NAME,
+                                    newSheetName: NEW_SHEET_NAME, // Enviar o nome da nova aba
                                     ...dataToSend
                                 })
                             });
@@ -2167,7 +2167,8 @@
                         student: student,
                         class: classInfo,
                         irregularities: irregularities.join(', '),
-                        description: description
+                        description: description,
+                        newSheetName: NEW_SHEET_NAME // Incluir o nome da nova aba
                     };
 
                     // Se estiver online, tentar enviar imediatamente
@@ -2181,6 +2182,7 @@
                                 action: 'addOccurrence',
                                 spreadsheetId: SPREADSHEET_ID,
                                 sheetName: SHEET_NAME,
+                                newSheetName: NEW_SHEET_NAME, // Enviar o nome da nova aba
                                 ...formData
                             })
                         });

@@ -1563,7 +1563,7 @@
             const SPREADSHEET_ID = "1u7qMsMHkZT47OZdar5qvshQDRA8XJrLgDjAZVOViAio";
             const STUDENT_SHEET_NAME = "BANCODEDADOSGERAL";
             const OCCURRENCE_SHEET_NAME = "OCORRENCIASDOSPROFESSORES1";
-            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwr2-R9puLSqIOlwx1BHMxIul9iM1bbHdYNxBsgjSksFgOPf09oXzIU64u2ppaxwUnx/exec";
+            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxVireWItgkKJDPv-Lojp-XiXgKJ3-8mhWRNE99pSAQWBAXSLiTmZYin9REShWoBbH8/exec";
 
             // Armazenar gráficos
             const charts = {};
@@ -1764,7 +1764,7 @@
                     studentOccurrencesCount.textContent = "Carregando...";
                     
                     // Buscar estatísticas do aluno
-                    const url = `${SCRIPT_URL}?action=getStudentStats&student=${encodeURIComponent(this.value)}&spreadsheetId=${SPREADSHEET_ID}&sheetName=${OCCURRENCE_SHEET_NAME}`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbxVireWItgkKJDPv-Lojp-XiXgKJ3-8mhWRNE99pSAQWBAXSLiTmZYin9REShWoBbH8/exec"}?action=getStudentStats&student=${encodeURIComponent(this.value)}&spreadsheetId=${SPREADSHEET_ID}&sheetName=${OCCURRENCE_SHEET_NAME}`;
                     
                     safeFetch(url)
                         .then(data => {
@@ -2004,7 +2004,7 @@
                             // Remover o ID do banco offline para evitar conflitos
                             const { id, ...dataToSend } = occurrence;
                             
-                            const response = await fetch(SCRIPT_URL, {
+                            const response = await fetch("https://script.google.com/macros/s/AKfycbxVireWItgkKJDPv-Lojp-XiXgKJ3-8mhWRNE99pSAQWBAXSLiTmZYin9REShWoBbH8/exec", {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
@@ -2171,7 +2171,7 @@
 
                     // Se estiver online, tentar enviar imediatamente
                     if (navigator.onLine) {
-                        const response = await fetch(SCRIPT_URL, {
+                        const response = await fetch("https://script.google.com/macros/s/AKfycbxVireWItgkKJDPv-Lojp-XiXgKJ3-8mhWRNE99pSAQWBAXSLiTmZYin9REShWoBbH8/exec", {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -2390,7 +2390,7 @@
             // Função para exportar dados para Excel
             exportBtn.addEventListener('click', async function() {
                 try {
-                    const url = `${SCRIPT_URL}?action=getAllOccurrences&spreadsheetId=${SPREADSHEET_ID}&sheetName=${OCCURRENCE_SHEET_NAME}`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbxVireWItgkKJDPv-Lojp-XiXgKJ3-8mhWRNE99pSAQWBAXSLiTmZYin9REShWoBbH8/exec"}?action=getAllOccurrences&spreadsheetId=${SPREADSHEET_ID}&sheetName=${OCCURRENCE_SHEET_NAME}`;
                     const data = await safeFetch(url);
                     
                     if (data && data.status === "success" && Array.isArray(data.occurrences)) {

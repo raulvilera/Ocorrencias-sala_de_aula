@@ -1408,7 +1408,8 @@
                             <br>
                             <p><strong>Novas funcionalidades:</strong></p>
                             <ul style="padding-left: 20px; margin-top: 10px;">
-                                <li>Registros salvos na aba "Ocorrência LKM"</li>
+                                <li>Registros salvos na aba "OCORRENCIASDOSPROFESSORES1"</li>
+                                <li>Dados de alunos carregados da aba "BANCODEDADOSGERAL"</li>
                                 <li>Formatação automática com cores alternadas</li>
                                 <li>Primeiro registro na linha A2</li>
                                 <li>Uso otimizado do Google Sheets</li>
@@ -1560,9 +1561,8 @@
 
             // Configurações da planilha
             const SPREADSHEET_ID = "1u7qMsMHkZT47OZdar5qvshQDRA8XJrLgDjAZVOViAio";
-            const SHEET_NAME = "OCORRENCIASDOSPROFESSORES";
-            const NEW_SHEET_NAME = "Ocorrência LKM";  // Nova aba conforme solicitado
             const STUDENT_SHEET_NAME = "BANCODEDADOSGERAL";
+            const OCCURRENCE_SHEET_NAME = "OCORRENCIASDOSPROFESSORES1";
             const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwr2-R9puLSqIOlwx1BHMxIul9iM1bbHdYNxBsgjSksFgOPf09oXzIU64u2ppaxwUnx/exec";
 
             // Armazenar gráficos
@@ -1718,7 +1718,7 @@
                 }
 
                 // Buscar alunos reais da planilha
-                const url = `${SCRIPT_URL}?action=getStudents&class=${encodeURIComponent(selectedClass)}&spreadsheetId=${SPREADSHEET_ID}`;
+                const url = `${SCRIPT_URL}?action=getStudents&class=${encodeURIComponent(selectedClass)}&spreadsheetId=${SPREADSHEET_ID}&sheetName=${STUDENT_SHEET_NAME}`;
                 
                 safeFetch(url)
                     .then(data => {
@@ -1764,7 +1764,7 @@
                     studentOccurrencesCount.textContent = "Carregando...";
                     
                     // Buscar estatísticas do aluno
-                    const url = `${SCRIPT_URL}?action=getStudentStats&student=${encodeURIComponent(this.value)}&spreadsheetId=${SPREADSHEET_ID}`;
+                    const url = `${SCRIPT_URL}?action=getStudentStats&student=${encodeURIComponent(this.value)}&spreadsheetId=${SPREADSHEET_ID}&sheetName=${OCCURRENCE_SHEET_NAME}`;
                     
                     safeFetch(url)
                         .then(data => {
@@ -2012,8 +2012,7 @@
                                 body: JSON.stringify({
                                     action: 'addOccurrence',
                                     spreadsheetId: SPREADSHEET_ID,
-                                    sheetName: SHEET_NAME,
-                                    newSheetName: NEW_SHEET_NAME, // Enviar o nome da nova aba
+                                    sheetName: OCCURRENCE_SHEET_NAME,
                                     ...dataToSend
                                 })
                             });
@@ -2167,8 +2166,7 @@
                         student: student,
                         class: classInfo,
                         irregularities: irregularities.join(', '),
-                        description: description,
-                        newSheetName: NEW_SHEET_NAME // Incluir o nome da nova aba
+                        description: description
                     };
 
                     // Se estiver online, tentar enviar imediatamente
@@ -2181,8 +2179,7 @@
                             body: JSON.stringify({
                                 action: 'addOccurrence',
                                 spreadsheetId: SPREADSHEET_ID,
-                                sheetName: SHEET_NAME,
-                                newSheetName: NEW_SHEET_NAME, // Enviar o nome da nova aba
+                                sheetName: OCCURRENCE_SHEET_NAME,
                                 ...formData
                             })
                         });
@@ -2248,7 +2245,7 @@
                 registrosTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Carregando registros...</td></tr>';
                 
                 try {
-                    const url = `${SCRIPT_URL}?action=getAllOccurrences&spreadsheetId=${SPREADSHEET_ID}&sheetName=${SHEET_NAME}`;
+                    const url = `${SCRIPT_URL}?action=getAllOccurrences&spreadsheetId=${SPREADSHEET_ID}&sheetName=${OCCURRENCE_SHEET_NAME}`;
                     const data = await safeFetch(url);
                     
                     if (data && data.status === "success" && Array.isArray(data.occurrences)) {
@@ -2393,7 +2390,7 @@
             // Função para exportar dados para Excel
             exportBtn.addEventListener('click', async function() {
                 try {
-                    const url = `${SCRIPT_URL}?action=getAllOccurrences&spreadsheetId=${SPREADSHEET_ID}&sheetName=${SHEET_NAME}`;
+                    const url = `${SCRIPT_URL}?action=getAllOccurrences&spreadsheetId=${SPREADSHEET_ID}&sheetName=${OCCURRENCE_SHEET_NAME}`;
                     const data = await safeFetch(url);
                     
                     if (data && data.status === "success" && Array.isArray(data.occurrences)) {
@@ -2412,7 +2409,7 @@
                         // Criar planilha
                         const worksheet = XLSX.utils.json_to_sheet(exportData);
                         const workbook = XLSX.utils.book_new();
-                        XLSX.utils.book_append_sheet(workbook, worksheet, "OCORRENCIASDOSPROFESSORES");
+                        XLSX.utils.book_append_sheet(workbook, worksheet, "OCORRENCIASDOSPROFESSORES1");
                         
                         // Exportar para arquivo Excel
                         XLSX.writeFile(workbook, 'ocorrencias_escolares.xlsx');
@@ -2447,7 +2444,7 @@
             // Função para editar ocorrência
             async function editOccurrence(occurrenceId) {
                 try {
-                    const url = `${SCRIPT_URL}?action=getOccurrenceById&id=${occurrenceId}&spreadsheetId=${SPREADSHEET_ID}&sheetName=${SHEET_NAME}`;
+                    const url = `${SCRIPT_URL}?action=getOccurrenceById&id=${occurrenceId}&spreadsheetId=${SPREADSHEET_ID}&sheetName=${OCCURRENCE_SHEET_NAME}`;
                     const response = await safeFetch(url);
                     
                     if (response && response.status === "success" && response.occurrence) {
@@ -2507,7 +2504,7 @@
                             action: 'deleteOccurrence',
                             id: occurrenceId,
                             spreadsheetId: SPREADSHEET_ID,
-                            sheetName: SHEET_NAME
+                            sheetName: OCCURRENCE_SHEET_NAME
                         })
                     });
                     

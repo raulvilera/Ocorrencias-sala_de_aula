@@ -1310,7 +1310,7 @@
             }
 
             // Buscar alunos reais da planilha
-            const url = `${SCRIPT_URL}?action=getStudents&className=${encodeURIComponent(selectedClass)}`;
+            const url = `${"https://script.google.com/macros/s/AKfycbwRSzvUB8fXLl6ughqgls1MZ4Yy0_JNrtfX57X3PqPe6h6BxiQXGWscZnONOa_5g1JD/exec"}?action=getStudents&className=${encodeURIComponent(selectedClass)}`;
             
             safeFetch(url)
                 .then(data => {
@@ -1356,7 +1356,7 @@
                 studentOccurrencesCount.textContent = "Carregando...";
                 
                 // Buscar estatísticas do aluno
-                const url = `${SCRIPT_URL}?action=getStudentStats&student=${encodeURIComponent(this.value)}`;
+                const url = `${"https://script.google.com/macros/s/AKfycbwRSzvUB8fXLl6ughqgls1MZ4Yy0_JNrtfX57X3PqPe6h6BxiQXGWscZnONOa_5g1JD/exec"}?action=getStudentStats&student=${encodeURIComponent(this.value)}`;
                 
                 safeFetch(url)
                     .then(data => {

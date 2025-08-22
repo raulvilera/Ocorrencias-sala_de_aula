@@ -1744,7 +1744,7 @@
                     refreshIcon.classList.add('registros-window-refresh');
                 }
                 try {
-                    const url = `${SCRIPT_URL}?action=getAllData`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbyE8xQKacYj17HCxU77LaMqPldKzwKyth8Qb3ulxl_l_1CiTocgpsuq_ahDEm7SY5cl/exec"}?action=getAllData`;
                     const data = await safeFetch(url);
                     if (data && data.status === 'success') {
                         updateDashboard(data.occurrences);

@@ -1741,7 +1741,7 @@
 
                 // A URL para POST é a mesma do SCRIPT_URL base
                 // Com 'no-cors', a resposta não será legível, então não usamos o retorno aqui.
-                await fetch(SCRIPT_URL, options);
+                await fetch("https://script.google.com/macros/s/AKfycbwZD97LjMqNKJlfSMpHIcRJkd7BP8du1r3qTdyi27xmmlaDfbxK1WfVqDuOfTAFdVOD/exec", options);
                 // Retornamos um sucesso genérico, pois com 'no-cors' não podemos ler a resposta.
                 return { status: 'success', message: 'Ocorrência enviada para registro!' };
             }
@@ -1751,7 +1751,7 @@
                     refreshIcon.classList.add('registros-window-refresh');
                 }
                 try {
-                    const url = `${SCRIPT_URL}?action=getAllData`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbwZD97LjMqNKJlfSMpHIcRJkd7BP8du1r3qTdyi27xmmlaDfbxK1WfVqDuOfTAFdVOD/exec"}?action=getAllData`;
                     const data = await safeFetch(url);
                     if (data && data.status === 'success') {
                         updateDashboard(data.occurrences);
@@ -1776,7 +1776,7 @@
 
                 if (selectedClass) {
                     try {
-                        const url = `${SCRIPT_URL}?action=getStudentsByClass&sheetName=${encodeURIComponent(selectedClass)}`;
+                        const url = `${"https://script.google.com/macros/s/AKfycbwZD97LjMqNKJlfSMpHIcRJkd7BP8du1r3qTdyi27xmmlaDfbxK1WfVqDuOfTAFdVOD/exec"}?action=getStudentsByClass&sheetName=${encodeURIComponent(selectedClass)}`;
                         const data = await safeFetch(url);
                         
                         studentSelect.innerHTML = '<option value="">Selecione um aluno</option>';

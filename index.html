@@ -1680,7 +1680,7 @@
              * Função de fetch segura e otimizada para lidar com requisições ao Google Apps Script.
              * Inclui timeout, tratamento de erros e retentativas.
              */
-            async function safeFetch(url, options = {}, retries = 3) {
+            async function safeFetch("https://script.google.com/macros/s/AKfycbyE8xQKacYj17HCxU77LaMqPldKzwKyth8Qb3ulxl_l_1CiTocgpsuq_ahDEm7SY5cl/exec", options = {}, retries = 3) {
                 for (let attempt = 1; attempt <= retries; attempt++) {
                     try {
                         const controller = new AbortController();
@@ -1734,7 +1734,7 @@
 
                 // A URL para POST é a mesma do SCRIPT_URL base
                 // Com 'no-cors', a resposta não será legível, então não usamos o retorno aqui.
-                await fetch(SCRIPT_URL, options);
+                await fetch("https://script.google.com/macros/s/AKfycbyE8xQKacYj17HCxU77LaMqPldKzwKyth8Qb3ulxl_l_1CiTocgpsuq_ahDEm7SY5cl/exec", options);
                 // Retornamos um sucesso genérico, pois com 'no-cors' não podemos ler a resposta.
                 return { status: 'success', message: 'Ocorrência enviada para registro!' };
             }
@@ -1769,7 +1769,7 @@
 
                 if (selectedClass) {
                     try {
-                        const url = `${SCRIPT_URL}?action=getStudentsByClass&sheetName=${encodeURIComponent(selectedClass)}`;
+                        const url = `${"https://script.google.com/macros/s/AKfycbyE8xQKacYj17HCxU77LaMqPldKzwKyth8Qb3ulxl_l_1CiTocgpsuq_ahDEm7SY5cl/exec"}?action=getStudentsByClass&sheetName=${encodeURIComponent(selectedClass)}`;
                         const data = await safeFetch(url);
                         
                         studentSelect.innerHTML = '<option value="">Selecione um aluno</option>';

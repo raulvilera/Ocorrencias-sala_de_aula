@@ -1796,7 +1796,7 @@
 
             async function loadPeriodStats() {
                 try {
-                    const url = `${SCRIPT_URL}?action=getPeriodStats`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbxT2mxwTTAGwg1LwcYu9XSMM716AzHyiWbyVbNymWyj1kMSi5FGarIaErk6ydMGFepC/exec"}?action=getPeriodStats`;
                     const response = await safeFetch(url);
                     
                     if (response.status === 'success') {
@@ -1814,7 +1814,7 @@
 
             async function loadGeneralStats() {
                 try {
-                    const url = `${SCRIPT_URL}?action=getGeneralStats`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbxT2mxwTTAGwg1LwcYu9XSMM716AzHyiWbyVbNymWyj1kMSi5FGarIaErk6ydMGFepC/exec"}?action=getGeneralStats`;
                     const response = await safeFetch(url);
                     
                     if (response.status === 'success') {
@@ -1839,7 +1839,7 @@
                 }
                 
                 try {
-                    const url = `${SCRIPT_URL}?action=getAllOccurrences`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbxT2mxwTTAGwg1LwcYu9XSMM716AzHyiWbyVbNymWyj1kMSi5FGarIaErk6ydMGFepC/exec"}?action=getAllOccurrences`;
                     const response = await safeFetch(url);
                     
                     if (response.status === 'success') {
@@ -1892,7 +1892,7 @@
 
             async function loadStudents(className) {
                 try {
-                    const url = `${SCRIPT_URL}?action=getStudents&className=${encodeURIComponent(className)}`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbxT2mxwTTAGwg1LwcYu9XSMM716AzHyiWbyVbNymWyj1kMSi5FGarIaErk6ydMGFepC/exec"}?action=getStudents&className=${encodeURIComponent(className)}`;
                     const response = await safeFetch(url);
                     
                     if (response.status === 'success') {
@@ -1908,7 +1908,7 @@
 
             async function loadStudentStats(studentName) {
                 try {
-                    const url = `${SCRIPT_URL}?action=getStudentStats&student=${encodeURIComponent(studentName)}`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbxT2mxwTTAGwg1LwcYu9XSMM716AzHyiWbyVbNymWyj1kMSi5FGarIaErk6ydMGFepC/exec"}?action=getStudentStats&student=${encodeURIComponent(studentName)}`;
                     const response = await safeFetch(url);
                     
                     if (response.status === 'success') {

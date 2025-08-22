@@ -1809,7 +1809,7 @@
             async function fetchData(action, params = {}) {
                 try {
                     const urlParams = new URLSearchParams(params);
-                    const url = `${SCRIPT_URL}?action=${action}&${urlParams.toString()}`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbyyvlmFl4F4ig24UGOH93zfsioNQofjPbuXM-5cY1faKdmSGwquLiGo-GCH7j0cx_Hg/exec"}?action=${action}&${urlParams.toString()}`;
                     
                     const response = await fetch(url, {
                         method: 'GET',

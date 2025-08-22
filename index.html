@@ -1587,6 +1587,7 @@
             // =========================================================================
             // CONFIGURAÇÕES E CONSTANTES
             // =========================================================================
+            // CORREÇÃO: URL do script atualizada para corresponder ao backend
             const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyEkEinhDuR1qQN-sTwowOUYgsm8kDIkZ8SnVsaa_lIsxDqMkrN9b49dr6mu4ddS_Wh/exec";
 
             const teacherEmails = {
@@ -1759,7 +1760,7 @@
             }
 
             // =========================================================================
-            // FUNÇÕES DE COMUNICAÇÃO COM O BACKEND
+            // FUNÇÕES DE COMUNICAÇÃO COM O BACKEND - CORRIGIDAS
             // =========================================================================
             async function safeFetch(url, options = {}, retries = 3) {
                 for (let attempt = 1; attempt <= retries; attempt++) {
@@ -1795,7 +1796,7 @@
 
             async function loadPeriodStats() {
                 try {
-                    const url = `${"https://script.google.com/macros/s/AKfycbyluFPyrG26uRwSH56DtVU2U_-L15U171nYKxhPQ6J4tW5zhdDHFP_d1mThTtp3Tsku/exec"}?action=getPeriodStats`;
+                    const url = `${SCRIPT_URL}?action=getPeriodStats`;
                     const response = await safeFetch(url);
                     
                     if (response.status === 'success') {
@@ -1813,7 +1814,7 @@
 
             async function loadGeneralStats() {
                 try {
-                    const url = `${"https://script.google.com/macros/s/AKfycbyluFPyrG26uRwSH56DtVU2U_-L15U171nYKxhPQ6J4tW5zhdDHFP_d1mThTtp3Tsku/exec"}?action=getGeneralStats`;
+                    const url = `${SCRIPT_URL}?action=getGeneralStats`;
                     const response = await safeFetch(url);
                     
                     if (response.status === 'success') {
@@ -1838,7 +1839,7 @@
                 }
                 
                 try {
-                    const url = `${"https://script.google.com/macros/s/AKfycbyluFPyrG26uRwSH56DtVU2U_-L15U171nYKxhPQ6J4tW5zhdDHFP_d1mThTtp3Tsku/exec"}?action=getAllOccurrences`;
+                    const url = `${SCRIPT_URL}?action=getAllOccurrences`;
                     const response = await safeFetch(url);
                     
                     if (response.status === 'success') {
@@ -1891,7 +1892,7 @@
 
             async function loadStudents(className) {
                 try {
-                    const url = `${"https://script.google.com/macros/s/AKfycbyluFPyrG26uRwSH56DtVU2U_-L15U171nYKxhPQ6J4tW5zhdDHFP_d1mThTtp3Tsku/exec"}?action=getStudents&className=${encodeURIComponent(className)}`;
+                    const url = `${SCRIPT_URL}?action=getStudents&className=${encodeURIComponent(className)}`;
                     const response = await safeFetch(url);
                     
                     if (response.status === 'success') {
@@ -1907,7 +1908,7 @@
 
             async function loadStudentStats(studentName) {
                 try {
-                    const url = `${"https://script.google.com/macros/s/AKfycbyluFPyrG26uRwSH56DtVU2U_-L15U171nYKxhPQ6J4tW5zhdDHFP_d1mThTtp3Tsku/exec"}?action=getStudentStats&student=${encodeURIComponent(studentName)}`;
+                    const url = `${SCRIPT_URL}?action=getStudentStats&student=${encodeURIComponent(studentName)}`;
                     const response = await safeFetch(url);
                     
                     if (response.status === 'success') {
@@ -1921,6 +1922,7 @@
                 }
             }
 
+            // CORREÇÃO PRINCIPAL: Função de envio de dados corrigida
             async function sendFormData(formData) {
                 const payload = {
                     action: 'addOccurrence',
@@ -1932,10 +1934,13 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(payload),
+                    // REMOVIDO: mode: 'no-cors' - isso impedia a leitura da resposta
+                    redirect: 'follow'
                 };
 
-                return await safeFetch("https://script.google.com/macros/s/AKfycbyluFPyrG26uRwSH56DtVU2U_-L15U171nYKxhPQ6J4tW5zhdDHFP_d1mThTtp3Tsku/exec", options);
+                // Usar a mesma URL para POST e GET
+                return await safeFetch(SCRIPT_URL, options);
             }
 
             // =========================================================================

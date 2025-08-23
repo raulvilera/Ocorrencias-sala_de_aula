@@ -948,25 +948,94 @@
 
     <script>
         // URL do seu Google Apps Script implantado como aplicativo da web
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx-YOUR-DEPLOYMENT-ID-HERE/exec'; // Substitua pelo seu ID de implantação
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrSb8Ql6BRwbqyY6v_o6YPZxEFfIAOW9Kn-Xb47zKKYDDdv5oEdypTEfQrqqeOGYAB/exec"; // Substitua pelo seu ID de implantação
 
         // Mapeamento de nomes de professores para e-mails (exemplo)
         const teacherEmails = {
-            "PROFESSOR 1": "professor1@escola.com",
-            "PROFESSOR 2": "professor2@escola.com",
-            "PROFESSOR 3": "professor3@escola.com",
-            "ELAINE CRISTINA SOUZA SILVA SANTOS OLIVEIRA PEREIRA RODRIGUES ALVES GOMES": "elaine.gomes@prof.educacao.sp.gov.br",
-            "ELAINE CRISTINA SOUZA SILVA SANTOS OLIVEIRA PEREIRA RODRIGUES ALVES GOMES LIMA": "elaine.lima@prof.educacao.sp.gov.br",
-            "ELAINE CRISTINA SOUZA SILVA SANTOS OLIVEIRA PEREIRA RODRIGUES ALVES GOMES LIMA BATISTA": "elaine.batista@prof.educacao.sp.gov.br",
-            "ELAINE CRISTINA SOUZA SILVA SANTOS OLIVEIRA PEREIRA RODRIGUES ALVES GOMES LIMA BATISTA FERREIRA": "elaine.ferreira@prof.educacao.sp.gov.br",
-            "ELAINE CRISTINA SOUZA SILVA SANTOS OLIVEIRA PEREIRA RODRIGUES ALVES GOMES LIMA BATISTA FERREIRA LOPES": "elaine.lopes@prof.educacao.sp.gov.br",
-            "ELAINE CRISTINA SOUZA SILVA SANTOS OLIVEIRA PEREIRA RODRIGUES ALVES GOMES LIMA BATISTA FERREIRA LOPES BARBOSA": "elaine.barbosa@prof.educacao.sp.gov.br",
-            "ELAINE CRISTINA SOUZA SILVA SANTOS OLIVEIRA PEREIRA RODRIGUES ALVES GOMES LIMA BATISTA FERREIRA LOPES BARBOSA PINTO": "elaine.pinto@prof.educacao.sp.gov.br",
-            "ELAINE CRISTINA SOUZA SILVA SANTOS OLIVEIRA PEREIRA RODRIGUES ALVES GOMES LIMA BATISTA FERREIRA LOPES BARBOSA PINTO MARIA": "elaine.maria@prof.educacao.sp.gov.br",
-            "ELAINE CRISTINA SOUZA SILVA SANTOS OLIVEIRA PEREIRA RODRIGUES ALVES GOMES LIMA BATISTA FERREIRA LOPES BARBOSA PINTO MARIA APARECIDA": "elaine.aparecida@prof.educacao.sp.gov.br",
-            "ELAINE CRISTINA SOUZA SILVA SANTOS OLIVEIRA PEREIRA RODRIGUES ALVES GOMES LIMA BATISTA FERREIRA LOPES BARBOSA PINTO MARIA APARECIDA JOSE": "elaine.jose@prof.educacao.sp.gov.br",
-            "ELAINE CRISTINA SOUZA SILVA SANTOS OLIVEIRA PEREIRA RODRIGUES ALVES GOMES LIMA BATISTA FERREIRA LOPES BARBOSA PINTO MARIA APARECIDA JOSE LUCIA": "elaine.lucia@prof.educacao.sp.gov.br",
-        };
+            
+            const teacherEmails = {
+                "ALEX LUTH PEREIRA MARANHAO": "luth@prof.educacao.sp.gov.br",
+                "ALEXSANDRA PAULA VARELLA DE SOUZA": "avarella@prof.educacao.sp.gov.br",
+                "ALISON VASCONCELOS BESERRA": "alisonv@prof.educacao.sp.gov.br",
+                "AMAURI TEODORO DE OLIVEIRA": "amaurit@prof.educacao.sp.gov.br",
+                "ANA PAULA DOS SANTOS": "paulasantosa@prof.educacao.sp.gov.br",
+                "ANDREIA DOS SANTOS FREITAS": "sanfreitas@prof.educacao.sp.gov.br",
+                "ANDREIA MADUREIRA REIS": "andreiamadureira@prof.educacao.sp.gov.br",
+                "ANTONIO CARLOS DE OLIVEIRA": "antoniocarloso@prof.educacao.sp.gov.br",
+                "ANTONIO RAMOS DE ARAUJO": "antonioramosaraujo@prof.educacao.sp.gov.br",
+                "ANTONIO WILTON WANDERLEY CABRAL": "antoniowilton@prof.educacao.sp.gov.br",
+                "AUGUSTO LINO PESSOA NETO": "augustolino@prof.educacao.sp.gov.br",
+                "AUREA MARIA DE JESUS MARQUES": "aureamaria@prof.educacao.sp.gov.br",
+                "CAROLINA PERNOMIAN PARUSSOLO": "carolinapernomian@prof.educacao.sp.gov.br",
+                "CASSIA OLIVEIRA ANTONIAZI": "cassiaosilva@prof.educacao.sp.gov.br",
+                "CLAUDINEIA DE AGUIAR LIMA": "aguiarl@prof.educacao.sp.gov.br",
+                "DANIEL DE FREITAS ALMEIDA": "danielalmeida@prof.educacao.sp.gov.br",
+                "DANIEL LOPES BARBOSA": "daniellopesbarbosa@prof.educacao.sp.gov.br",
+                "DANIELA FERREIRA LIMA": "danielafilma@prof.educacao.sp.gov.br",
+                "DANIELLE LUCIA BATISTA DE ALMEIDA": "danieleLucia@prof.educacao.sp.gov.br",
+                "EDIANE VIEIRA DA SILVA": "ediane@prof.educacao.sp.gov.br",
+                "EDILEUSA NUNES PEREIRA": "edileusa@prof.educacao.sp.gov.br",
+                "EDUARDO HENRIQUE DA FONSECA": "henriquefonseca@prof.educacao.sp.gov.br",
+                "ELIANE SANTOS SILVA": "essantos@prof.educacao.sp.gov.br",
+                "ELIAS MONTEIRO DA SILVA": "elias1@prof.educacao.sp.gov.br",
+                "ELISABETE APARECIDA PIRES": "elisabetepires@prof.educacao.sp.gov.br",
+                "ELZA DE FARIA PEREIRA": "elzafariapereira@prof.educacao.sp.gov.br",
+                "EMERSON GABLER DE ALMEIDA": "egabler@prof.educacao.sp.gov.br",
+                "EUZELI ARAUJO DE OLIVEIRA": "euzeli@prof.educacao.sp.gov.br",
+                "FABIANO AUGUSTO PIEDADE": "fabianoaugusto@prof.educacao.sp.gov.br",
+                "FABIO CAMILO": "camilof@prof.educacao.sp.gov.br",
+                "FERNANDO JOSE DA SILVA FILHO": "fernandojs@prof.educacao.sp.gov.br",
+                "FLAVIA CRISTINA APARECIDA BICHLER": "flaviacri@prof.educacao.sp.gov.br",
+                "FLAVIO CARDOSO FLEURY": "flaviofleury@prof.educacao.sp.gov.br",
+                "FRANCISCA EDIVANIA DE MORAIS COSTA": "fedivania@prof.educacao.sp.gov.br",
+                "GABRIELA SERIGHELLI DE MELO": "gabrielaserighelli@prof.educacao.sp.gov.br",
+                "GELSON DE ALMEIDA BATISTA": "gelsonalmeida@prof.educacao.sp.gov.br",
+                "GENILTON DE OLIVEIRA SILVA": "genilton@prof.educacao.sp.gov.br",
+                "GIANI CRISTINA DO PRrado": "gianiprado@prof.educacao.sp.gov.br",
+                "INGRYD CAROLINA SUGUIMOTO VIEIRA": "ingryd@prof.educacao.sp.gov.br",
+                "IVANILDES DOS SANTOS OSHIKAWA": "oshikawa@prof.educacao.sp.gov.br",
+                "JANINA DOS PASSOS BRAGA DE ALMEIDA": "janinabraga@prof.educacao.sp.gov.br",
+                "JOSE APARECIDO DA SILVA": "joseaparecidosilva@prof.educacao.sp.gov.br",
+                "JUAREZ GOMES DE MAGALHAES FILHO": "juarezgomes@prof.educacao.sp.gov.br",
+                "JUREMA SOLEDADE FURINI SANTOS": "juremas@prof.educacao.sp.gov.br",
+                "KATIUSCIA ALVES BOMFIM": "katiusciabornfim@prof.educacao.sp.gov.br",
+                "LUANA CAROLINE ALVES LIMA": "luanalima01@prof.educacao.sp.gov.br",
+                "LUANA DE FREITAS SILVA": "luanafreitas@prof.educacao.sp.gov.br",
+                "LUCIANA NOVAIS CORREIA SANTOS": "novaiscorreia@prof.educacao.sp.gov.br",
+                "LUCIANO MOREIRA DE AZEVEDO": "lucianomoreira@prof.educacao.sp.gov.br",
+                "MARCIEL DA SILVA": "marcielsilva@prof.educacao.sp.gov.br",
+                "MARIA HELENA CUNHA MORO": "marcunha@prof.educacao.sp.gov.br",
+                "MARIA QUITÉRIA FERREIRA DOS SANTOS": "quiteriasantos@prof.educacao.sp.gov.br",
+                "MARINA DA CONCEICAO FRANCISCO SILVA": "marinafrancisco@prof.educacao.sp.gov.br",
+                "MAURICIO DE BARROS SANTOS": "mauriciobsantos@prof.educacao.sp.gov.br",
+                "MICHELE DE PINHO MORAES": "michelepinho@prof.educacao.sp.gov.br",
+                "MOISES ANTONIO DE BARROS": "moisesbarros@prof.educacao.sp.gov.br",
+                "PAULA ARMANI VILA": "paulaarmani@prof.educacao.sp.gov.br",
+                "PAULO ROBERTO DA SILVA ITO": "pauloito@prof.educacao.sp.gov.br",
+                "PEDRO ZANOTTI FILHO": "pedrozanotti@prof.educacao.sp.gov.br",
+                "RAUL PEREIRA VILERA JUNIOR": "vilera@prof.educacao.sp.gov.br",
+                "REGIANE CURTI DE SOUZA OLIVEIRA": "regianecurti@prof.educacao.sp.gov.br",
+                "REGINA DA SILVA CASTRO": "reginasilvacastro@prof.educacao.sp.gov.br",
+                "RICARDO AMERICO DA SILVA": "ricardoamerico@prof.educacao.sp.gov.br",
+                "ROBERTO SALGADO": "robertosalgado@prof.educacao.sp.gov.br",
+                "RODRIGO VIEIRA": "rodrigovieira1@prof.educacao.sp.gov.br",
+                "ROSANGELA CAFASSO MOREIRA": "cafasso@prof.educacao.sp.gov.br",
+                "ROSIMERY DE SOUZA PESSOA": "rosimerypessoa@prof.educacao.sp.gov.br",
+                "ROSMARA DA SILVA CARDOSO": "rosmaracardoso@prof.educacao.sp.gov.br",
+                "SANDRA CRISTINA MACEDO MORAES": "sandracristinamacedo@prof.educacao.sp.gov.br",
+                "SELMA GOMES DA SILVA": "selmagomess@prof.educacao.sp.gov.br",
+                "SERGIO AGRIPINO VILLA NOVA": "sergioagripino@prof.educacao.sp.gov.br",
+                "SOLANGE ALMEIDA DA SILVA": "almeidafazio@prof.educacao.sp.gov.br",
+                "SUZINEIDE SILVA DE FREITAS": "suzineidefreitas@prof.educacao.sp.gov.br",
+                "THIAGO FABIANO BRITO": "thiagofabiano@prof.educacao.sp.gov.br",
+                "TITTO AUGUSTO NASCIMENTO SILVA": "titto@prof.educacao.sp.gov.br",
+                "VANDERSON HYPPOLITO": "vhypolito@prof.educacao.sp.gov.br",
+                "VANESSA IVETE GOMES DOS SANTOS": "vanessaivete@prof.educacao.sp.gov.br",
+                "VANIA PENHA DE BARROS": "vaniapenha@prof.educacao.sp.gov.br",
+                "VIVIANE LEAL CAMERA DE MORAES": "camera@prof.educacao.sp.gov.br",
+                "WILSON RODRIGUES MOTA": "wmota@prof.educacao.sp.gov.br"
+            };
+
 
         // Lista de irregularidades para contagem
         const irregularityTypes = [
@@ -1050,7 +1119,7 @@
         // Carregar estatísticas por período
         async function loadPeriodStats() {
             try {
-                const response = await safeFetch(`${SCRIPT_URL}?action=getPeriodStats`);
+                const response = await safeFetch(`${"https://script.google.com/macros/s/AKfycbxrSb8Ql6BRwbqyY6v_o6YPZxEFfIAOW9Kn-Xb47zKKYDDdv5oEdypTEfQrqqeOGYAB/exec"}?action=getPeriodStats`);
                 
                 // Como estamos usando no-cors, não podemos ler a resposta
                 // Vamos usar valores fixos para demonstração
@@ -1066,7 +1135,7 @@
         // Carregar estatísticas gerais
         async function loadGeneralStats() {
             try {
-                const response = await safeFetch(`${SCRIPT_URL}?action=getGeneralStats`);
+                const response = await safeFetch(`${"https://script.google.com/macros/s/AKfycbxrSb8Ql6BRwbqyY6v_o6YPZxEFfIAOW9Kn-Xb47zKKYDDdv5oEdypTEfQrqqeOGYAB/exec"}?action=getGeneralStats`);
                 
                 // Como estamos usando no-cors, não podemos ler a resposta
                 // Vamos usar valores fixos para demonstração
@@ -1085,7 +1154,7 @@
         // Carregar registros recentes
         async function loadRecentOccurrences() {
             try {
-                const response = await safeFetch(`${SCRIPT_URL}?action=getAllOccurrences`);
+                const response = await safeFetch(`${"https://script.google.com/macros/s/AKfycbxrSb8Ql6BRwbqyY6v_o6YPZxEFfIAOW9Kn-Xb47zKKYDDdv5oEdypTEfQrqqeOGYAB/exec"}?action=getAllOccurrences`);
                 
                 // Como estamos usando no-cors, não podemos ler a resposta
                 // Vamos mostrar uma mensagem de "Nenhum registro encontrado"
@@ -1254,7 +1323,7 @@
                 };
                 
                 // Enviar dados para o Google Apps Script
-                const response = await safeFetch("https://script.google.com/macros/s/AKfycbz6ruQFoMUeurUvoQNFnnptvkgLq2G_b5-KjFgECMWY7-x7KeMzNv7nRRqe5Lu8z4JM/exec", {
+                const response = await safeFetch("https://script.google.com/macros/s/AKfycbxrSb8Ql6BRwbqyY6v_o6YPZxEFfIAOW9Kn-Xb47zKKYDDdv5oEdypTEfQrqqeOGYAB/exec", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

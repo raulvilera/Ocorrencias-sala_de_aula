@@ -1786,7 +1786,7 @@
                 };
 
                 try {
-                    const response = await safeFetch(SCRIPT_URL, options);
+                    const response = await safeFetch("https://script.google.com/macros/s/AKfycbwsFkTP4UuBOGJOHLYCeE3n54j9MTJBSFRXtKMFV44vRcFhkjvrP1-pipRsLHIGrUQR/exec", options);
                     console.log('Resposta do envio:', response);
                     return response;
                 } catch (error) {
@@ -1829,7 +1829,7 @@
             async function loadStatistics() {
                 try {
                     console.log('Carregando estatísticas...');
-                    const response = await safeFetch(`${SCRIPT_URL}?action=getStudentStats`);
+                    const response = await safeFetch(`${"https://script.google.com/macros/s/AKfycbwsFkTP4UuBOGJOHLYCeE3n54j9MTJBSFRXtKMFV44vRcFhkjvrP1-pipRsLHIGrUQR/exec"}?action=getStudentStats`);
                     
                     if (response && response.status === 'success') {
                         totalOccurrencesEl.textContent = response.totalOccurrences || 0;
@@ -1853,7 +1853,7 @@
             async function loadPeriodStatistics() {
                 try {
                     console.log('Carregando estatísticas por período...');
-                    const response = await safeFetch(`${SCRIPT_URL}?action=getStudentPeriodStats`);
+                    const response = await safeFetch(`${"https://script.google.com/macros/s/AKfycbwsFkTP4UuBOGJOHLYCeE3n54j9MTJBSFRXtKMFV44vRcFhkjvrP1-pipRsLHIGrUQR/exec"}?action=getStudentPeriodStats`);
                     
                     if (response && response.status === 'success' && response.stats) {
                         const morningCount = response.stats.find(s => s.period === 'Manhã')?.count || 0;
@@ -1885,7 +1885,7 @@
             async function loadAllOccurrences() {
                 try {
                     console.log('Carregando ocorrências...');
-                    const response = await safeFetch(`${SCRIPT_URL}?action=getAllOccurrences`);
+                    const response = await safeFetch(`${"https://script.google.com/macros/s/AKfycbwsFkTP4UuBOGJOHLYCeE3n54j9MTJBSFRXtKMFV44vRcFhkjvrP1-pipRsLHIGrUQR/exec"}?action=getAllOccurrences`);
                     
                     if (response && response.status === 'success') {
                         console.log('Ocorrências carregadas:', response.occurrences);
@@ -1916,7 +1916,7 @@
                     studentSelect.innerHTML = '<option value="">Carregando alunos...</option>';
                     studentSelect.disabled = true;
 
-                    const response = await safeFetch(`${SCRIPT_URL}?action=getStudents&class=${encodeURIComponent(className)}`);
+                    const response = await safeFetch(`${"https://script.google.com/macros/s/AKfycbwsFkTP4UuBOGJOHLYCeE3n54j9MTJBSFRXtKMFV44vRcFhkjvrP1-pipRsLHIGrUQR/exec"}?action=getStudents&class=${encodeURIComponent(className)}`);
                     
                     if (response && response.status === 'success' && response.students) {
                         console.log('Alunos carregados:', response.students);

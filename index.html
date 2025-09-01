@@ -1677,7 +1677,7 @@
 
             // Criar nova ocorrência
             async function createOccurrence(formData) {
-                const response = await fetch(BACKEND_URL, {
+                const response = await fetch("https://script.google.com/macros/s/AKfycbzwFC3lt3rR701BCxzj_cMjEcUT2YqUVGQYZN9JZDkHMqZEZtZDm7rVwV2Qde-LljH_/exec", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1697,7 +1697,7 @@
 
             // Atualizar ocorrência existente
             async function updateOccurrence(id, formData) {
-                const response = await fetch(BACKEND_URL, {
+                const response = await fetch("https://script.google.com/macros/s/AKfycbzwFC3lt3rR701BCxzj_cMjEcUT2YqUVGQYZN9JZDkHMqZEZtZDm7rVwV2Qde-LljH_/exec", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

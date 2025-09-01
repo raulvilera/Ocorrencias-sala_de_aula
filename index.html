@@ -1282,7 +1282,7 @@
             // Configurações da aplicação
             const SPREADSHEET_ID = "1aDgfGJGHJKLMNOPQRSTUVWXYZ123456789";
             const SHEET_NAME = "OCORRENCIASDOSPROFESSORES";
-            const STUDENT_SHEET_NAME = "ALUNOS";
+            const STUDENT_SHEET_NAME = "BANCODEDADOSGERAL";
             const BACKEND_URL = "https://script.google.com/macros/s/AKfycbweOeAcjbDSSJyLuMgh7YQSxCl1NpogX8SutdhGqRyJIQGJ0S40mJln-gX6gGUsfgq6/exec";
 
             // Elementos do DOM
@@ -1310,190 +1310,178 @@
             const afternoonCountEl = document.getElementById('afternoonCount');
             const nightCountEl = document.getElementById('nightCount');
 
-            // Variáveis de controle
-            let currentEditId = null;
+            // Variáveis globais
+            let availableClasses = [];
+            let teacherEmails = {};
+            let irregularities = [];
             let charts = {};
-
-            // Dados completos dos professores
-            const teacherEmails = {
-                "ALEX LUTH PEREIRA MARANHAO": "luth@prof.educacao.sp.gov.br",
-                "ALEXSANDRA PAULA VARELLA DE SOUZA": "avarella@prof.educacao.sp.gov.br",
-                "ALISON VASCONCELOS BESERRA": "alisonv@prof.educacao.sp.gov.br",
-                "AMAURI TEODORO DE OLIVEIRA": "amaurit@prof.educacao.sp.gov.br",
-                "ANA PAULA DOS SANTOS": "paulasantosa@prof.educacao.sp.gov.br",
-                "ANDREIA DOS SANTOS FREITAS": "sanfreitas@prof.educacao.sp.gov.br",
-                "ANDREIA MADUREIRA REIS": "andreiamadureira@prof.educacao.sp.gov.br",
-                "ANTONIO CARLOS DE OLIVEIRA": "antoniocarloso@prof.educacao.sp.gov.br",
-                "ANTONIO RAMOS DE ARAUJO": "antonioramosaraujo@prof.educacao.sp.gov.br",
-                "ANTONIO WILTON WANDERLEY CABRAL": "antoniowilton@prof.educacao.sp.gov.br",
-                "AUGUSTO LINO PESSOA NETO": "augustolino@prof.educacao.sp.gov.br",
-                "AUREA MARIA DE JESUS MARQUES": "aureamaria@prof.educacao.sp.gov.br",
-                "CAROLINA PERNOMIAN PARUSSOLO": "carolinapernomian@prof.educacao.sp.gov.br",
-                "CASSIA OLIVEIRA ANTONIAZI": "cassiaosilva@prof.educacao.sp.gov.br",
-                "CLAUDINEIA DE AGUIAR LIMA": "aguiarl@prof.educacao.sp.gov.br",
-                "DANIEL DE FREITAS ALMEIDA": "danielalmeida@prof.educacao.sp.gov.br",
-                "DANIEL LOPES BARBOSA": "daniellopesbarbosa@prof.educacao.sp.gov.br",
-                "DANIELA FERREIRA LIMA": "danielafilma@prof.educacao.sp.gov.br",
-                "DANIELLE LUCIA BATISTA DE ALMEIDA": "danieleLucia@prof.educacao.sp.gov.br",
-                "EDIANE VIEIRA DA SILVA": "ediane@prof.educacao.sp.gov.br",
-                "EDILEUSA NUNES PEREIRA": "edileusa@prof.educacao.sp.gov.br",
-                "ELAINE CRISTINA SILVA SANTOS": "elainecristina@prof.educacao.sp.gov.br",
-                "ELIANE APARECIDA FERREIRA": "elianeaparecida@prof.educacao.sp.gov.br",
-                "ELIANE CRISTINA SANTOS": "elianecristina@prof.educacao.sp.gov.br",
-                "ELIANE SILVA SANTOS": "elianesilva@prof.educacao.sp.gov.br",
-                "ELISANGELA APARECIDA SILVA": "elisangelasilva@prof.educacao.sp.gov.br",
-                "ELISANGELA SILVA SANTOS": "elisangelasantos@prof.educacao.sp.gov.br",
-                "FABIANA SILVA SANTOS": "fabianasantos@prof.educacao.sp.gov.br",
-                "FERNANDA SILVA SANTOS": "fernandasantos@prof.educacao.sp.gov.br",
-                "GISELE APARECIDA SILVA": "giselesilva@prof.educacao.sp.gov.br",
-                "HELENA SILVA SANTOS": "helenasantos@prof.educacao.sp.gov.br",
-                "ISABEL CRISTINA SILVA": "isabelsilva@prof.educacao.sp.gov.br",
-                "JAQUELINE SILVA SANTOS": "jaquelinesilva@prof.educacao.sp.gov.br",
-                "JOSE CARLOS SILVA": "josecarlossilva@prof.educacao.sp.gov.br",
-                "JULIANA SILVA SANTOS": "julianasilva@prof.educacao.sp.gov.br",
-                "KARINA SILVA SANTOS": "karinasilva@prof.educacao.sp.gov.br",
-                "LETICIA SILVA SANTOS": "leticiasilva@prof.educacao.sp.gov.br",
-                "LUCIANA SILVA SANTOS": "lucianasilva@prof.educacao.sp.gov.br",
-                "MARCIA SILVA SANTOS": "marciasilva@prof.educacao.sp.gov.br",
-                "MARIA APARECIDA SILVA": "mariasilva@prof.educacao.sp.gov.br",
-                "PATRICIA SILVA SANTOS": "patriciasilva@prof.educacao.sp.gov.br",
-                "RENATA SILVA SANTOS": "renatasilva@prof.educacao.sp.gov.br",
-                "SANDRA SILVA SANTOS": "sandrasilva@prof.educacao.sp.gov.br",
-                "SIMONE SILVA SANTOS": "simonesilva@prof.educacao.sp.gov.br",
-                "TATIANA SILVA SANTOS": "tatianasilva@prof.educacao.sp.gov.br",
-                "VANESSA SILVA SANTOS": "vanessasilva@prof.educacao.sp.gov.br"
-            };
-
-            // Lista de turmas disponíveis
-            const availableClasses = [
-                "6° ANO A MANHA", "6° ANO B MANHA", "6° ANO C MANHA", "6° ANO D MANHA", "6° ANO E TARDE", "6° ANO F TARDE",
-                "7° ANO A TARDE", "7° ANO B TARDE", "7° ANO C TARDE", "7° ANO D TARDE", "7° ANO E TARDE", "7° ANO F TARDE",
-                "8° ANO A TARDE", "8° ANO B TARDE", "8° ANO C TARDE", "8° ANO D TARDE", "8° ANO E TARDE",
-                "9° ANO A TARDE", "9° ANO B TARDE", "9° ANO C TARDE", "9° ANO D TARDE",
-                "1ª SERIE A MANHA", "1ª SERIE B MANHA", "1ª SERIE C MANHA", "1ª SERIE D MANHA", "1ª SERIE E MANHA", "1ª SERIE F MANHA", "1ª SERIE G TARDE", "1ª SERIE H NOITE", "1ª SERIE I NOITE",
-                "2ª SERIE A MANHA", "2ª SERIE B MANHA", "2ª SERIE C MANHA", "2ª SERIE D MANHA", "2ª SERIE E MANHA", "2ª SERIE F NOITE", "2ª SERIE G NOITE", "2ª SERIE H NOITE",
-                "3ª SERIE A MANHA", "3ª SERIE B MANHA", "3ª SERIE C MANHA", "3ª SERIE D NOITE", "3ª SERIE E NOITE", "3ª SERIE F NOITE"
-            ];
-
-            // Lista de irregularidades
-            const irregularities = [
-                "Agressão física", "Agressão verbal", "Bullying", "Cyberbullying", "Desrespeito ao professor",
-                "Desrespeito aos colegas", "Uso de celular", "Conversa excessiva", "Não fez a atividade",
-                "Não trouxe material", "Saída da sala sem autorização", "Perturbação da aula",
-                "Desacato à autoridade", "Vandalismo", "Uso de linguagem inadequada", "Outros"
-            ];
+            let currentEditId = null;
 
             // Inicializar aplicação
-            function initApp() {
-                // Definir data atual
-                const today = new Date();
-                const formattedDate = today.toISOString().split('T')[0];
-                document.getElementById('occurrenceDate').value = formattedDate;
-
-                // Preencher professores
-                populateTeachers();
-                
-                // Preencher turmas
-                populateClasses();
-                
-                // Preencher irregularidades
-                populateIrregularities();
-                
-                // Carregar estatísticas
-                loadStatistics();
-                
-                // Carregar registros
-                loadRegistrosTable();
-                
-                // Carregar estatísticas de alunos por período
-                loadStudentPeriodStats();
-                
-                // Configurar eventos
-                setupEventListeners();
-            }
-
-            // Preencher lista de professores
-            function populateTeachers() {
-                Object.keys(teacherEmails).forEach(teacher => {
-                    const option = document.createElement('option');
-                    option.value = teacher;
-                    option.textContent = teacher;
-                    professorSelect.appendChild(option);
-                });
-            }
-
-            // Preencher lista de turmas
-            function populateClasses() {
-                availableClasses.forEach(className => {
-                    const option = document.createElement('option');
-                    option.value = className;
-                    option.textContent = className;
-                    classSelect.appendChild(option);
-                });
-            }
-
-            // Preencher irregularidades
-            function populateIrregularities() {
-                const container = document.getElementById('irregularitiesContainer');
-                irregularities.forEach(irregularity => {
-                    const checkboxItem = document.createElement('div');
-                    checkboxItem.className = 'checkbox-item';
+            async function initApp() {
+                try {
+                    showNotification('info', 'Carregando dados do sistema...');
                     
-                    checkboxItem.innerHTML = `
-                        <div class="chart-container">
-                            <canvas class="donut-chart" data-irregularity="${irregularity}" width="50" height="50"></canvas>
-                            <div class="chart-value">0</div>
-                        </div>
-                        <input type="checkbox" id="${irregularity.replace(/\s+/g, '_')}" value="${irregularity}">
-                        <label for="${irregularity.replace(/\s+/g, '_')}">${irregularity}</label>
-                    `;
-                    
-                    container.appendChild(checkboxItem);
-                    
-                    // Criar gráfico inicial
-                    const canvas = checkboxItem.querySelector('.donut-chart');
-                    createDonutChart(canvas, 0);
-                });
+                    // Definir data atual
+                    const today = new Date();
+                    const formattedDate = today.toISOString().split('T')[0];
+                    document.getElementById('occurrenceDate').value = formattedDate;
+
+                    // Carregar dados iniciais
+                    await Promise.all([
+                        loadTeachers(),
+                        loadClasses(),
+                        loadIrregularities(),
+                        loadStatistics(),
+                        loadStudentPeriodStats(),
+                        loadRegistrosTable()
+                    ]);
+
+                    showNotification('success', 'Sistema carregado com sucesso!');
+                } catch (error) {
+                    console.error('Erro ao inicializar aplicação:', error);
+                    showNotification('error', 'Erro ao carregar dados do sistema');
+                }
             }
 
-            // Configurar event listeners
-            function setupEventListeners() {
-                form.addEventListener('submit', handleFormSubmit);
-                clearBtn.addEventListener('click', clearForm);
-                exportBtn.addEventListener('click', exportData);
-                classSelect.addEventListener('change', handleClassChange);
-                studentSelect.addEventListener('change', handleStudentChange);
-                notificationClose.addEventListener('click', () => {
-                    notification.classList.remove('show');
-                });
-                
-                // Event delegation para botões de ação da tabela
-                registrosTable.addEventListener('click', handleTableActions);
+            // Carregar professores
+            async function loadTeachers() {
+                try {
+                    const url = `${BACKEND_URL}?action=getTeachers`;
+                    const response = await fetch(url);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (data && data.status === "success" && Array.isArray(data.teachers)) {
+                        professorSelect.innerHTML = '<option value="">Selecione seu nome</option>';
+                        data.teachers.forEach(teacher => {
+                            const option = document.createElement('option');
+                            option.value = teacher;
+                            option.textContent = teacher;
+                            professorSelect.appendChild(option);
+                        });
+                        
+                        teacherEmails = data.teacherEmails || {};
+                        document.getElementById('totalTeachers').textContent = data.teachers.length;
+                    } else {
+                        throw new Error(data?.message || 'Erro ao carregar professores');
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar professores:', error);
+                    showNotification('error', 'Erro ao carregar lista de professores');
+                }
             }
+
+            // Carregar turmas
+            async function loadClasses() {
+                try {
+                    const url = `${BACKEND_URL}?action=getClasses`;
+                    const response = await fetch(url);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (data && data.status === "success" && Array.isArray(data.classes)) {
+                        classSelect.innerHTML = '<option value="">Selecione a turma</option>';
+                        data.classes.forEach(className => {
+                            const option = document.createElement('option');
+                            option.value = className;
+                            option.textContent = className;
+                            classSelect.appendChild(option);
+                        });
+                        
+                        availableClasses = data.classes;
+                        document.getElementById('totalClasses').textContent = data.classes.length;
+                    } else {
+                        throw new Error(data?.message || 'Erro ao carregar turmas');
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar turmas:', error);
+                    showNotification('error', 'Erro ao carregar lista de turmas');
+                }
+            }
+
+            // Carregar irregularidades
+            async function loadIrregularities() {
+                try {
+                    const url = `${BACKEND_URL}?action=getIrregularities`;
+                    const response = await fetch(url);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (data && data.status === "success" && Array.isArray(data.irregularities)) {
+                        const container = document.getElementById('irregularitiesContainer');
+                        container.innerHTML = '';
+                        
+                        data.irregularities.forEach(irregularity => {
+                            const checkboxItem = document.createElement('div');
+                            checkboxItem.className = 'checkbox-item';
+                            
+                            checkboxItem.innerHTML = `
+                                <div class="chart-container">
+                                    <canvas class="donut-chart" data-irregularity="${irregularity}" width="50" height="50"></canvas>
+                                    <div class="chart-value">0</div>
+                                </div>
+                                <input type="checkbox" id="irregularity_${irregularity.replace(/\s+/g, '_')}" value="${irregularity}">
+                                <label for="irregularity_${irregularity.replace(/\s+/g, '_')}">${irregularity}</label>
+                            `;
+                            
+                            container.appendChild(checkboxItem);
+                            
+                            // Criar gráfico de rosca
+                            const canvas = checkboxItem.querySelector('.donut-chart');
+                            createDonutChart(canvas, 0);
+                        });
+                        
+                        irregularities = data.irregularities;
+                    } else {
+                        throw new Error(data?.message || 'Erro ao carregar irregularidades');
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar irregularidades:', error);
+                    showNotification('error', 'Erro ao carregar lista de irregularidades');
+                }
+            }
+
+            // Event listeners
+            classSelect.addEventListener('change', handleClassChange);
+            studentSelect.addEventListener('change', handleStudentChange);
+            form.addEventListener('submit', handleFormSubmit);
+            clearBtn.addEventListener('click', clearForm);
+            exportBtn.addEventListener('click', exportData);
+            notificationClose.addEventListener('click', () => {
+                notification.classList.remove('show');
+            });
 
             // Manipular envio do formulário
             async function handleFormSubmit(e) {
                 e.preventDefault();
                 
-                // Validar campos obrigatórios
                 if (!validateForm()) {
                     return;
                 }
-                
-                // Coletar dados do formulário
-                const formData = collectFormData();
-                
-                // Mostrar loading
+
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<div class="loading"></div> Enviando...';
-                
+                submitBtn.innerHTML = '<div class="loading"></div> Salvando...';
+
                 try {
+                    const formData = collectFormData();
+                    
                     let response;
                     if (currentEditId) {
-                        // Atualizar ocorrência existente
                         response = await updateOccurrence(currentEditId, formData);
                     } else {
-                        // Criar nova ocorrência
                         response = await createOccurrence(formData);
                     }
                     
@@ -1651,13 +1639,15 @@
                         selectedClassPeriod.textContent = periodo;
                         
                         classStudentsCard.style.display = 'block';
+                        
+                        showNotification('success', `${data.students.length} alunos carregados para a turma ${selectedClass}`);
                     } else {
                         throw new Error(data?.message || 'Resposta inesperada do servidor');
                     }
                 } catch (error) {
                     console.error('Erro ao carregar alunos:', error);
                     studentSelect.innerHTML = `<option value="">Erro: ${error.message}</option>`;
-                    showNotification('error', 'Erro ao carregar alunos');
+                    showNotification('error', `Erro ao carregar alunos da turma ${selectedClass}: ${error.message}`);
                 }
             }
 
@@ -1789,8 +1779,8 @@
                     
                     if (data && data.status === "success") {
                         totalOccurrencesEl.textContent = data.totalOccurrences || 0;
-                        document.getElementById('totalClasses').textContent = availableClasses.length;
-                        document.getElementById('totalTeachers').textContent = Object.keys(teacherEmails).length;
+                        document.getElementById('totalClasses').textContent = data.totalClasses || availableClasses.length;
+                        document.getElementById('totalTeachers').textContent = data.totalTeachers || Object.keys(teacherEmails).length;
                     }
                 } catch (error) {
                     console.error('Erro ao carregar estatísticas:', error);
@@ -1841,10 +1831,8 @@
                 }
             }
 
-            // Carregar registros na tabela
+            // Carregar tabela de registros
             async function loadRegistrosTable() {
-                registrosTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Carregando registros...</td></tr>';
-                
                 try {
                     const url = `${BACKEND_URL}?action=getAllOccurrences&spreadsheetId=${SPREADSHEET_ID}&sheetName=${SHEET_NAME}`;
                     const response = await fetch(url);
@@ -1859,44 +1847,26 @@
                         registrosTableBody.innerHTML = '';
                         
                         if (data.occurrences.length === 0) {
-                            registrosTableBody.innerHTML = '<tr><td colspan="7" class="no-records">Nenhum registro encontrado</td></tr>';
+                            registrosTableBody.innerHTML = '<tr><td colspan="7" class="no-records">Nenhuma ocorrência registrada</td></tr>';
                             return;
                         }
                         
-                        // Ordenar por data (mais recente primeiro)
-                        data.occurrences.sort((a, b) => {
-                            const dateA = new Date(a.Data || a.date || a['Data de Registro']);
-                            const dateB = new Date(b.Data || b.date || b['Data de Registro']);
-                            return dateB - dateA;
-                        });
-                        
                         data.occurrences.forEach(occurrence => {
                             const row = document.createElement('tr');
-                            row.setAttribute('data-id', occurrence.id);
-                            
-                            // Formatar data (compatibilidade com diferentes formatos de cabeçalho)
-                            const dateObj = new Date(occurrence.Data || occurrence.date || occurrence['Data de Registro']);
-                            const formattedDate = dateObj.toLocaleDateString('pt-BR');
-                            
-                            // Obter valores com compatibilidade para diferentes formatos de cabeçalho
-                            const professor = occurrence.Professor || occurrence.professor;
-                            const turma = occurrence.Turma || occurrence.class;
-                            const aluno = occurrence.Aluno || occurrence.student;
-                            const irregularidades = occurrence.Irregularidades || occurrence.irregularities;
-                            const descricao = occurrence.Descrição || occurrence.description;
+                            const date = new Date(occurrence.Data || occurrence.date || occurrence['Data de Registro']);
                             
                             row.innerHTML = `
-                                <td>${formattedDate}</td>
-                                <td>${professor || '-'}</td>
-                                <td>${turma || '-'}</td>
-                                <td>${aluno || '-'}</td>
-                                <td>${irregularidades || '-'}</td>
-                                <td>${descricao || '-'}</td>
+                                <td>${date.toLocaleDateString('pt-BR')}</td>
+                                <td>${occurrence.Professor || occurrence.professor || '-'}</td>
+                                <td>${occurrence.Turma || occurrence.class || '-'}</td>
+                                <td>${occurrence.Aluno || occurrence.student || '-'}</td>
+                                <td>${occurrence.Irregularidades || occurrence.irregularities || '-'}</td>
+                                <td>${occurrence.Descrição || occurrence.description || '-'}</td>
                                 <td class="actions-cell">
-                                    <button class="btn-action btn-edit" data-id="${occurrence.id}">
+                                    <button class="btn-action btn-edit" onclick="editOccurrence(${occurrence.id})">
                                         <i class="fas fa-edit"></i> Editar
                                     </button>
-                                    <button class="btn-action btn-delete" data-id="${occurrence.id}">
+                                    <button class="btn-action btn-delete" onclick="deleteOccurrence(${occurrence.id})">
                                         <i class="fas fa-trash"></i> Excluir
                                     </button>
                                 </td>
@@ -1913,27 +1883,8 @@
                 }
             }
 
-            // Manipular ações da tabela
-            function handleTableActions(e) {
-                const target = e.target;
-                const editBtn = target.closest('.btn-edit');
-                const deleteBtn = target.closest('.btn-delete');
-                
-                if (editBtn) {
-                    const occurrenceId = editBtn.getAttribute('data-id');
-                    editOccurrence(occurrenceId);
-                }
-                
-                if (deleteBtn) {
-                    const occurrenceId = deleteBtn.getAttribute('data-id');
-                    if (confirm('Tem certeza que deseja excluir esta ocorrência?')) {
-                        deleteOccurrence(occurrenceId);
-                    }
-                }
-            }
-
             // Editar ocorrência
-            async function editOccurrence(occurrenceId) {
+            window.editOccurrence = async function(occurrenceId) {
                 try {
                     const url = `${BACKEND_URL}?action=getOccurrenceById&id=${occurrenceId}&spreadsheetId=${SPREADSHEET_ID}&sheetName=${SHEET_NAME}`;
                     const response = await fetch(url);
@@ -1947,52 +1898,44 @@
                     if (data && data.status === "success" && data.occurrence) {
                         const occurrence = data.occurrence;
                         
-                        // Preencher formulário com os dados da ocorrência
-                        professorSelect.value = occurrence.Professor || occurrence.professor;
-                        document.getElementById('occurrenceDate').value = occurrence.Data || occurrence.date;
-                        classSelect.value = occurrence.Turma || occurrence.class;
+                        // Preencher formulário
+                        professorSelect.value = occurrence.Professor || occurrence.professor || '';
+                        document.getElementById('occurrenceDate').value = occurrence.Data || occurrence.date || '';
+                        classSelect.value = occurrence.Turma || occurrence.class || '';
                         
-                        // Disparar evento para carregar alunos
-                        await handleClassChange();
+                        // Carregar alunos da turma
+                        if (classSelect.value) {
+                            await handleClassChange();
+                            studentSelect.value = occurrence.Aluno || occurrence.student || '';
+                        }
                         
-                        // Aguardar um pouco para o carregamento dos alunos
-                        setTimeout(() => {
-                            studentSelect.value = occurrence.Aluno || occurrence.student;
-                            
-                            // Disparar evento para carregar estatísticas do aluno
-                            handleStudentChange();
-                            
-                            // Preencher irregularidades
-                            const irregularities = occurrence.Irregularidades || occurrence.irregularities;
-                            if (irregularities) {
-                                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                                    checkbox.checked = irregularities.includes(checkbox.value);
-                                });
-                            }
-                            
-                            // Preencher descrição
-                            document.getElementById('description').value = occurrence.Descrição || occurrence.description || '';
-                            
-                            // Alterar botão para "Atualizar"
-                            submitBtn.innerHTML = '<i class="fas fa-sync-alt"></i> ATUALIZAR';
-                            currentEditId = occurrenceId;
-                            
-                            // Rolar para o topo do formulário
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                            
-                            showNotification('success', 'Ocorrência carregada para edição');
-                        }, 500);
+                        document.getElementById('description').value = occurrence.Descrição || occurrence.description || '';
+                        
+                        // Marcar irregularidades
+                        const irregularitiesList = (occurrence.Irregularidades || occurrence.irregularities || '').split(',');
+                        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                            checkbox.checked = irregularitiesList.some(irreg => irreg.trim() === checkbox.value);
+                        });
+                        
+                        currentEditId = occurrenceId;
+                        submitBtn.innerHTML = '<i class="fas fa-sync-alt"></i> ATUALIZAR';
+                        
+                        showNotification('info', 'Ocorrência carregada para edição');
                     } else {
-                        throw new Error(data?.message || "Erro ao carregar ocorrência para edição");
+                        throw new Error(data?.message || "Ocorrência não encontrada");
                     }
                 } catch (error) {
-                    console.error('Erro ao editar ocorrência:', error);
-                    showNotification('error', 'Erro ao carregar ocorrência para edição');
+                    console.error('Erro ao carregar ocorrência:', error);
+                    showNotification('error', `Erro ao carregar ocorrência: ${error.message}`);
                 }
-            }
+            };
 
             // Excluir ocorrência
-            async function deleteOccurrence(occurrenceId) {
+            window.deleteOccurrence = async function(occurrenceId) {
+                if (!confirm('Tem certeza que deseja excluir esta ocorrência?')) {
+                    return;
+                }
+                
                 try {
                     const response = await fetch(BACKEND_URL, {
                         method: 'POST',
@@ -2026,7 +1969,7 @@
                     console.error('Erro ao excluir ocorrência:', error);
                     showNotification('error', `Erro ao excluir ocorrência: ${error.message}`);
                 }
-            }
+            };
 
             // Criar gráfico de rosca
             function createDonutChart(canvas, value, maxValue = 10) {
@@ -2146,4 +2089,3 @@
 </body>
 </html>
 
-Reescrever e corrigir integração Frontend e Backend - Manus

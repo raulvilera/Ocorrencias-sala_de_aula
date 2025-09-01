@@ -1730,7 +1730,7 @@
                 }
 
                 try {
-                    const url = `${BACKEND_URL}?action=getStudents&class=${encodeURIComponent(selectedClass)}`;
+                    const url = `$"https://script.google.com/macros/s/AKfycbzwFC3lt3rR701BCxzj_cMjEcUT2YqUVGQYZN9JZDkHMqZEZtZDm7rVwV2Qde-LljH_/exec"}?action=getStudents&class=${encodeURIComponent(selectedClass)}`;
                     const response = await fetch(url);
                     
                     if (!response.ok) {
@@ -1780,7 +1780,7 @@
                     studentOccurrencesCount.textContent = "Carregando...";
                     
                     try {
-                        const url = `${BACKEND_URL}?action=getStudentStats&student=${encodeURIComponent(studentSelect.value)}`;
+                        const url = `${"https://script.google.com/macros/s/AKfycbzwFC3lt3rR701BCxzj_cMjEcUT2YqUVGQYZN9JZDkHMqZEZtZDm7rVwV2Qde-LljH_/exec"}?action=getStudentStats&student=${encodeURIComponent(studentSelect.value)}`;
                         const response = await fetch(url);
                         
                         if (!response.ok) {
@@ -1833,7 +1833,7 @@
             // Exportar dados
             async function exportData() {
                 try {
-                    const url = `${BACKEND_URL}?action=getAllOccurrences`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbzwFC3lt3rR701BCxzj_cMjEcUT2YqUVGQYZN9JZDkHMqZEZtZDm7rVwV2Qde-LljH_/exec"}?action=getAllOccurrences`;
                     const response = await fetch(url);
                     
                     if (!response.ok) {
@@ -1875,7 +1875,7 @@
             // Carregar estatísticas
             async function loadStatistics() {
                 try {
-                    const url = `${BACKEND_URL}?action=getStatistics`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbzwFC3lt3rR701BCxzj_cMjEcUT2YqUVGQYZN9JZDkHMqZEZtZDm7rVwV2Qde-LljH_/exec"}?action=getStatistics`;
                     const response = await fetch(url);
                     
                     if (!response.ok) {
@@ -1901,7 +1901,7 @@
             // Carregar estatísticas de alunos por período
             async function loadStudentPeriodStats() {
                 try {
-                    const url = `${BACKEND_URL}?action=getStudentPeriodStats`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbzwFC3lt3rR701BCxzj_cMjEcUT2YqUVGQYZN9JZDkHMqZEZtZDm7rVwV2Qde-LljH_/exec"}?action=getStudentPeriodStats`;
                     const response = await fetch(url);
                     
                     if (!response.ok) {
@@ -1983,7 +1983,7 @@
             // Carregar ocorrências
             async function loadOccurrences() {
                 try {
-                    const url = `${BACKEND_URL}?action=getAllOccurrences`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbzwFC3lt3rR701BCxzj_cMjEcUT2YqUVGQYZN9JZDkHMqZEZtZDm7rVwV2Qde-LljH_/exec"}?action=getAllOccurrences`;
                     const response = await fetch(url);
                     
                     if (!response.ok) {
@@ -2050,7 +2050,7 @@
             // Editar ocorrência (função global)
             window.editOccurrence = async function(id) {
                 try {
-                    const url = `${BACKEND_URL}?action=getOccurrenceById&id=${id}`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbzwFC3lt3rR701BCxzj_cMjEcUT2YqUVGQYZN9JZDkHMqZEZtZDm7rVwV2Qde-LljH_/exec"}?action=getOccurrenceById&id=${id}`;
                     const response = await fetch(url);
                     
                     if (!response.ok) {
@@ -2101,7 +2101,7 @@
                 }
 
                 try {
-                    const response = await fetch(BACKEND_URL, {
+                    const response = await fetch("https://script.google.com/macros/s/AKfycbzwFC3lt3rR701BCxzj_cMjEcUT2YqUVGQYZN9JZDkHMqZEZtZDm7rVwV2Qde-LljH_/exec", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'

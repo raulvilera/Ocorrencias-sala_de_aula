@@ -1371,7 +1371,7 @@
             // Carregar professores
             async function loadTeachers() {
                 try {
-                    const response = await fetch(`${BACKEND_URL}?action=getTeachers`);
+                    const response = await fetch(`${"https://script.google.com/macros/s/AKfycbznGe-oOkNHu9X9cZzhh_i_qCW3FciYmUCAF5baGfZJ_ZTzQKvVBDeRvby6B-E-sxdh/exec"}?action=getTeachers`);
                     
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -1402,7 +1402,7 @@
             // Carregar turmas
             async function loadClasses() {
                 try {
-                    const response = await fetch(`${BACKEND_URL}?action=getClasses`);
+                    const response = await fetch(`${"https://script.google.com/macros/s/AKfycbznGe-oOkNHu9X9cZzhh_i_qCW3FciYmUCAF5baGfZJ_ZTzQKvVBDeRvby6B-E-sxdh/exec"}?action=getClasses`);
                     
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -1433,7 +1433,7 @@
             // Carregar irregularidades
             async function loadIrregularities() {
                 try {
-                    const response = await fetch(`${BACKEND_URL}?action=getIrregularities`);
+                    const response = await fetch(`${"https://script.google.com/macros/s/AKfycbznGe-oOkNHu9X9cZzhh_i_qCW3FciYmUCAF5baGfZJ_ZTzQKvVBDeRvby6B-E-sxdh/exec"}?action=getIrregularities`);
                     
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -1565,7 +1565,7 @@
 
             // Criar nova ocorrência
             async function createOccurrence(formData) {
-                const response = await fetch(BACKEND_URL, {
+                const response = await fetch("https://script.google.com/macros/s/AKfycbznGe-oOkNHu9X9cZzhh_i_qCW3FciYmUCAF5baGfZJ_ZTzQKvVBDeRvby6B-E-sxdh/exec", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1585,7 +1585,7 @@
 
             // Atualizar ocorrência existente
             async function updateOccurrence(id, formData) {
-                const response = await fetch(BACKEND_URL, {
+                const response = await fetch("https://script.google.com/macros/s/AKfycbznGe-oOkNHu9X9cZzhh_i_qCW3FciYmUCAF5baGfZJ_ZTzQKvVBDeRvby6B-E-sxdh/exec", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1618,7 +1618,7 @@
                 }
 
                 try {
-                    const url = `${BACKEND_URL}?action=getStudents&class=${encodeURIComponent(selectedClass)}`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbznGe-oOkNHu9X9cZzhh_i_qCW3FciYmUCAF5baGfZJ_ZTzQKvVBDeRvby6B-E-sxdh/exec"}?action=getStudents&class=${encodeURIComponent(selectedClass)}`;
                     const response = await fetch(url);
                     
                     if (!response.ok) {
@@ -1668,7 +1668,7 @@
                     studentOccurrencesCount.textContent = "Carregando...";
                     
                     try {
-                        const url = `${BACKEND_URL}?action=getStudentStats&student=${encodeURIComponent(studentSelect.value)}`;
+                        const url = `${"https://script.google.com/macros/s/AKfycbznGe-oOkNHu9X9cZzhh_i_qCW3FciYmUCAF5baGfZJ_ZTzQKvVBDeRvby6B-E-sxdh/exec"}?action=getStudentStats&student=${encodeURIComponent(studentSelect.value)}`;
                         const response = await fetch(url);
                         
                         if (!response.ok) {
@@ -1721,7 +1721,7 @@
             // Exportar dados
             async function exportData() {
                 try {
-                    const url = `${BACKEND_URL}?action=getAllOccurrences`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbznGe-oOkNHu9X9cZzhh_i_qCW3FciYmUCAF5baGfZJ_ZTzQKvVBDeRvby6B-E-sxdh/exec"}?action=getAllOccurrences`;
                     const response = await fetch(url);
                     
                     if (!response.ok) {
@@ -1764,7 +1764,7 @@
             // Carregar estatísticas
             async function loadStatistics() {
                 try {
-                    const response = await fetch(`${BACKEND_URL}?action=getStatistics`);
+                    const response = await fetch(`${"https://script.google.com/macros/s/AKfycbznGe-oOkNHu9X9cZzhh_i_qCW3FciYmUCAF5baGfZJ_ZTzQKvVBDeRvby6B-E-sxdh/exec"}?action=getStatistics`);
                     
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -1787,7 +1787,7 @@
             // Carregar estatísticas de alunos por período
             async function loadStudentPeriodStats() {
                 try {
-                    const response = await fetch(`${BACKEND_URL}?action=getStudentPeriodStats`);
+                    const response = await fetch(`${"https://script.google.com/macros/s/AKfycbznGe-oOkNHu9X9cZzhh_i_qCW3FciYmUCAF5baGfZJ_ZTzQKvVBDeRvby6B-E-sxdh/exec"}?action=getStudentPeriodStats`);
                     
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -1852,7 +1852,7 @@
             // Carregar ocorrências
             async function loadOccurrences() {
                 try {
-                    const response = await fetch(`${BACKEND_URL}?action=getAllOccurrences`);
+                    const response = await fetch(`${"https://script.google.com/macros/s/AKfycbznGe-oOkNHu9X9cZzhh_i_qCW3FciYmUCAF5baGfZJ_ZTzQKvVBDeRvby6B-E-sxdh/exec"}?action=getAllOccurrences`);
                     
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -1918,7 +1918,7 @@
             // Editar ocorrência (função global)
             window.editOccurrence = async function(id) {
                 try {
-                    const url = `${BACKEND_URL}?action=getOccurrenceById&id=${id}`;
+                    const url = `${"https://script.google.com/macros/s/AKfycbznGe-oOkNHu9X9cZzhh_i_qCW3FciYmUCAF5baGfZJ_ZTzQKvVBDeRvby6B-E-sxdh/exec"}?action=getOccurrenceById&id=${id}`;
                     const response = await fetch(url);
                     
                     if (!response.ok) {
@@ -1969,7 +1969,7 @@
                 }
 
                 try {
-                    const response = await fetch(BACKEND_URL, {
+                    const response = await fetch("https://script.google.com/macros/s/AKfycbznGe-oOkNHu9X9cZzhh_i_qCW3FciYmUCAF5baGfZJ_ZTzQKvVBDeRvby6B-E-sxdh/exec", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'

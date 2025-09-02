@@ -45,7 +45,7 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -64,7 +64,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
         }
@@ -114,7 +114,7 @@
         
         .dashboard {
             display: grid;
-            grid-template-columns: 1fr 350px;
+            grid-template-columns: 1fr 350px 400px;
             gap: 25px;
             margin-bottom: 30px;
         }
@@ -218,6 +218,214 @@
             padding: 30px;
             position: relative;
             z-index: 2;
+        }
+        
+        /* ESTILOS PARA ÚLTIMOS REGISTROS */
+        .registros-card {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            color: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            height: fit-content;
+        }
+        
+        .registros-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(to top, rgba(255,255,255,0.3), transparent);
+            z-index: 1;
+        }
+        
+        .registros-header {
+            background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%);
+            color: white;
+            padding: 20px 25px;
+            font-size: 1.35rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .registros-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .registros-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .registros-refresh-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .registros-refresh-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .registros-body {
+            padding: 20px 25px;
+            position: relative;
+            z-index: 2;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .registros-search {
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .registros-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .registro-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .registro-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .registro-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        
+        .registro-student {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+        
+        .registro-date {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+        
+        .registro-details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .registro-class {
+            color: #f1c40f;
+            font-weight: 500;
+        }
+        
+        .registro-professor {
+            color: #e8f5e9;
+            opacity: 0.9;
+        }
+        
+        .registro-irregularities {
+            color: #ffcccb;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        
+        .registro-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.85rem;
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+            border-left: 3px solid #f1c40f;
+        }
+        
+        .registros-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+        }
+        
+        .registros-loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .registros-count {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-left: 10px;
         }
         
         .form-group {
@@ -542,10 +750,6 @@
             margin-right: 10px;
         }
         
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
         .notification {
             position: fixed;
             top: 20px;
@@ -625,6 +829,46 @@
             transform: translateY(-2px);
         }
         
+        .period-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.85);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 10px;
+        }
+        
+        .period-item {
+            text-align: center;
+            flex: 1;
+            transition: var(--transition);
+        }
+        
+        .period-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .period-value {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .period-manha { color: #f1c40f; }
+        .period-tarde { color: #e67e22; }
+        .period-noite { color: #9b59b6; }
+        
+        @media (max-width: 1200px) {
+            .dashboard {
+                grid-template-columns: 1fr 350px;
+            }
+            
+            .registros-card {
+                grid-column: 1 / -1;
+                margin-top: 25px;
+            }
+        }
+        
         @media (max-width: 992px) {
             .dashboard {
                 grid-template-columns: 1fr;
@@ -657,6 +901,15 @@
             
             .checkbox-container {
                 grid-template-columns: 1fr;
+            }
+            
+            .registros-body {
+                max-height: 300px;
+            }
+            
+            .registro-header {
+                flex-direction: column;
+                gap: 10px;
             }
         }
     </style>
@@ -843,6 +1096,34 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- NOVA SEÇÃO: ÚLTIMOS REGISTROS -->
+                <div class="registros-card">
+                    <div class="registros-header">
+                        <div class="registros-title">
+                            <i class="fas fa-history"></i>
+                            Últimos Registros
+                            <span class="registros-count" id="registrosCount">(0)</span>
+                        </div>
+                        <div class="registros-controls">
+                            <button class="registros-refresh-btn" id="refreshRegistrosBtn">
+                                <i class="fas fa-sync-alt" id="refreshIcon"></i>
+                                Atualizar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="registros-body">
+                        <div class="registros-search">
+                            <input type="text" class="search-input" id="searchRegistros" placeholder="Buscar por aluno, professor, turma...">
+                        </div>
+                        <div class="registros-list" id="registrosList">
+                            <div class="registros-loading">
+                                <div class="loading-spinner"></div>
+                                Carregando registros...
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -868,7 +1149,7 @@
             // =========================================================================
             // CONFIGURAÇÕES E CONSTANTES
             // =========================================================================
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzC_C8i5s_Gt18d6v3VDd1AD9nakz42sFRxkagc_uL-EOF0gdlz_PAKpeTfB9n2__iF/exec';
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx9KfIesA_LVXPH_x0r-FXqO4lBh_kLabNAPjoT4mJZMQKji5OBaVc9YrP6wxWZzUp4/exec';
 
             const teacherEmails = {
                 "ALEX LUTH PEREIRA MARANHAO": "luth@prof.educacao.sp.gov.br",
@@ -970,6 +1251,20 @@
             const notificationIcon = notification.querySelector('.icon');
             const notificationContent = notification.querySelector('.content');
             const notificationClose = notification.querySelector('.close');
+            
+            // Elementos dos Últimos Registros
+            const registrosList = document.getElementById('registrosList');
+            const registrosCount = document.getElementById('registrosCount');
+            const refreshRegistrosBtn = document.getElementById('refreshRegistrosBtn');
+            const refreshIcon = document.getElementById('refreshIcon');
+            const searchRegistros = document.getElementById('searchRegistros');
+
+            // =========================================================================
+            // ESTADO DA APLICAÇÃO
+            // =========================================================================
+            let allRegistros = [];
+            let filteredRegistros = [];
+            let autoRefreshInterval = null;
 
             // =========================================================================
             // FUNÇÕES DE INICIALIZAÇÃO
@@ -981,6 +1276,8 @@
                 addEventListeners();
                 loadClassList();
                 fetchAllData();
+                loadRecentOccurrences();
+                startAutoRefresh();
             }
 
             function populateProfessorDropdown() {
@@ -1009,6 +1306,8 @@
                 clearBtn.addEventListener('click', clearForm);
                 classSelect.addEventListener('change', handleClassChange);
                 notificationClose.addEventListener('click', () => notification.classList.remove('show'));
+                refreshRegistrosBtn.addEventListener('click', () => loadRecentOccurrences(true));
+                searchRegistros.addEventListener('input', handleSearchRegistros);
             }
 
             // =========================================================================
@@ -1020,7 +1319,7 @@
              */
             async function makeGetRequest(action, params = {}) {
                 try {
-                    const url = new URL(SCRIPT_URL);
+                    const url = new URL('https://script.google.com/macros/s/AKfycbx9KfIesA_LVXPH_x0r-FXqO4lBh_kLabNAPjoT4mJZMQKji5OBaVc9YrP6wxWZzUp4/exec');
                     url.searchParams.append('action', action);
                     
                     Object.keys(params).forEach(key => {
@@ -1053,7 +1352,7 @@
              */
             async function makePostRequest(data) {
                 try {
-                    const response = await fetch(SCRIPT_URL, {
+                    const response = await fetch('https://script.google.com/macros/s/AKfycbx9KfIesA_LVXPH_x0r-FXqO4lBh_kLabNAPjoT4mJZMQKji5OBaVc9YrP6wxWZzUp4/exec', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -1169,6 +1468,146 @@
             }
 
             // =========================================================================
+            // FUNÇÕES DOS ÚLTIMOS REGISTROS
+            // =========================================================================
+
+            /**
+             * Carrega as ocorrências mais recentes
+             */
+            async function loadRecentOccurrences(isRefresh = false) {
+                try {
+                    if (isRefresh) {
+                        refreshIcon.style.animation = 'spin 1s linear infinite';
+                    }
+
+                    const data = await makeGetRequest('getRecentOccurrences', { limit: 20 });
+                    
+                    if (data && data.status === 'success') {
+                        allRegistros = data.occurrences || [];
+                        filteredRegistros = [...allRegistros];
+                        updateRegistrosList();
+                        updateRegistrosCount();
+                    } else {
+                        showRegistrosError(data.message || 'Erro ao carregar registros');
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar registros:', error);
+                    showRegistrosError('Erro ao carregar registros');
+                } finally {
+                    if (isRefresh) {
+                        setTimeout(() => {
+                            refreshIcon.style.animation = '';
+                        }, 1000);
+                    }
+                }
+            }
+
+            /**
+             * Atualiza a lista de registros na interface
+             */
+            function updateRegistrosList() {
+                if (filteredRegistros.length === 0) {
+                    registrosList.innerHTML = `
+                        <div class="registros-empty">
+                            <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+                            <p>Nenhum registro encontrado</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const registrosHTML = filteredRegistros.map(registro => `
+                    <div class="registro-item">
+                        <div class="registro-header">
+                            <div class="registro-student">${registro.student}</div>
+                            <div class="registro-date">${registro.date}</div>
+                        </div>
+                        <div class="registro-details">
+                            <div class="registro-class">
+                                <i class="fas fa-users"></i> ${registro.class}
+                            </div>
+                            <div class="registro-professor">
+                                <i class="fas fa-user-tie"></i> ${registro.professor}
+                            </div>
+                            ${registro.irregularities ? `
+                                <div class="registro-irregularities">
+                                    <i class="fas fa-exclamation-triangle"></i> ${registro.irregularities}
+                                </div>
+                            ` : ''}
+                            ${registro.description ? `
+                                <div class="registro-description">
+                                    <i class="fas fa-comment"></i> ${registro.description}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `).join('');
+
+                registrosList.innerHTML = registrosHTML;
+            }
+
+            /**
+             * Atualiza o contador de registros
+             */
+            function updateRegistrosCount() {
+                registrosCount.textContent = `(${filteredRegistros.length})`;
+            }
+
+            /**
+             * Mostra erro nos registros
+             */
+            function showRegistrosError(message) {
+                registrosList.innerHTML = `
+                    <div class="registros-empty">
+                        <i class="fas fa-exclamation-circle" style="font-size: 2rem; margin-bottom: 10px; color: #e74c3c;"></i>
+                        <p>${message}</p>
+                    </div>
+                `;
+            }
+
+            /**
+             * Manipula a busca nos registros
+             */
+            function handleSearchRegistros() {
+                const searchTerm = searchRegistros.value.toLowerCase().trim();
+                
+                if (searchTerm === '') {
+                    filteredRegistros = [...allRegistros];
+                } else {
+                    filteredRegistros = allRegistros.filter(registro => 
+                        registro.student.toLowerCase().includes(searchTerm) ||
+                        registro.professor.toLowerCase().includes(searchTerm) ||
+                        registro.class.toLowerCase().includes(searchTerm) ||
+                        (registro.irregularities && registro.irregularities.toLowerCase().includes(searchTerm)) ||
+                        (registro.description && registro.description.toLowerCase().includes(searchTerm))
+                    );
+                }
+                
+                updateRegistrosList();
+                updateRegistrosCount();
+            }
+
+            /**
+             * Inicia atualização automática dos registros
+             */
+            function startAutoRefresh() {
+                // Atualiza a cada 30 segundos
+                autoRefreshInterval = setInterval(() => {
+                    loadRecentOccurrences();
+                }, 30000);
+            }
+
+            /**
+             * Para a atualização automática
+             */
+            function stopAutoRefresh() {
+                if (autoRefreshInterval) {
+                    clearInterval(autoRefreshInterval);
+                    autoRefreshInterval = null;
+                }
+            }
+
+            // =========================================================================
             // MANIPULADORES DE EVENTOS
             // =========================================================================
 
@@ -1219,6 +1658,7 @@
                         clearForm();
                         fetchAllData(); // Atualiza as estatísticas
                         fetchStatistics(); // Atualiza as estatísticas específicas
+                        loadRecentOccurrences(); // Atualiza os últimos registros
                     } else {
                         showNotification('error', result.message || 'Erro ao registrar ocorrência');
                     }
@@ -1321,6 +1761,13 @@
                     notification.classList.remove('show');
                 }, 5000);
             }
+
+            // =========================================================================
+            // CLEANUP
+            // =========================================================================
+            window.addEventListener('beforeunload', () => {
+                stopAutoRefresh();
+            });
 
             // =========================================================================
             // INICIALIZAÇÃO

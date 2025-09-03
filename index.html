@@ -13,6 +13,7 @@
             --accent-color: #f1c40f;
             --success-color: #2ecc71;
             --error-color: #e74c3c;
+            --warning-color: #f39c12;
             --border-color: #dadce0;
             --text-color: #202124;
             --light-text: #5f6368;
@@ -856,6 +857,35 @@
         .period-tarde { color: #e67e22; }
         .period-noite { color: #9b59b6; }
         
+        /* Novo estilo para contador de alunos na sala */
+        .class-student-count {
+            background: rgba(26, 115, 232, 0.1);
+            border: 1px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            display: none;
+        }
+        
+        .class-student-count.show {
+            display: block;
+            animation: fadeInUp 0.3s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
         @media (max-width: 1200px) {
             .dashboard {
                 grid-template-columns: 1fr 350px;
@@ -935,8 +965,8 @@
                         <i class="fas fa-plug"></i>
                         <div>
                             <strong>Status de integração:</strong> 
-                            <span class="status-indicator status-connected"></span>
-                            Conectado à planilha Google Sheets
+                            <span class="status-indicator status-connected" id="statusIndicator"></span>
+                            <span id="statusText">Conectado à planilha Google Sheets</span>
                         </div>
                     </div>
                     
@@ -975,6 +1005,9 @@
                                                     <option value="">Selecione a turma</option>
                                                     <!-- Turmas serão carregadas dinamicamente -->
                                                 </select>
+                                            </div>
+                                            <div class="class-student-count" id="classStudentCount">
+                                                <i class="fas fa-users"></i> <span id="studentCountText">0 alunos matriculados</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1070,8 +1103,8 @@
                             <div class="stat-label">Total de Ocorrências</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-value" id="totalTeachers">0</div>
-                            <div class="stat-label">Professores</div>
+                            <div class="stat-value" id="totalStudents">0</div>
+                            <div class="stat-label">Total de Alunos</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-value" id="totalClasses">0</div>
@@ -1095,7 +1128,7 @@
                     </div>
                 </div>
                 
-                <!-- NOVA SEÇÃO: ÚLTIMOS REGISTROS -->
+                <!-- SEÇÃO: ÚLTIMOS REGISTROS -->
                 <div class="registros-card">
                     <div class="registros-header">
                         <div class="registros-title">
@@ -1236,264 +1269,221 @@
             // ELEMENTOS DO DOM
             // =========================================================================
             const form = document.getElementById('occurrenceForm');
-            const clearBtn = document.getElementById('clearBtn');
-            const submitBtn = document.getElementById('submitBtn');
-            const studentSelect = document.getElementById('student');
-            const classSelect = document.getElementById('studentClass');
             const professorSelect = document.getElementById('professor');
+            const classSelect = document.getElementById('studentClass');
+            const studentSelect = document.getElementById('student');
+            const occurrenceDateInput = document.getElementById('occurrenceDate');
+            const descriptionTextarea = document.getElementById('description');
+            const submitBtn = document.getElementById('submitBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            
+            // Elementos de estatísticas
             const totalOccurrencesEl = document.getElementById('totalOccurrences');
+            const totalStudentsEl = document.getElementById('totalStudents');
+            const totalClassesEl = document.getElementById('totalClasses');
             const morningCountEl = document.getElementById('morningCount');
             const afternoonCountEl = document.getElementById('afternoonCount');
             const nightCountEl = document.getElementById('nightCount');
+            
+            // Elementos de registros
+            const registrosList = document.getElementById('registrosList');
+            const registrosCount = document.getElementById('registrosCount');
+            const searchRegistros = document.getElementById('searchRegistros');
+            const refreshRegistrosBtn = document.getElementById('refreshRegistrosBtn');
+            const refreshIcon = document.getElementById('refreshIcon');
+            
+            // Elementos de notificação
             const notification = document.getElementById('notification');
             const notificationIcon = notification.querySelector('.icon');
             const notificationContent = notification.querySelector('.content');
             const notificationClose = notification.querySelector('.close');
             
-            // Elementos dos Últimos Registros
-            const registrosList = document.getElementById('registrosList');
-            const registrosCount = document.getElementById('registrosCount');
-            const refreshRegistrosBtn = document.getElementById('refreshRegistrosBtn');
-            const refreshIcon = document.getElementById('refreshIcon');
-            const searchRegistros = document.getElementById('searchRegistros');
+            // Elementos de status
+            const statusIndicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            
+            // Novo elemento para contador de alunos
+            const classStudentCount = document.getElementById('classStudentCount');
+            const studentCountText = document.getElementById('studentCountText');
 
             // =========================================================================
-            // ESTADO DA APLICAÇÃO
+            // VARIÁVEIS GLOBAIS
             // =========================================================================
             let allRegistros = [];
             let filteredRegistros = [];
             let autoRefreshInterval = null;
+            let currentStudentCount = 0;
 
             // =========================================================================
             // FUNÇÕES DE INICIALIZAÇÃO
             // =========================================================================
             function initialize() {
-                populateProfessorDropdown();
+                console.log('Inicializando sistema...');
                 setDefaultDate();
-                updateStaticCounts();
-                addEventListeners();
-                loadClassList();
-                fetchAllData();
-                loadRecentOccurrences();
+                populateTeachers();
+                loadClasses();
+                loadInitialData();
+                setupEventListeners();
                 startAutoRefresh();
-            }
-
-            function populateProfessorDropdown() {
-                const teacherNames = Object.keys(teacherEmails);
-                teacherNames.sort();
-                teacherNames.forEach(teacherName => {
-                    const option = document.createElement('option');
-                    option.value = teacherName;
-                    option.textContent = teacherName;
-                    professorSelect.appendChild(option);
-                });
             }
 
             function setDefaultDate() {
                 const today = new Date();
                 const formattedDate = today.toISOString().split('T')[0];
-                document.getElementById('occurrenceDate').value = formattedDate;
+                occurrenceDateInput.value = formattedDate;
             }
 
-            function updateStaticCounts() {
-                document.getElementById('totalTeachers').textContent = Object.keys(teacherEmails).length;
+            function populateTeachers() {
+                const teachers = Object.keys(teacherEmails).sort();
+                teachers.forEach(teacher => {
+                    const option = document.createElement('option');
+                    option.value = teacher;
+                    option.textContent = teacher;
+                    professorSelect.appendChild(option);
+                });
             }
 
-            function addEventListeners() {
+            function setupEventListeners() {
                 form.addEventListener('submit', handleFormSubmit);
                 clearBtn.addEventListener('click', clearForm);
                 classSelect.addEventListener('change', handleClassChange);
-                notificationClose.addEventListener('click', () => notification.classList.remove('show'));
-                refreshRegistrosBtn.addEventListener('click', () => loadRecentOccurrences(true));
                 searchRegistros.addEventListener('input', handleSearchRegistros);
+                refreshRegistrosBtn.addEventListener('click', () => loadRecentOccurrences(true));
+                notificationClose.addEventListener('click', () => notification.classList.remove('show'));
+                
+                // Auto-hide notification after 5 seconds
+                notification.addEventListener('transitionend', (e) => {
+                    if (e.propertyName === 'opacity' && notification.classList.contains('show')) {
+                        setTimeout(() => {
+                            notification.classList.remove('show');
+                        }, 5000);
+                    }
+                });
             }
 
             // =========================================================================
-            // FUNÇÕES DE COMUNICAÇÃO COM O BACKEND (CORRIGIDAS)
+            // FUNÇÕES DE CARREGAMENTO DE DADOS
             // =========================================================================
-
-            /**
-             * Função para fazer requisições GET ao backend (CORRIGIDA)
-             */
-            async function makeGetRequest(action, params = {}) {
+            async function loadClasses() {
                 try {
-                    const url = new URL('https://script.google.com/macros/s/AKfycbyBiIq86Bu_sg68fLxZyEq8BAJMzcNpqbpFeSAcNRSagcaWhymK0oEmUz-wmDg38dVi/exec');
-                    url.searchParams.append('action', action);
-                    
-                    Object.keys(params).forEach(key => {
-                        if (params[key] !== null && params[key] !== undefined) {
-                            url.searchParams.append(key, params[key]);
-                        }
-                    });
-
-                    const response = await fetch(url.toString(), {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json',
-                        }
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`Erro HTTP: ${response.status}`);
-                    }
-
+                    const response = await fetch(`${SCRIPT_URL}?action=getClassList`);
                     const data = await response.json();
-                    return data;
-                } catch (error) {
-                    console.error('Erro na requisição GET:', error);
-                    throw error;
-                }
-            }
-
-            /**
-             * Função para fazer requisições POST ao backend (NOVA IMPLEMENTAÇÃO)
-             */
-            async function makePostRequest(data) {
-                try {
-                    // Inclui explicitamente a ação no payload
-                    const payload = {
-                        action: 'addOccurrence',
-                        date: data.date,
-                        professor: data.professor,
-                        class: data.class,
-                        student: data.student,
-                        irregularities: data.irregularities,
-                        description: data.description
-                    };
-
-                    const response = await fetch('https://script.google.com/macros/s/AKfycbyBiIq86Bu_sg68fLxZyEq8BAJMzcNpqbpFeSAcNRSagcaWhymK0oEmUz-wmDg38dVi/exec', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`Erro HTTP: ${response.status}`);
-                    }
-
-                    const result = await response.json();
-                    return result;
-                } catch (error) {
-                    console.error('Erro na requisição POST:', error);
-                    throw error;
-                }
-            }
-
-            /**
-             * Carrega a lista de turmas disponíveis
-             */
-            async function loadClassList() {
-                try {
-                    const data = await makeGetRequest('getClassList');
-                    if (data && data.status === 'success' && data.classes) {
-                        // Limpa as opções existentes (exceto a primeira)
+                    
+                    if (data.status === 'success' && data.classes) {
                         classSelect.innerHTML = '<option value="">Selecione a turma</option>';
-                        
-                        // Adiciona as turmas retornadas pelo backend
                         data.classes.forEach(className => {
-                            if (className && className.trim() !== '') {
-                                const option = document.createElement('option');
-                                option.value = className;
-                                option.textContent = className;
-                                classSelect.appendChild(option);
-                            }
+                            const option = document.createElement('option');
+                            option.value = className;
+                            option.textContent = className;
+                            classSelect.appendChild(option);
                         });
-                        
-                        // Atualiza o contador de turmas
-                        document.getElementById('totalClasses').textContent = data.classes.length;
+                        updateTotalClasses(data.classes.length);
+                    } else {
+                        console.error('Erro ao carregar turmas:', data.message);
+                        updateConnectionStatus(false, 'Erro ao carregar turmas');
                     }
                 } catch (error) {
-                    console.error('Erro ao carregar lista de turmas:', error);
-                    showNotification('error', 'Erro ao carregar lista de turmas');
+                    console.error('Erro ao carregar turmas:', error);
+                    updateConnectionStatus(false, 'Erro de conexão');
                 }
             }
 
-            /**
-             * Carrega os alunos de uma turma específica (CORRIGIDA - usando className)
-             */
             async function loadStudentsByClass(className) {
                 try {
                     studentSelect.innerHTML = '<option value="">Carregando alunos...</option>';
                     studentSelect.disabled = true;
-
-                    // Usando o parâmetro correto (className) para a requisição
-                    const data = await makeGetRequest('getStudentsByClass', { className: className });
                     
-                    if (data && data.status === 'success' && data.students) {
+                    const response = await fetch(`${SCRIPT_URL}?action=getStudentsByClass&className=${encodeURIComponent(className)}`);
+                    const data = await response.json();
+                    
+                    if (data.status === 'success' && data.students) {
                         studentSelect.innerHTML = '<option value="">Selecione o aluno</option>';
-                        
-                        data.students.forEach(studentName => {
-                            if (studentName && studentName.trim() !== '') {
+                        data.students.forEach(student => {
+                            if (student && student.trim()) {
                                 const option = document.createElement('option');
-                                option.value = studentName;
-                                option.textContent = studentName;
+                                option.value = student;
+                                option.textContent = student;
                                 studentSelect.appendChild(option);
                             }
                         });
-                        
                         studentSelect.disabled = false;
+                        
+                        // Atualizar contador de alunos
+                        currentStudentCount = data.students.filter(s => s && s.trim()).length;
+                        updateClassStudentCount(currentStudentCount);
+                        
                     } else {
-                        studentSelect.innerHTML = '<option value="">Nenhum aluno encontrado</option>';
-                        showNotification('error', data.message || 'Erro ao carregar alunos');
+                        studentSelect.innerHTML = '<option value="">Erro ao carregar alunos</option>';
+                        console.error('Erro ao carregar alunos:', data.message);
+                        updateClassStudentCount(0);
                     }
                 } catch (error) {
                     console.error('Erro ao carregar alunos:', error);
                     studentSelect.innerHTML = '<option value="">Erro ao carregar alunos</option>';
-                    showNotification('error', 'Erro ao carregar alunos da turma');
+                    updateClassStudentCount(0);
                 }
             }
 
-            /**
-             * Busca todos os dados para atualizar estatísticas
-             */
-            async function fetchAllData() {
+            async function loadInitialData() {
                 try {
-                    const data = await makeGetRequest('getAllData');
-                    if (data && data.status === 'success') {
-                        updateDashboard(data.occurrences || []);
-                    }
+                    await Promise.all([
+                        loadStatistics(),
+                        loadStudentCounts(),
+                        loadRecentOccurrences()
+                    ]);
+                    updateConnectionStatus(true, 'Conectado à planilha Google Sheets');
                 } catch (error) {
-                    console.error('Erro ao buscar dados:', error);
+                    console.error('Erro ao carregar dados iniciais:', error);
+                    updateConnectionStatus(false, 'Erro ao conectar com Google Sheets');
                 }
             }
 
-            /**
-             * Busca estatísticas do sistema
-             */
-            async function fetchStatistics() {
+            async function loadStatistics() {
                 try {
-                    const data = await makeGetRequest('getStatistics');
-                    if (data && data.status === 'success' && data.statistics) {
+                    const response = await fetch(`${SCRIPT_URL}?action=getStatistics`);
+                    const data = await response.json();
+                    
+                    if (data.status === 'success' && data.statistics) {
                         const stats = data.statistics;
                         totalOccurrencesEl.textContent = stats.totalOccurrences || 0;
-                        morningCountEl.textContent = stats.periodCounts.manha || 0;
-                        afternoonCountEl.textContent = stats.periodCounts.tarde || 0;
-                        nightCountEl.textContent = stats.periodCounts.noite || 0;
+                        
+                        // Atualizar contadores por período
+                        if (stats.periodCounts) {
+                            morningCountEl.textContent = stats.periodCounts.manha || 0;
+                            afternoonCountEl.textContent = stats.periodCounts.tarde || 0;
+                            nightCountEl.textContent = stats.periodCounts.noite || 0;
+                        }
                     }
                 } catch (error) {
-                    console.error('Erro ao buscar estatísticas:', error);
+                    console.error('Erro ao carregar estatísticas:', error);
                 }
             }
 
-            // =========================================================================
-            // FUNÇÕES DOS ÚLTIMOS REGISTROS
-            // =========================================================================
+            async function loadStudentCounts() {
+                try {
+                    const response = await fetch(`${SCRIPT_URL}?action=getStudentCountsByPeriod`);
+                    const data = await response.json();
+                    
+                    if (data.status === 'success' && data.counts) {
+                        const counts = data.counts;
+                        const total = (counts.manha || 0) + (counts.tarde || 0) + (counts.noite || 0);
+                        totalStudentsEl.textContent = total;
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar contagem de alunos:', error);
+                }
+            }
 
-            /**
-             * Carrega as ocorrências mais recentes
-             */
             async function loadRecentOccurrences(isRefresh = false) {
                 try {
                     if (isRefresh) {
                         refreshIcon.style.animation = 'spin 1s linear infinite';
                     }
-
-                    // AQUI ESTÁ A CHAMADA SOLICITADA
-                    const data = await makeGetRequest('getRecentOccurrences', { limit: 20 });
                     
-                    if (data && data.status === 'success') {
+                    const response = await fetch(`${SCRIPT_URL}?action=getRecentOccurrences&limit=20`);
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
                         allRegistros = data.occurrences || [];
                         filteredRegistros = [...allRegistros];
                         updateRegistrosList();
@@ -1513,9 +1503,67 @@
                 }
             }
 
-            /**
-             * Atualiza a lista de registros na interface
-             */
+            // =========================================================================
+            // FUNÇÕES DE ENVIO DE DADOS
+            // =========================================================================
+            async function makePostRequest(formData) {
+                try {
+                    const payload = {
+                        action: 'addOccurrence',
+                        date: formData.date,
+                        professor: formData.professor,
+                        class: formData.class,
+                        student: formData.student,
+                        irregularities: formData.irregularities,
+                        description: formData.description
+                    };
+
+                    const response = await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    return result;
+                } catch (error) {
+                    console.error('Erro na requisição POST:', error);
+                    throw error;
+                }
+            }
+
+            // =========================================================================
+            // FUNÇÕES DE INTERFACE
+            // =========================================================================
+            function updateConnectionStatus(connected, message) {
+                if (connected) {
+                    statusIndicator.className = 'status-indicator status-connected';
+                    statusText.textContent = message;
+                } else {
+                    statusIndicator.className = 'status-indicator status-disconnected';
+                    statusText.textContent = message;
+                }
+            }
+
+            function updateTotalClasses(count) {
+                totalClassesEl.textContent = count;
+            }
+
+            function updateClassStudentCount(count) {
+                if (count > 0) {
+                    studentCountText.textContent = `${count} aluno${count !== 1 ? 's' : ''} matriculado${count !== 1 ? 's' : ''}`;
+                    classStudentCount.classList.add('show');
+                } else {
+                    classStudentCount.classList.remove('show');
+                }
+            }
+
             function updateRegistrosList() {
                 if (filteredRegistros.length === 0) {
                     registrosList.innerHTML = `
@@ -1557,16 +1605,10 @@
                 registrosList.innerHTML = registrosHTML;
             }
 
-            /**
-             * Atualiza o contador de registros
-             */
             function updateRegistrosCount() {
                 registrosCount.textContent = `(${filteredRegistros.length})`;
             }
 
-            /**
-             * Mostra erro nos registros
-             */
             function showRegistrosError(message) {
                 registrosList.innerHTML = `
                     <div class="registros-empty">
@@ -1576,60 +1618,24 @@
                 `;
             }
 
-            /**
-             * Manipula a busca nos registros
-             */
-            function handleSearchRegistros() {
-                const searchTerm = searchRegistros.value.toLowerCase().trim();
-                
-                if (searchTerm === '') {
-                    filteredRegistros = [...allRegistros];
-                } else {
-                    filteredRegistros = allRegistros.filter(registro => 
-                        registro.student.toLowerCase().includes(searchTerm) ||
-                        registro.professor.toLowerCase().includes(searchTerm) ||
-                        registro.class.toLowerCase().includes(searchTerm) ||
-                        (registro.irregularities && registro.irregularities.toLowerCase().includes(searchTerm)) ||
-                        (registro.description && registro.description.toLowerCase().includes(searchTerm))
-                    );
-                }
-                
-                updateRegistrosList();
-                updateRegistrosCount();
-            }
-
-            /**
-             * Inicia atualização automática dos registros
-             */
-            function startAutoRefresh() {
-                // Atualiza a cada 30 segundos
-                autoRefreshInterval = setInterval(() => {
-                    loadRecentOccurrences();
-                }, 30000);
-            }
-
-            /**
-             * Para a atualização automática
-             */
-            function stopAutoRefresh() {
-                if (autoRefreshInterval) {
-                    clearInterval(autoRefreshInterval);
-                    autoRefreshInterval = null;
-                }
+            function showNotification(type, message) {
+                notification.className = `notification ${type}`;
+                notificationIcon.className = type === 'success' ? 'icon fas fa-check-circle' : 'icon fas fa-exclamation-circle';
+                notificationContent.textContent = message;
+                notification.classList.add('show');
             }
 
             // =========================================================================
-            // MANIPULADORES DE EVENTOS (ATUALIZADOS)
+            // MANIPULADORES DE EVENTOS
             // =========================================================================
-
             function handleClassChange() {
                 const selectedClass = classSelect.value;
                 if (selectedClass) {
-                    // Usando o parâmetro correto (className) para carregar alunos
                     loadStudentsByClass(selectedClass);
                 } else {
                     studentSelect.innerHTML = '<option value="">Selecione primeiro a turma</option>';
                     studentSelect.disabled = true;
+                    classStudentCount.classList.remove('show');
                 }
             }
 
@@ -1652,15 +1658,13 @@
                         return;
                     }
                     
-                    // Envia os dados para o backend usando a nova função makePostRequest
+                    // Envia os dados para o backend
                     const result = await makePostRequest(formData);
                     
                     if (result && result.status === 'success') {
                         showNotification('success', result.message || 'Ocorrência registrada com sucesso!');
                         clearForm();
-                        fetchAllData(); // Atualiza as estatísticas
-                        fetchStatistics(); // Atualiza as estatísticas específicas
-                        loadRecentOccurrences(); // Atualiza os últimos registros
+                        loadInitialData(); // Recarrega todos os dados
                     } else {
                         showNotification('error', result.message || 'Erro ao registrar ocorrência');
                     }
@@ -1675,22 +1679,40 @@
                 }
             }
 
+            function handleSearchRegistros() {
+                const searchTerm = searchRegistros.value.toLowerCase().trim();
+                
+                if (searchTerm === '') {
+                    filteredRegistros = [...allRegistros];
+                } else {
+                    filteredRegistros = allRegistros.filter(registro => 
+                        registro.student.toLowerCase().includes(searchTerm) ||
+                        registro.professor.toLowerCase().includes(searchTerm) ||
+                        registro.class.toLowerCase().includes(searchTerm) ||
+                        (registro.irregularities && registro.irregularities.toLowerCase().includes(searchTerm)) ||
+                        (registro.description && registro.description.toLowerCase().includes(searchTerm))
+                    );
+                }
+                
+                updateRegistrosList();
+                updateRegistrosCount();
+            }
+
             // =========================================================================
             // FUNÇÕES AUXILIARES
             // =========================================================================
-
             function collectFormData() {
                 const irregularities = Array.from(document.querySelectorAll('input[name="irregularity"]:checked'))
                     .map(checkbox => checkbox.value)
                     .join(', ');
 
                 return {
-                    date: document.getElementById('occurrenceDate').value,
-                    professor: document.getElementById('professor').value,
-                    class: document.getElementById('studentClass').value,
-                    student: document.getElementById('student').value,
+                    date: occurrenceDateInput.value,
+                    professor: professorSelect.value,
+                    class: classSelect.value,
+                    student: studentSelect.value,
                     irregularities: irregularities,
-                    description: document.getElementById('description').value
+                    description: descriptionTextarea.value
                 };
             }
 
@@ -1721,47 +1743,22 @@
                 form.reset();
                 studentSelect.innerHTML = '<option value="">Selecione primeiro a turma</option>';
                 studentSelect.disabled = true;
+                classStudentCount.classList.remove('show');
                 setDefaultDate();
             }
 
-            function updateDashboard(occurrences) {
-                if (!Array.isArray(occurrences)) {
-                    occurrences = [];
-                }
-                
-                totalOccurrencesEl.textContent = occurrences.length;
-                
-                // Conta ocorrências por período
-                let morningCount = 0;
-                let afternoonCount = 0;
-                let nightCount = 0;
-                
-                occurrences.forEach(occurrence => {
-                    const className = String(occurrence[2] || '').toUpperCase();
-                    if (className.includes('MANHA')) {
-                        morningCount++;
-                    } else if (className.includes('TARDE')) {
-                        afternoonCount++;
-                    } else if (className.includes('NOITE')) {
-                        nightCount++;
-                    }
-                });
-                
-                morningCountEl.textContent = morningCount;
-                afternoonCountEl.textContent = afternoonCount;
-                nightCountEl.textContent = nightCount;
+            function startAutoRefresh() {
+                // Atualiza a cada 30 segundos
+                autoRefreshInterval = setInterval(() => {
+                    loadRecentOccurrences();
+                }, 30000);
             }
 
-            function showNotification(type, message) {
-                notification.className = `notification ${type}`;
-                notificationIcon.className = type === 'success' ? 'icon fas fa-check-circle' : 'icon fas fa-exclamation-circle';
-                notificationContent.textContent = message;
-                notification.classList.add('show');
-                
-                // Remove automaticamente após 5 segundos
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 5000);
+            function stopAutoRefresh() {
+                if (autoRefreshInterval) {
+                    clearInterval(autoRefreshInterval);
+                    autoRefreshInterval = null;
+                }
             }
 
             // =========================================================================

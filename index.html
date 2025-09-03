@@ -1199,7 +1199,7 @@
             // =========================================================================
             // CONFIGURAÇÕES E CONSTANTES
             // =========================================================================
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwpMa_aJY5ixOu4IRkYvEZbkFW4Mm3ESgQBXSGODd1vsRsFUP6MKKRji9HwSKth5dC6/exec';
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbybuEvCwesld4brXpZp4_vAaOAhlKiWx3DfM_BEGhm7r9G2vxz6egmm3LXLg-y7-uQ6/exec';
             const MAX_RETRY_ATTEMPTS = 3;
             const RETRY_DELAY = 2000; // 2 segundos
 
@@ -1500,7 +1500,7 @@
             // FUNÇÕES DE REQUISIÇÃO HTTP COM RETRY
             // =========================================================================
             async function makeGetRequest(action, params = {}) {
-                const url = new URL('https://script.google.com/macros/s/AKfycbwpMa_aJY5ixOu4IRkYvEZbkFW4Mm3ESgQBXSGODd1vsRsFUP6MKKRji9HwSKth5dC6/exec');
+                const url = new URL('https://script.google.com/macros/s/AKfycbybuEvCwesld4brXpZp4_vAaOAhlKiWx3DfM_BEGhm7r9G2vxz6egmm3LXLg-y7-uQ6/exec');
                 url.searchParams.append('action', action);
                 
                 Object.entries(params).forEach(([key, value]) => {
@@ -1524,7 +1524,7 @@
                     description: formData.description
                 };
 
-                return await makeRequestWithRetry('https://script.google.com/macros/s/AKfycbwpMa_aJY5ixOu4IRkYvEZbkFW4Mm3ESgQBXSGODd1vsRsFUP6MKKRji9HwSKth5dC6/exec', {
+                return await makeRequestWithRetry('https://script.google.com/macros/s/AKfycbybuEvCwesld4brXpZp4_vAaOAhlKiWx3DfM_BEGhm7r9G2vxz6egmm3LXLg-y7-uQ6/exec', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

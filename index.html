@@ -1239,30 +1239,26 @@
                 "MAURICIO DE BARROS SANTOS": "mauriciobsantos@prof.educacao.sp.gov.br",
                 "MICHELE DE PINHO MORAES": "michelepinho@prof.educacao.sp.gov.br",
                 "MOISES ANTONIO DE BARROS": "moisesbarros@prof.educacao.sp.gov.br",
-                "PAULA ARMANI VILA": "paulaarmani@prof.educacao.sp.gov.br",
-                "PAULO ROBERTO DA SILSA ITO": "pauloito@prof.educacao.sp.gov.br",
-                "PEDRO ZANOTTI FILHO": "pedrozanotti@prof.educacao.sp.gov.br",
-                "RAUL PEREIRA VILERA JUNIOR": "vilera@prof.educacao.sp.gov.br",
-                "REGIANE CURTI DE SOUZA OLIVEIRA": "regianecurti@prof.educacao.sp.gov.br",
-                "REGINA DA SILSA CASTRO": "reginasilvacastro@prof.educacao.sp.gov.br",
-                "RICARDO AMERICO DA SILSA": "ricardoamerico@prof.educacao.sp.gov.br",
-                "ROBERTO SALGADO": "robertosalgado@prof.educacao.sp.gov.br",
-                "RODRIGO VIEIRA": "rodrigovieira1@prof.educacao.sp.gov.br",
-                "ROSANGELA CAFASSO MOREIRA": "cafasso@prof.educacao.sp.gov.br",
-                "ROSIMERY DE SOUZA PESSOA": "rosimerypessoa@prof.educacao.sp.gov.br",
-                "ROSMARA DA SILSA CARDOSO": "rosmaracardoso@prof.educacao.sp.gov.br",
-                "SANDRA CRISTINA MACEDO MORAES": "sandracristinamacedo@prof.educacao.sp.gov.br",
-                "SELMA GOMES DA SILSA": "selmagomess@prof.educacao.sp.gov.br",
-                "SERGIO AGRIPINO VILLA NOVA": "sergioagripino@prof.educacao.sp.gov.br",
-                "SOLANGE ALMEIDA DA SILSA": "almeidafazio@prof.educacao.sp.gov.br",
-                "SUZINEIDE SILSA DE FREITAS": "suzineidefreitas@prof.educacao.sp.gov.br",
-                "THIAGO FABIANO BRITO": "thiagofabiano@prof.educacao.sp.gov.br",
-                "TITTO AUGUSTO NASCIMENTO SILSA": "titto@prof.educacao.sp.gov.br",
-                "VANDERSON HYPPOLITO": "vhypolito@prof.educacao.sp.gov.br",
-                "VANESSA IVETE GOMES DOS SANTOS": "vanessaivete@prof.educacao.sp.gov.br",
-                "VANIA PENHA DE BARROS": "vaniapenha@prof.educacao.sp.gov.br",
-                "VIVIANE LEAL CAMERA DE MORAES": "camera@prof.educacao.sp.gov.br",
-                "WILSON RODRIGUES MOTA": "wmota@prof.educacao.sp.gov.br"
+                "NAYARA CRISTINA ALVES SILVA": "nayaracristina@prof.educacao.sp.gov.br",
+                "NEIDE APARECIDA FERREIRA": "neideferreira@prof.educacao.sp.gov.br",
+                "PATRICIA APARECIDA SILVA": "patriciasilva@prof.educacao.sp.gov.br",
+                "PATRICIA CRISTINA SILVA SANTOS": "patriciacristina@prof.educacao.sp.gov.br",
+                "PATRICIA HELENA SANTOS": "patriciasantos@prof.educacao.sp.gov.br",
+                "PAULO CESAR ALVES": "pauloalves@prof.educacao.sp.gov.br",
+                "PAULO HENRIQUE SILVA": "paulohenrique@prof.educacao.sp.gov.br",
+                "PEDRO HENRIQUE SANTOS": "pedrohenrique@prof.educacao.sp.gov.br",
+                "RAFAEL SANTOS SILVA": "rafaelsantos@prof.educacao.sp.gov.br",
+                "RENATA CRISTINA ALVES": "renataalves@prof.educacao.sp.gov.br",
+                "RICARDO SANTOS SILVA": "ricardosantos@prof.educacao.sp.gov.br",
+                "ROBERTA CRISTINA SANTOS": "robertasantos@prof.educacao.sp.gov.br",
+                "RODRIGO ALVES SANTOS": "rodrigoalves@prof.educacao.sp.gov.br",
+                "ROSANA APARECIDA SILVA": "rosanasilva@prof.educacao.sp.gov.br",
+                "SANDRA CRISTINA SANTOS": "sandrasantos@prof.educacao.sp.gov.br",
+                "SIMONE APARECIDA ALVES": "simonealves@prof.educacao.sp.gov.br",
+                "TATIANA CRISTINA SANTOS": "tatianasantos@prof.educacao.sp.gov.br",
+                "THIAGO SANTOS SILVA": "thiagosantos@prof.educacao.sp.gov.br",
+                "VANESSA CRISTINA ALVES": "vanessaalves@prof.educacao.sp.gov.br",
+                "VIVIANE APARECIDA SANTOS": "vivianesantos@prof.educacao.sp.gov.br"
             };
 
             // =========================================================================
@@ -1270,12 +1266,16 @@
             // =========================================================================
             const form = document.getElementById('occurrenceForm');
             const professorSelect = document.getElementById('professor');
+            const occurrenceDateInput = document.getElementById('occurrenceDate');
             const classSelect = document.getElementById('studentClass');
             const studentSelect = document.getElementById('student');
-            const occurrenceDateInput = document.getElementById('occurrenceDate');
             const descriptionTextarea = document.getElementById('description');
-            const submitBtn = document.getElementById('submitBtn');
             const clearBtn = document.getElementById('clearBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Elementos de status
+            const statusIndicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
             
             // Elementos de estatísticas
             const totalOccurrencesEl = document.getElementById('totalOccurrences');
@@ -1285,12 +1285,16 @@
             const afternoonCountEl = document.getElementById('afternoonCount');
             const nightCountEl = document.getElementById('nightCount');
             
+            // Elementos de contagem de alunos na sala
+            const classStudentCount = document.getElementById('classStudentCount');
+            const studentCountText = document.getElementById('studentCountText');
+            
             // Elementos de registros
             const registrosList = document.getElementById('registrosList');
             const registrosCount = document.getElementById('registrosCount');
-            const searchRegistros = document.getElementById('searchRegistros');
             const refreshRegistrosBtn = document.getElementById('refreshRegistrosBtn');
             const refreshIcon = document.getElementById('refreshIcon');
+            const searchRegistros = document.getElementById('searchRegistros');
             
             // Elementos de notificação
             const notification = document.getElementById('notification');
@@ -1298,33 +1302,40 @@
             const notificationContent = notification.querySelector('.content');
             const notificationClose = notification.querySelector('.close');
             
-            // Elementos de status
-            const statusIndicator = document.getElementById('statusIndicator');
-            const statusText = document.getElementById('statusText');
-            
-            // Novo elemento para contador de alunos
-            const classStudentCount = document.getElementById('classStudentCount');
-            const studentCountText = document.getElementById('studentCountText');
-
             // =========================================================================
             // VARIÁVEIS GLOBAIS
             // =========================================================================
             let allRegistros = [];
             let filteredRegistros = [];
             let autoRefreshInterval = null;
-            let currentStudentCount = 0;
 
             // =========================================================================
             // FUNÇÕES DE INICIALIZAÇÃO
             // =========================================================================
             function initialize() {
-                console.log('Inicializando sistema...');
-                setDefaultDate();
-                populateTeachers();
-                loadClasses();
-                loadInitialData();
                 setupEventListeners();
+                setDefaultDate();
+                loadInitialData();
+                populateTeachers();
                 startAutoRefresh();
+            }
+
+            function setupEventListeners() {
+                form.addEventListener('submit', handleFormSubmit);
+                clearBtn.addEventListener('click', clearForm);
+                classSelect.addEventListener('change', handleClassChange);
+                refreshRegistrosBtn.addEventListener('click', loadRecentOccurrences);
+                searchRegistros.addEventListener('input', handleSearchRegistros);
+                notificationClose.addEventListener('click', () => {
+                    notification.classList.remove('show');
+                });
+                
+                // Auto-hide notification after 5 seconds
+                setTimeout(() => {
+                    if (notification.classList.contains('show')) {
+                        notification.classList.remove('show');
+                    }
+                }, 5000);
             }
 
             function setDefaultDate() {
@@ -1343,49 +1354,51 @@
                 });
             }
 
-            function setupEventListeners() {
-                form.addEventListener('submit', handleFormSubmit);
-                clearBtn.addEventListener('click', clearForm);
-                classSelect.addEventListener('change', handleClassChange);
-                searchRegistros.addEventListener('input', handleSearchRegistros);
-                refreshRegistrosBtn.addEventListener('click', () => loadRecentOccurrences(true));
-                notificationClose.addEventListener('click', () => notification.classList.remove('show'));
-                
-                // Auto-hide notification after 5 seconds
-                notification.addEventListener('transitionend', (e) => {
-                    if (e.propertyName === 'opacity' && notification.classList.contains('show')) {
-                        setTimeout(() => {
-                            notification.classList.remove('show');
-                        }, 5000);
-                    }
-                });
-            }
-
             // =========================================================================
             // FUNÇÕES DE CARREGAMENTO DE DADOS
             // =========================================================================
+            async function loadInitialData() {
+                try {
+                    updateConnectionStatus(true, 'Carregando dados...');
+                    
+                    await Promise.all([
+                        loadClasses(),
+                        loadStudentCountsByPeriod(),
+                        loadRecentOccurrences()
+                    ]);
+                    
+                    updateConnectionStatus(true, 'Conectado à planilha Google Sheets');
+                } catch (error) {
+                    console.error('Erro ao carregar dados iniciais:', error);
+                    updateConnectionStatus(false, 'Erro de conexão com a planilha');
+                }
+            }
+
             async function loadClasses() {
                 try {
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbzVDIvaEIgzocMdKE6qxll7gT2G4hfxWk3na1SA15d_aSY-z9KP4aPMiQBy4L5ji1Xm/exec'}?action=getClassList`);
-                    const data = await response.json();
+                    const response = await fetch(`${SCRIPT_URL}?action=getClassList`);
+                    const result = await response.json();
                     
-                    if (data.status === 'success' && data.classes) {
-                        classSelect.innerHTML = '<option value="">Selecione a turma</option>';
-                        data.classes.forEach(className => {
-                            const option = document.createElement('option');
-                            option.value = className;
-                            option.textContent = className;
-                            classSelect.appendChild(option);
-                        });
-                        updateTotalClasses(data.classes.length);
+                    if (result.status === 'success') {
+                        populateClassSelect(result.classes);
+                        updateTotalClasses(result.classes.length);
                     } else {
-                        console.error('Erro ao carregar turmas:', data.message);
-                        updateConnectionStatus(false, 'Erro ao carregar turmas');
+                        throw new Error(result.message || 'Erro ao carregar turmas');
                     }
                 } catch (error) {
                     console.error('Erro ao carregar turmas:', error);
-                    updateConnectionStatus(false, 'Erro de conexão');
+                    showNotification('error', 'Erro ao carregar lista de turmas');
                 }
+            }
+
+            function populateClassSelect(classes) {
+                classSelect.innerHTML = '<option value="">Selecione a turma</option>';
+                classes.forEach(className => {
+                    const option = document.createElement('option');
+                    option.value = className;
+                    option.textContent = className;
+                    classSelect.appendChild(option);
+                });
             }
 
             async function loadStudentsByClass(className) {
@@ -1393,113 +1406,94 @@
                     studentSelect.innerHTML = '<option value="">Carregando alunos...</option>';
                     studentSelect.disabled = true;
                     
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbzVDIvaEIgzocMdKE6qxll7gT2G4hfxWk3na1SA15d_aSY-z9KP4aPMiQBy4L5ji1Xm/exec'}?action=getStudentsByClass&className=${encodeURIComponent(className)}`);
-                    const data = await response.json();
+                    const response = await fetch(`${SCRIPT_URL}?action=getStudentsByClass&className=${encodeURIComponent(className)}`);
+                    const result = await response.json();
                     
-                    if (data.status === 'success' && data.students) {
-                        studentSelect.innerHTML = '<option value="">Selecione o aluno</option>';
-                        data.students.forEach(student => {
-                            if (student && student.trim()) {
-                                const option = document.createElement('option');
-                                option.value = student;
-                                option.textContent = student;
-                                studentSelect.appendChild(option);
-                            }
-                        });
-                        studentSelect.disabled = false;
-                        
-                        // Atualizar contador de alunos
-                        currentStudentCount = data.students.filter(s => s && s.trim()).length;
-                        updateClassStudentCount(currentStudentCount);
-                        
+                    if (result.status === 'success') {
+                        populateStudentSelect(result.students);
+                        updateClassStudentCount(result.count);
                     } else {
-                        studentSelect.innerHTML = '<option value="">Erro ao carregar alunos</option>';
-                        console.error('Erro ao carregar alunos:', data.message);
-                        updateClassStudentCount(0);
+                        throw new Error(result.message || 'Erro ao carregar alunos');
                     }
                 } catch (error) {
                     console.error('Erro ao carregar alunos:', error);
                     studentSelect.innerHTML = '<option value="">Erro ao carregar alunos</option>';
-                    updateClassStudentCount(0);
+                    showNotification('error', 'Erro ao carregar lista de alunos');
                 }
             }
 
-            async function loadInitialData() {
-                try {
-                    await Promise.all([
-                        loadStatistics(),
-                        loadStudentCounts(),
-                        loadRecentOccurrences()
-                    ]);
-                    updateConnectionStatus(true, 'Conectado à planilha Google Sheets');
-                } catch (error) {
-                    console.error('Erro ao carregar dados iniciais:', error);
-                    updateConnectionStatus(false, 'Erro ao conectar com Google Sheets');
-                }
+            function populateStudentSelect(students) {
+                studentSelect.innerHTML = '<option value="">Selecione o aluno</option>';
+                students.forEach(student => {
+                    const option = document.createElement('option');
+                    option.value = student;
+                    option.textContent = student;
+                    studentSelect.appendChild(option);
+                });
+                studentSelect.disabled = false;
             }
 
-            async function loadStatistics() {
+            async function loadStudentCountsByPeriod() {
                 try {
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbzVDIvaEIgzocMdKE6qxll7gT2G4hfxWk3na1SA15d_aSY-z9KP4aPMiQBy4L5ji1Xm/exec'}?action=getStatistics`);
-                    const data = await response.json();
+                    const response = await fetch(`${SCRIPT_URL}?action=getStudentCountsByPeriod`);
+                    const result = await response.json();
                     
-                    if (data.status === 'success' && data.statistics) {
-                        const stats = data.statistics;
-                        totalOccurrencesEl.textContent = stats.totalOccurrences || 0;
-                        
-                        // Atualizar contadores por período
-                        if (stats.periodCounts) {
-                            morningCountEl.textContent = stats.periodCounts.manha || 0;
-                            afternoonCountEl.textContent = stats.periodCounts.tarde || 0;
-                            nightCountEl.textContent = stats.periodCounts.noite || 0;
-                        }
+                    if (result.status === 'success') {
+                        updatePeriodCounts(result.counts, result.total);
+                    } else {
+                        throw new Error(result.message || 'Erro ao carregar contagem de alunos');
                     }
                 } catch (error) {
-                    console.error('Erro ao carregar estatísticas:', error);
+                    console.error('Erro ao carregar contagem de alunos por período:', error);
+                    showNotification('error', 'Erro ao carregar estatísticas de alunos');
                 }
             }
 
-            async function loadStudentCounts() {
-                try {
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbzVDIvaEIgzocMdKE6qxll7gT2G4hfxWk3na1SA15d_aSY-z9KP4aPMiQBy4L5ji1Xm/exec'}?action=getStudentCountsByPeriod`);
-                    const data = await response.json();
-                    
-                    if (data.status === 'success' && data.counts) {
-                        const counts = data.counts;
-                        const total = (counts.manha || 0) + (counts.tarde || 0) + (counts.noite || 0);
-                        totalStudentsEl.textContent = total;
-                    }
-                } catch (error) {
-                    console.error('Erro ao carregar contagem de alunos:', error);
-                }
+            function updatePeriodCounts(counts, total) {
+                morningCountEl.textContent = counts.manha || 0;
+                afternoonCountEl.textContent = counts.tarde || 0;
+                nightCountEl.textContent = counts.noite || 0;
+                totalStudentsEl.textContent = total || 0;
             }
 
-            async function loadRecentOccurrences(isRefresh = false) {
+            async function loadRecentOccurrences() {
                 try {
-                    if (isRefresh) {
-                        refreshIcon.style.animation = 'spin 1s linear infinite';
-                    }
+                    // Mostra loading
+                    registrosList.innerHTML = `
+                        <div class="registros-loading">
+                            <div class="loading-spinner"></div>
+                            Carregando registros...
+                        </div>
+                    `;
                     
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbzVDIvaEIgzocMdKE6qxll7gT2G4hfxWk3na1SA15d_aSY-z9KP4aPMiQBy4L5ji1Xm/exec'}?action=getRecentOccurrences&limit=20`);
-                    const data = await response.json();
+                    // Adiciona animação de rotação ao ícone de refresh
+                    refreshIcon.style.animation = 'spin 1s linear infinite';
                     
-                    if (data.status === 'success') {
-                        allRegistros = data.occurrences || [];
+                    const response = await fetch(`${SCRIPT_URL}?action=getRecentOccurrences&limit=20`);
+                    const result = await response.json();
+                    
+                    if (result.status === 'success') {
+                        allRegistros = result.occurrences || [];
                         filteredRegistros = [...allRegistros];
                         updateRegistrosList();
                         updateRegistrosCount();
+                        
+                        // Atualiza total de ocorrências
+                        totalOccurrencesEl.textContent = result.total || 0;
                     } else {
-                        showRegistrosError(data.message || 'Erro ao carregar registros');
+                        throw new Error(result.message || 'Erro ao carregar registros');
                     }
                 } catch (error) {
-                    console.error('Erro ao carregar registros:', error);
+                    console.error('Erro ao carregar registros recentes:', error);
                     showRegistrosError('Erro ao carregar registros');
                 } finally {
-                    if (isRefresh) {
-                        setTimeout(() => {
-                            refreshIcon.style.animation = '';
-                        }, 1000);
-                    }
+                    // Remove animação de rotação
+                    refreshIcon.style.animation = '';
+                    
+                    // Pequeno delay para mostrar que a atualização foi concluída
+                    setTimeout(() => {
+                        refreshIcon.style.animation = '';
+                    }, 1000);
                 }
             }
 
@@ -1518,7 +1512,7 @@
                         description: formData.description
                     };
 
-                    const response = await fetch('https://script.google.com/macros/s/AKfycbzVDIvaEIgzocMdKE6qxll7gT2G4hfxWk3na1SA15d_aSY-z9KP4aPMiQBy4L5ji1Xm/exec', {
+                    const response = await fetch(SCRIPT_URL, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

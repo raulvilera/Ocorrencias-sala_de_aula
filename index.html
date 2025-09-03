@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
+        /* Todos os estilos CSS permanecem exatamente iguais */
         :root {
             --primary-color: #1a73e8;
             --primary-dark: #0d47a1;
@@ -1173,7 +1174,7 @@
                 "DANIELLE LUCIA BATISTA DE ALMEIDA": "danieleLucia@prof.educacao.sp.gov.br",
                 "EDIANE VIEIRA DA SILVA": "ediane@prof.educacao.sp.gov.br",
                 "EDILEUSA NUNES PEREIRA": "edileusa@prof.educacao.sp.gov.br",
-                "EDUARDO HENRIQUE DA FONSECA": "henriquefonseca@prof.educacao.sp.gov.br",
+                "EDUARDA HENRIQUE DA FONSECA": "henriquefonseca@prof.educacao.sp.gov.br",
                 "ELIANE SANTOS SILVA": "essantos@prof.educacao.sp.gov.br",
                 "ELIAS MONTEIRO DA SILVA": "elias1@prof.educacao.sp.gov.br",
                 "ELISABETE APARECIDA PIRES": "elisabetepires@prof.educacao.sp.gov.br",
@@ -1219,7 +1220,7 @@
                 "RODRIGO VIEIRA": "rodrigovieira1@prof.educacao.sp.gov.br",
                 "ROSANGELA CAFASSO MOREIRA": "cafasso@prof.educacao.sp.gov.br",
                 "ROSIMERY DE SOUZA PESSOA": "rosimerypessoa@prof.educacao.sp.gov.br",
-                "ROSMARA DA SILVA CARDOSO": "rosmaracardoso@prof.educacao.sp.gov.br",
+                "ROSMARA DA SILSA CARDOSO": "rosmaracardoso@prof.educacao.sp.gov.br",
                 "SANDRA CRISTINA MACEDO MORAES": "sandracristinamacedo@prof.educacao.sp.gov.br",
                 "SELMA GOMES DA SILVA": "selmagomess@prof.educacao.sp.gov.br",
                 "SERGIO AGRIPINO VILLA NOVA": "sergioagripino@prof.educacao.sp.gov.br",
@@ -1311,15 +1312,15 @@
             }
 
             // =========================================================================
-            // FUNÇÕES DE COMUNICAÇÃO COM O BACKEND
+            // FUNÇÕES DE COMUNICAÇÃO COM O BACKEND (CORRIGIDAS)
             // =========================================================================
 
             /**
-             * Função para fazer requisições GET ao backend
+             * Função para fazer requisições GET ao backend (CORRIGIDA)
              */
             async function makeGetRequest(action, params = {}) {
                 try {
-                    const url = new URL('https://script.google.com/macros/s/AKfycbx9KfIesA_LVXPH_x0r-FXqO4lBh_kLabNAPjoT4mJZMQKji5OBaVc9YrP6wxWZzUp4/exec');
+                    const url = new URL(SCRIPT_URL);
                     url.searchParams.append('action', action);
                     
                     Object.keys(params).forEach(key => {
@@ -1348,16 +1349,27 @@
             }
 
             /**
-             * Função para fazer requisições POST ao backend
+             * Função para fazer requisições POST ao backend (NOVA IMPLEMENTAÇÃO)
              */
             async function makePostRequest(data) {
                 try {
-                    const response = await fetch('https://script.google.com/macros/s/AKfycbx9KfIesA_LVXPH_x0r-FXqO4lBh_kLabNAPjoT4mJZMQKji5OBaVc9YrP6wxWZzUp4/exec', {
+                    // Inclui explicitamente a ação no payload
+                    const payload = {
+                        action: 'addOccurrence',
+                        date: data.date,
+                        professor: data.professor,
+                        class: data.class,
+                        student: data.student,
+                        irregularities: data.irregularities,
+                        description: data.description
+                    };
+
+                    const response = await fetch(SCRIPT_URL, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify(data)
+                        body: JSON.stringify(payload)
                     });
 
                     if (!response.ok) {
@@ -1402,13 +1414,14 @@
             }
 
             /**
-             * Carrega os alunos de uma turma específica
+             * Carrega os alunos de uma turma específica (CORRIGIDA - usando className)
              */
             async function loadStudentsByClass(className) {
                 try {
                     studentSelect.innerHTML = '<option value="">Carregando alunos...</option>';
                     studentSelect.disabled = true;
 
+                    // Usando o parâmetro correto (className) para a requisição
                     const data = await makeGetRequest('getStudentsByClass', { className: className });
                     
                     if (data && data.status === 'success' && data.students) {
@@ -1608,12 +1621,13 @@
             }
 
             // =========================================================================
-            // MANIPULADORES DE EVENTOS
+            // MANIPULADORES DE EVENTOS (ATUALIZADOS)
             // =========================================================================
 
             function handleClassChange() {
                 const selectedClass = classSelect.value;
                 if (selectedClass) {
+                    // Usando o parâmetro correto (className) para carregar alunos
                     loadStudentsByClass(selectedClass);
                 } else {
                     studentSelect.innerHTML = '<option value="">Selecione primeiro a turma</option>';
@@ -1640,18 +1654,8 @@
                         return;
                     }
                     
-                    // Envia os dados para o backend
-                    const payload = {
-                        action: 'addOccurrence',
-                        date: formData.date,
-                        professor: formData.professor,
-                        class: formData.class,
-                        student: formData.student,
-                        irregularities: formData.irregularities,
-                        description: formData.description
-                    };
-                    
-                    const result = await makePostRequest(payload);
+                    // Envia os dados para o backend usando a nova função makePostRequest
+                    const result = await makePostRequest(formData);
                     
                     if (result && result.status === 'success') {
                         showNotification('success', result.message || 'Ocorrência registrada com sucesso!');

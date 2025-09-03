@@ -1180,7 +1180,7 @@
             // =========================================================================
             // CONFIGURAÇÕES E CONSTANTES
             // =========================================================================
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzVDIvaEIgzocMdKE6qxll7gT2G4hfxWk3na1SA15d_aSY-z9KP4aPMiQBy4L5ji1Xm/exec';
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyFXUop6r2aZfhURIwDHVgkhjyqN-C8gopzREsgWXLBK3Polc5VrXXpfS6cLNy2cSGT/exec';
 
             const teacherEmails = {
                 "ALEX LUTH PEREIRA MARANHAO": "luth@prof.educacao.sp.gov.br",
@@ -1376,7 +1376,7 @@
 
             async function loadClasses() {
                 try {
-                    const response = await fetch(`${SCRIPT_URL}?action=getClassList`);
+                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbyFXUop6r2aZfhURIwDHVgkhjyqN-C8gopzREsgWXLBK3Polc5VrXXpfS6cLNy2cSGT/exec'}?action=getClassList`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1406,7 +1406,7 @@
                     studentSelect.innerHTML = '<option value="">Carregando alunos...</option>';
                     studentSelect.disabled = true;
                     
-                    const response = await fetch(`${SCRIPT_URL}?action=getStudentsByClass&className=${encodeURIComponent(className)}`);
+                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbyFXUop6r2aZfhURIwDHVgkhjyqN-C8gopzREsgWXLBK3Polc5VrXXpfS6cLNy2cSGT/exec'}?action=getStudentsByClass&className=${encodeURIComponent(className)}`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1435,7 +1435,7 @@
 
             async function loadStudentCountsByPeriod() {
                 try {
-                    const response = await fetch(`${SCRIPT_URL}?action=getStudentCountsByPeriod`);
+                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbyFXUop6r2aZfhURIwDHVgkhjyqN-C8gopzREsgWXLBK3Polc5VrXXpfS6cLNy2cSGT/exec'}?action=getStudentCountsByPeriod`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1469,7 +1469,7 @@
                     // Adiciona animação de rotação ao ícone de refresh
                     refreshIcon.style.animation = 'spin 1s linear infinite';
                     
-                    const response = await fetch(`${SCRIPT_URL}?action=getRecentOccurrences&limit=20`);
+                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbyFXUop6r2aZfhURIwDHVgkhjyqN-C8gopzREsgWXLBK3Polc5VrXXpfS6cLNy2cSGT/exec'}?action=getRecentOccurrences&limit=20`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1512,7 +1512,7 @@
                         description: formData.description
                     };
 
-                    const response = await fetch(SCRIPT_URL, {
+                    const response = await fetch('https://script.google.com/macros/s/AKfycbyFXUop6r2aZfhURIwDHVgkhjyqN-C8gopzREsgWXLBK3Polc5VrXXpfS6cLNy2cSGT/exec', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

@@ -1147,7 +1147,7 @@
             // =========================================================================
             // CONFIGURAÇÕES E CONSTANTES
             // =========================================================================
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwSJ-Bvri4XuQ5dfSh-ksJB0JQ6eg_iHzA5anmH7t-x1_qSU0wP8Ghtn3-Rd8nDkkw/exec';
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBiIq86Bu_sg68fLxZyEq8BAJMzcNpqbpFeSAcNRSagcaWhymK0oEmUz-wmDg38dVi/exec';
 
             const teacherEmails = {
                 "ALEX LUTH PEREIRA MARANHAO": "luth@prof.educacao.sp.gov.br",
@@ -1317,7 +1317,7 @@
              */
             async function makeGetRequest(action, params = {}) {
                 try {
-                    const url = new URL(SCRIPT_URL);
+                    const url = new URL('https://script.google.com/macros/s/AKfycbyBiIq86Bu_sg68fLxZyEq8BAJMzcNpqbpFeSAcNRSagcaWhymK0oEmUz-wmDg38dVi/exec');
                     url.searchParams.append('action', action);
                     
                     Object.keys(params).forEach(key => {
@@ -1361,7 +1361,7 @@
                         description: data.description
                     };
 
-                    const response = await fetch(SCRIPT_URL, {
+                    const response = await fetch('https://script.google.com/macros/s/AKfycbyBiIq86Bu_sg68fLxZyEq8BAJMzcNpqbpFeSAcNRSagcaWhymK0oEmUz-wmDg38dVi/exec', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

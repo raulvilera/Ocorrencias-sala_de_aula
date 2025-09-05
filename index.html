@@ -965,8 +965,8 @@
                         <i class="fas fa-plug"></i>
                         <div>
                             <strong>Status de integração:</strong> 
-                            <span class="status-indicator status-connected" id="statusIndicator"></span>
-                            <span id="statusText">Conectado à planilha Google Sheets</span>
+                            <span class="status-indicator status-disconnected" id="statusIndicator"></span>
+                            <span id="statusText">Verificando conexão...</span>
                         </div>
                     </div>
                     
@@ -1180,7 +1180,8 @@
             // =========================================================================
             // CONFIGURAÇÕES E CONSTANTES
             // =========================================================================
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2C2lhSuMVHuMBrlb2tbfZbxCusRim4QCJMhdEuqVlEbErCFtPVbWPK9B7nSoUiYVD/exec';
+            // IMPORTANTE: Substitua pela URL do seu Google Apps Script
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw9lpdfJe4Ij_rg8u0RK7UFiz1uoSVtx7Q0xab4-ABmZi6Lz9RxNy2Fzmnr4VGZbpSB/exec';
 
             const teacherEmails = {
                 "ALEX LUTH PEREIRA MARANHAO": "luth@prof.educacao.sp.gov.br",
@@ -1308,6 +1309,8 @@
             let allRegistros = [];
             let filteredRegistros = [];
             let autoRefreshInterval = null;
+            let connectionRetryCount = 0;
+            const MAX_RETRY_ATTEMPTS = 3;
 
             // =========================================================================
             // INICIALIZAÇÃO
@@ -1321,16 +1324,13 @@
                 // Carrega professores
                 loadProfessors();
                 
-                // Carrega dados iniciais
-                loadInitialData();
+                // Testa conexão primeiro
+                testConnection();
                 
                 // Configura event listeners
                 setupEventListeners();
                 
-                // Inicia auto-refresh
-                startAutoRefresh();
-                
-                console.log('Sistema inicializado com sucesso');
+                console.log('Sistema inicializado');
             }
 
             function setDefaultDate() {
@@ -1350,10 +1350,118 @@
                 console.log(`${professorNames.length} professores carregados`);
             }
 
+            async function testConnection() {
+                try {
+                    updateConnectionStatus(false, 'Testando conexão...');
+                    
+                    // Verifica se a URL do script está configurada
+                    if (SCRIPT_URL.includes('https://script.google.com/macros/s/AKfycbw9lpdfJe4Ij_rg8u0RK7UFiz1uoSVtx7Q0xab4-ABmZi6Lz9RxNy2Fzmnr4VGZbpSB/exec') {
+                        throw new Error('URL do Google Apps Script não configurada');
+                    }
+                    
+                    const response = await fetch(`${SCRIPT_URL}?action=getClassList`, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const result = await response.json();
+                    
+                    if (result.status === 'success') {
+                        updateConnectionStatus(true, 'Conectado à planilha Google Sheets');
+                        await loadInitialData();
+                        startAutoRefresh();
+                    } else {
+                        throw new Error(result.message || 'Erro desconhecido na resposta');
+                    }
+                    
+                } catch (error) {
+                    console.error('Erro na conexão:', error);
+                    handleConnectionError(error);
+                }
+            }
+
+            function handleConnectionError(error) {
+                let errorMessage = 'Erro na conexão com a planilha';
+                
+                if (error.message.includes('SEU_SCRIPT_ID_AQUI')) {
+                    errorMessage = 'Configure a URL do Google Apps Script';
+                } else if (error.message.includes('NetworkError') || error.message.includes('Failed to fetch')) {
+                    errorMessage = 'Erro de rede - Verifique sua conexão';
+                } else if (error.message.includes('CORS')) {
+                    errorMessage = 'Erro CORS - Verifique as permissões do script';
+                } else if (error.message.includes('404')) {
+                    errorMessage = 'Script não encontrado - Verifique a URL';
+                } else if (error.message.includes('403')) {
+                    errorMessage = 'Acesso negado - Verifique as permissões';
+                }
+                
+                updateConnectionStatus(false, errorMessage);
+                
+                // Retry automático
+                if (connectionRetryCount < MAX_RETRY_ATTEMPTS) {
+                    connectionRetryCount++;
+                    setTimeout(() => {
+                        console.log(`Tentativa de reconexão ${connectionRetryCount}/${MAX_RETRY_ATTEMPTS}`);
+                        testConnection();
+                    }, 5000 * connectionRetryCount); // Delay progressivo
+                } else {
+                    showOfflineMode();
+                }
+            }
+
+            function showOfflineMode() {
+                updateConnectionStatus(false, 'Modo offline - Funcionalidades limitadas');
+                
+                // Carrega dados mock para demonstração
+                loadMockData();
+                
+                showNotification('error', 'Sistema em modo offline. Algumas funcionalidades podem não estar disponíveis.');
+            }
+
+            function loadMockData() {
+                // Carrega turmas mock
+                const mockClasses = [
+                    "6° ANO A MANHA", "6° ANO B MANHA", "6° ANO C MANHA",
+                    "7° ANO A TARDE", "7° ANO B TARDE", "8° ANO A TARDE",
+                    "9° ANO A TARDE", "1ª SERIE A MANHA", "2ª SERIE A MANHA", "3ª SERIE A MANHA"
+                ];
+                
+                classSelect.innerHTML = '<option value="">Selecione a turma</option>';
+                mockClasses.forEach(className => {
+                    const option = document.createElement('option');
+                    option.value = className;
+                    option.textContent = className;
+                    classSelect.appendChild(option);
+                });
+                
+                updateTotalClasses(mockClasses.length);
+                
+                // Dados mock para estatísticas
+                totalOccurrencesEl.textContent = '0';
+                totalStudentsEl.textContent = '0';
+                morningCountEl.textContent = '0';
+                afternoonCountEl.textContent = '0';
+                nightCountEl.textContent = '0';
+                
+                // Lista vazia de registros
+                registrosList.innerHTML = `
+                    <div class="registros-empty">
+                        <i class="fas fa-wifi" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+                        <p>Modo offline - Conecte-se à internet para ver os registros</p>
+                    </div>
+                `;
+                
+                updateRegistrosCount();
+            }
+
             async function loadInitialData() {
                 try {
-                    updateConnectionStatus(true, 'Carregando dados...');
-                    
                     // Carrega turmas
                     await loadClasses();
                     
@@ -1363,11 +1471,9 @@
                     // Carrega registros recentes
                     await loadRecentOccurrences();
                     
-                    updateConnectionStatus(true, 'Conectado à planilha Google Sheets');
-                    
                 } catch (error) {
                     console.error('Erro ao carregar dados iniciais:', error);
-                    updateConnectionStatus(false, 'Erro na conexão com a planilha');
+                    handleConnectionError(error);
                 }
             }
 
@@ -1378,7 +1484,10 @@
                 classSelect.addEventListener('change', handleClassChange);
                 
                 // Registros
-                refreshRegistrosBtn.addEventListener('click', loadRecentOccurrences);
+                refreshRegistrosBtn.addEventListener('click', () => {
+                    connectionRetryCount = 0; // Reset retry count
+                    testConnection();
+                });
                 searchRegistros.addEventListener('input', handleSearchRegistros);
                 
                 // Notificação
@@ -1399,7 +1508,7 @@
             // =========================================================================
             async function loadClasses() {
                 try {
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbw2C2lhSuMVHuMBrlb2tbfZbxCusRim4QCJMhdEuqVlEbErCFtPVbWPK9B7nSoUiYVD/exec'}?action=getClassList`);
+                    const response = await fetchWithTimeout(`${'https://script.google.com/macros/s/AKfycbw9lpdfJe4Ij_rg8u0RK7UFiz1uoSVtx7Q0xab4-ABmZi6Lz9RxNy2Fzmnr4VGZbpSB/exec'}?action=getClassList`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1419,10 +1528,11 @@
                         updateTotalClasses(classes.length);
                         console.log(`${classes.length} turmas carregadas`);
                     } else {
-                        console.error('Erro ao carregar turmas:', result.message);
+                        throw new Error(result.message || 'Erro ao carregar turmas');
                     }
                 } catch (error) {
                     console.error('Erro na requisição de turmas:', error);
+                    throw error;
                 }
             }
 
@@ -1431,7 +1541,7 @@
                     studentSelect.disabled = true;
                     studentSelect.innerHTML = '<option value="">Carregando alunos...</option>';
                     
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbw2C2lhSuMVHuMBrlb2tbfZbxCusRim4QCJMhdEuqVlEbErCFtPVbWPK9B7nSoUiYVD/exec'}?action=getStudentsByClass&className=${encodeURIComponent(className)}`);
+                    const response = await fetchWithTimeout(`${'https://script.google.com/macros/s/AKfycbw9lpdfJe4Ij_rg8u0RK7UFiz1uoSVtx7Q0xab4-ABmZi6Lz9RxNy2Fzmnr4VGZbpSB/exec'}?action=getStudentsByClass&className=${encodeURIComponent(className)}`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1463,7 +1573,7 @@
 
             async function loadStatistics() {
                 try {
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbw2C2lhSuMVHuMBrlb2tbfZbxCusRim4QCJMhdEuqVlEbErCFtPVbWPK9B7nSoUiYVD/exec'}?action=getStatistics`);
+                    const response = await fetchWithTimeout(`${'https://script.google.com/macros/s/AKfycbw9lpdfJe4Ij_rg8u0RK7UFiz1uoSVtx7Q0xab4-ABmZi6Lz9RxNy2Fzmnr4VGZbpSB/exec'}?action=getStatistics`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1480,6 +1590,7 @@
                     }
                 } catch (error) {
                     console.error('Erro na requisição de estatísticas:', error);
+                    throw error;
                 }
             }
 
@@ -1496,7 +1607,7 @@
                     // Adiciona animação de rotação ao ícone de refresh
                     refreshIcon.style.animation = 'spin 1s linear infinite';
                     
-                    const response = await fetch(`$'https://script.google.com/macros/s/AKfycbw2C2lhSuMVHuMBrlb2tbfZbxCusRim4QCJMhdEuqVlEbErCFtPVbWPK9B7nSoUiYVD/exec'}?action=getRecentOccurrences&limit=20`);
+                    const response = await fetchWithTimeout(`${'https://script.google.com/macros/s/AKfycbw9lpdfJe4Ij_rg8u0RK7UFiz1uoSVtx7Q0xab4-ABmZi6Lz9RxNy2Fzmnr4VGZbpSB/exec'}?action=getRecentOccurrences&limit=20`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1513,6 +1624,7 @@
                 } catch (error) {
                     console.error('Erro ao carregar registros:', error);
                     showRegistrosError('Erro na conexão com a planilha');
+                    throw error;
                 } finally {
                     // Remove animação do ícone
                     setTimeout(() => {
@@ -1536,7 +1648,7 @@
                         description: formData.description
                     };
 
-                    const response = await fetch('https://script.google.com/macros/s/AKfycbw2C2lhSuMVHuMBrlb2tbfZbxCusRim4QCJMhdEuqVlEbErCFtPVbWPK9B7nSoUiYVD/exec', {
+                    const response = await fetchWithTimeout('https://script.google.com/macros/s/AKfycbw9lpdfJe4Ij_rg8u0RK7UFiz1uoSVtx7Q0xab4-ABmZi6Lz9RxNy2Fzmnr4VGZbpSB/exec', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -1552,6 +1664,29 @@
                     return result;
                 } catch (error) {
                     console.error('Erro na requisição POST:', error);
+                    throw error;
+                }
+            }
+
+            // =========================================================================
+            // FUNÇÕES AUXILIARES
+            // =========================================================================
+            async function fetchWithTimeout(url, options = {}, timeout = 10000) {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), timeout);
+                
+                try {
+                    const response = await fetch(url, {
+                        ...options,
+                        signal: controller.signal
+                    });
+                    clearTimeout(timeoutId);
+                    return response;
+                } catch (error) {
+                    clearTimeout(timeoutId);
+                    if (error.name === 'AbortError') {
+                        throw new Error('Timeout na requisição');
+                    }
                     throw error;
                 }
             }
@@ -1641,6 +1776,11 @@
                 notificationIcon.className = type === 'success' ? 'icon fas fa-check-circle' : 'icon fas fa-exclamation-circle';
                 notificationContent.textContent = message;
                 notification.classList.add('show');
+                
+                // Auto-hide após 5 segundos
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 5000);
             }
 
             // =========================================================================
@@ -1659,6 +1799,12 @@
 
             async function handleFormSubmit(e) {
                 e.preventDefault();
+                
+                // Verifica se está conectado
+                if (statusIndicator.classList.contains('status-disconnected')) {
+                    showNotification('error', 'Sistema desconectado. Verifique a conexão e tente novamente.');
+                    return;
+                }
                 
                 const submitButton = e.target.querySelector('button[type="submit"]');
                 const originalText = submitButton.innerHTML;
@@ -1682,14 +1828,18 @@
                     if (result && result.status === 'success') {
                         showNotification('success', result.message || 'Ocorrência registrada com sucesso!');
                         clearForm();
-                        loadInitialData(); // Recarrega todos os dados
+                        
+                        // Recarrega dados após sucesso
+                        setTimeout(() => {
+                            loadInitialData();
+                        }, 1000);
                     } else {
                         showNotification('error', result.message || 'Erro ao registrar ocorrência');
                     }
                     
                 } catch (error) {
                     console.error('Erro ao enviar formulário:', error);
-                    showNotification('error', 'Erro ao registrar ocorrência. Tente novamente.');
+                    showNotification('error', 'Erro ao registrar ocorrência. Verifique a conexão e tente novamente.');
                 } finally {
                     // Restaura o botão
                     submitButton.disabled = false;
@@ -1766,9 +1916,13 @@
             }
 
             function startAutoRefresh() {
-                // Atualiza a cada 30 segundos
+                // Atualiza a cada 30 segundos apenas se conectado
                 autoRefreshInterval = setInterval(() => {
-                    loadRecentOccurrences();
+                    if (statusIndicator.classList.contains('status-connected')) {
+                        loadRecentOccurrences().catch(error => {
+                            console.warn('Erro no auto-refresh:', error);
+                        });
+                    }
                 }, 30000);
             }
 

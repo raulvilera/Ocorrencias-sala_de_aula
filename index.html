@@ -1180,7 +1180,7 @@
             // =========================================================================
             // CONFIGURAÇÕES E CONSTANTES
             // =========================================================================
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwJZQJb5H-ecmrptSEVJNleDNh7WLpSyOJKSorC8sH2TFc98xHKZeDJQ-146aE3jL8V/exec';
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2C2lhSuMVHuMBrlb2tbfZbxCusRim4QCJMhdEuqVlEbErCFtPVbWPK9B7nSoUiYVD/exec';
 
             const teacherEmails = {
                 "ALEX LUTH PEREIRA MARANHAO": "luth@prof.educacao.sp.gov.br",
@@ -1399,7 +1399,7 @@
             // =========================================================================
             async function loadClasses() {
                 try {
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbwJZQJb5H-ecmrptSEVJNleDNh7WLpSyOJKSorC8sH2TFc98xHKZeDJQ-146aE3jL8V/exec'}?action=getClassList`);
+                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbw2C2lhSuMVHuMBrlb2tbfZbxCusRim4QCJMhdEuqVlEbErCFtPVbWPK9B7nSoUiYVD/exec'}?action=getClassList`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1431,7 +1431,7 @@
                     studentSelect.disabled = true;
                     studentSelect.innerHTML = '<option value="">Carregando alunos...</option>';
                     
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbwJZQJb5H-ecmrptSEVJNleDNh7WLpSyOJKSorC8sH2TFc98xHKZeDJQ-146aE3jL8V/exec'}?action=getStudentsByClass&className=${encodeURIComponent(className)}`);
+                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbw2C2lhSuMVHuMBrlb2tbfZbxCusRim4QCJMhdEuqVlEbErCFtPVbWPK9B7nSoUiYVD/exec'}?action=getStudentsByClass&className=${encodeURIComponent(className)}`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1463,7 +1463,7 @@
 
             async function loadStatistics() {
                 try {
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbwJZQJb5H-ecmrptSEVJNleDNh7WLpSyOJKSorC8sH2TFc98xHKZeDJQ-146aE3jL8V/exec'}?action=getStatistics`);
+                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbw2C2lhSuMVHuMBrlb2tbfZbxCusRim4QCJMhdEuqVlEbErCFtPVbWPK9B7nSoUiYVD/exec'}?action=getStatistics`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1496,7 +1496,7 @@
                     // Adiciona animação de rotação ao ícone de refresh
                     refreshIcon.style.animation = 'spin 1s linear infinite';
                     
-                    const response = await fetch(`$'https://script.google.com/macros/s/AKfycbwJZQJb5H-ecmrptSEVJNleDNh7WLpSyOJKSorC8sH2TFc98xHKZeDJQ-146aE3jL8V/exec'}?action=getRecentOccurrences&limit=20`);
+                    const response = await fetch(`$'https://script.google.com/macros/s/AKfycbw2C2lhSuMVHuMBrlb2tbfZbxCusRim4QCJMhdEuqVlEbErCFtPVbWPK9B7nSoUiYVD/exec'}?action=getRecentOccurrences&limit=20`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1536,7 +1536,7 @@
                         description: formData.description
                     };
 
-                    const response = await fetch('https://script.google.com/macros/s/AKfycbwJZQJb5H-ecmrptSEVJNleDNh7WLpSyOJKSorC8sH2TFc98xHKZeDJQ-146aE3jL8V/exec', {
+                    const response = await fetch('https://script.google.com/macros/s/AKfycbw2C2lhSuMVHuMBrlb2tbfZbxCusRim4QCJMhdEuqVlEbErCFtPVbWPK9B7nSoUiYVD/exec', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

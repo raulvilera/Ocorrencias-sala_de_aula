@@ -1191,7 +1191,7 @@
             // =========================================================================
             // CONFIGURAÇÕES E CONSTANTES
             // =========================================================================
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyA6VlnMWTEEoDUZwuGC59zpV-eOKAd1_dnbiU6OWD3e3yRAp17A9t1XSSjHxL6R1v4/exec';
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec';
 
             // =========================================================================
             // ELEMENTOS DO DOM
@@ -1303,7 +1303,7 @@
                 try {
                     console.log('Carregando todos os dados...');
                     
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbyA6VlnMWTEEoDUZwuGC59zpV-eOKAd1_dnbiU6OWD3e3yRAp17A9t1XSSjHxL6R1v4/exec'}?action=getAllData`);
+                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getAllData`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1332,7 +1332,7 @@
                 try {
                     console.log('Carregando alunos da turma:', className);
                     
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbyA6VlnMWTEEoDUZwuGC59zpV-eOKAd1_dnbiU6OWD3e3yRAp17A9t1XSSjHxL6R1v4/exec'}?action=getStudentsByClass&className=${encodeURIComponent(className)}`);
+                    const response = await fetch(`${SCRIPT_URL}?action=getStudentsByClass&className=${encodeURIComponent(className)}`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1360,7 +1360,7 @@
                     // Carregar ocorrências para cada aluno
                     for (const student of students) {
                         try {
-                            const response = await fetch(`${'https://script.google.com/macros/s/AKfycbyA6VlnMWTEEoDUZwuGC59zpV-eOKAd1_dnbiU6OWD3e3yRAp17A9t1XSSjHxL6R1v4/exec'}?action=getStudentOccurrences&studentName=${encodeURIComponent(student)}`);
+                            const response = await fetch(`${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getStudentOccurrences&studentName=${encodeURIComponent(student)}`);
                             const result = await response.json();
                             
                             if (result.status === 'success' && result.count > 0) {
@@ -1405,7 +1405,7 @@
                     const refreshIcon = document.getElementById('refreshIcon');
                     refreshIcon.style.animation = 'spin 1s linear infinite';
                     
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbyA6VlnMWTEEoDUZwuGC59zpV-eOKAd1_dnbiU6OWD3e3yRAp17A9t1XSSjHxL6R1v4/exec'}?action=getRecentOccurrences&limit=20`);
+                    const response = await fetch(`$'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getRecentOccurrences&limit=20`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1560,8 +1560,9 @@
 
                     console.log('Payload preparado:', payload);
 
-                    const response = await fetch('https://script.google.com/macros/s/AKfycbyA6VlnMWTEEoDUZwuGC59zpV-eOKAd1_dnbiU6OWD3e3yRAp17A9t1XSSjHxL6R1v4/exec', {
+                    const response = await fetch('https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec', {
                         method: 'POST',
+                        mode: 'cors',
                         headers: {
                             'Content-Type': 'application/json',
                         },
@@ -1623,7 +1624,7 @@
                     const result = await makePostRequest(formData);
                     
                     if (result && result.status === 'success') {
-                        showNotification('success', result.message || 'Ocorrência registrada com sucesso na aba "OCORRENCIASDOSPROFESSORES"!');
+                        showNotification('success', result.message || 'Ocorrência registrada com sucesso!');
                         clearForm();
                         
                         // Recarrega os dados para atualizar estatísticas e registros

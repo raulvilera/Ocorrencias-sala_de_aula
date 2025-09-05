@@ -1226,6 +1226,7 @@
             let allRegistros = [];
             let filteredRegistros = [];
             let autoRefreshInterval = null;
+            let allData = null;
 
             // =========================================================================
             // INICIALIZAÇÃO
@@ -1266,7 +1267,7 @@
             }
 
             // =========================================================================
-            // FUNÇÕES DE CARREGAMENTO DE DADOS
+            // FUNÇÕES DE CARREGAMENTO DE DADOS - CORRIGIDAS
             // =========================================================================
             async function loadInitialData() {
                 try {
@@ -1274,94 +1275,101 @@
                     
                     // Carregar dados básicos
                     await Promise.all([
-                        loadClassList(),
-                        loadStatistics(),
-                        loadStudentCounts(),
+                        loadAllData(),
                         loadRecentOccurrences()
                     ]);
                     
                     updateConnectionStatus(true, 'Conectado à planilha Google Sheets');
+                    
                 } catch (error) {
                     console.error('Erro ao carregar dados iniciais:', error);
-                    updateConnectionStatus(false, 'Erro na conexão com Google Sheets');
+                    updateConnectionStatus(false, 'Erro na conexão');
+                    showNotification('error', 'Erro ao carregar dados iniciais');
                 }
             }
 
-            async function loadClassList() {
+            async function loadAllData() {
                 try {
-                    const response = await fetch(`${SCRIPT_URL}?action=getClassList`);
+                    console.log('Carregando todos os dados...');
+                    
+                    const response = await fetch(`${SCRIPT_URL}?action=getAllData`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
                     const result = await response.json();
+                    console.log('Dados recebidos:', result);
                     
                     if (result.status === 'success') {
+                        allData = result;
+                        
+                        // Preencher dropdowns
                         populateProfessors(result.professors);
                         populateClasses(result.classes);
-                        updateTotalClasses(result.classes.length);
+                        
+                        // Atualizar estatísticas
+                        updateStatistics(result.statistics, result.studentCounts);
+                        
+                        console.log('Dados carregados com sucesso');
                     } else {
-                        throw new Error(result.message);
+                        throw new Error(result.message || 'Erro ao carregar dados');
                     }
                 } catch (error) {
-                    console.error('Erro ao carregar lista de turmas:', error);
+                    console.error('Erro ao carregar todos os dados:', error);
                     throw error;
                 }
             }
 
             async function loadStudentsByClass(className) {
                 try {
+                    console.log('Carregando alunos da turma:', className);
+                    
+                    if (!className) {
+                        studentSelect.innerHTML = '<option value="">Selecione primeiro a turma</option>';
+                        studentSelect.disabled = true;
+                        classStudentCount.classList.remove('show');
+                        return;
+                    }
+                    
                     const response = await fetch(`${SCRIPT_URL}?action=getStudentsByClass&className=${encodeURIComponent(className)}`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
                     const result = await response.json();
+                    console.log('Alunos recebidos:', result);
                     
                     if (result.status === 'success') {
                         populateStudents(result.students);
-                        updateClassStudentCount(result.count);
+                        updateStudentCount(result.count);
                     } else {
-                        throw new Error(result.message);
+                        throw new Error(result.message || 'Erro ao carregar alunos');
                     }
                 } catch (error) {
                     console.error('Erro ao carregar alunos da turma:', error);
                     studentSelect.innerHTML = '<option value="">Erro ao carregar alunos</option>';
                     studentSelect.disabled = true;
-                }
-            }
-
-            async function loadStatistics() {
-                try {
-                    const response = await fetch(`${SCRIPT_URL}?action=getStatistics`);
-                    const result = await response.json();
-                    
-                    if (result.status === 'success') {
-                        updateStatistics(result.statistics);
-                    } else {
-                        throw new Error(result.message);
-                    }
-                } catch (error) {
-                    console.error('Erro ao carregar estatísticas:', error);
-                }
-            }
-
-            async function loadStudentCounts() {
-                try {
-                    const response = await fetch(`${SCRIPT_URL}?action=getStudentCountsByPeriod`);
-                    const result = await response.json();
-                    
-                    if (result.status === 'success') {
-                        updateStudentCounts(result);
-                    } else {
-                        throw new Error(result.message);
-                    }
-                } catch (error) {
-                    console.error('Erro ao carregar contagem de alunos:', error);
+                    classStudentCount.classList.remove('show');
+                    showNotification('error', 'Erro ao carregar alunos da turma');
                 }
             }
 
             async function loadRecentOccurrences() {
                 try {
-                    const refreshIcon = document.getElementById('refreshIcon');
-                    if (refreshIcon) {
-                        refreshIcon.style.animation = 'spin 1s linear infinite';
-                    }
+                    console.log('Carregando ocorrências recentes...');
+                    
+                    showRegistrosLoading();
                     
                     const response = await fetch(`${SCRIPT_URL}?action=getRecentOccurrences&limit=20`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
                     const result = await response.json();
+                    console.log('Ocorrências recebidas:', result);
                     
                     if (result.status === 'success') {
                         allRegistros = result.occurrences || [];
@@ -1369,59 +1377,92 @@
                         updateRegistrosList();
                         updateRegistrosCount();
                     } else {
-                        showRegistrosError(result.message || 'Erro ao carregar registros');
+                        throw new Error(result.message || 'Erro ao carregar ocorrências');
                     }
                 } catch (error) {
-                    console.error('Erro ao carregar registros recentes:', error);
-                    showRegistrosError('Erro de conexão ao carregar registros');
-                } finally {
-                    const refreshIcon = document.getElementById('refreshIcon');
-                    if (refreshIcon) {
-                        setTimeout(() => {
-                            refreshIcon.style.animation = '';
-                        }, 1000);
-                    }
+                    console.error('Erro ao carregar ocorrências recentes:', error);
+                    showRegistrosError('Erro ao carregar registros');
                 }
             }
 
             // =========================================================================
-            // FUNÇÕES DE POPULAÇÃO DE ELEMENTOS
+            // FUNÇÕES DE ATUALIZAÇÃO DA INTERFACE - CORRIGIDAS
             // =========================================================================
             function populateProfessors(professors) {
+                console.log('Populando professores:', professors);
+                
                 professorSelect.innerHTML = '<option value="">Selecione seu nome</option>';
-                professors.forEach(professor => {
-                    const option = document.createElement('option');
-                    option.value = professor;
-                    option.textContent = professor;
-                    professorSelect.appendChild(option);
-                });
+                
+                if (professors && professors.length > 0) {
+                    professors.forEach(professor => {
+                        const option = document.createElement('option');
+                        option.value = professor;
+                        option.textContent = professor;
+                        professorSelect.appendChild(option);
+                    });
+                }
             }
 
             function populateClasses(classes) {
+                console.log('Populando turmas:', classes);
+                
                 classSelect.innerHTML = '<option value="">Selecione a turma</option>';
-                classes.forEach(className => {
-                    const option = document.createElement('option');
-                    option.value = className;
-                    option.textContent = className;
-                    classSelect.appendChild(option);
-                });
+                
+                if (classes && classes.length > 0) {
+                    classes.forEach(className => {
+                        const option = document.createElement('option');
+                        option.value = className;
+                        option.textContent = className;
+                        classSelect.appendChild(option);
+                    });
+                }
             }
 
             function populateStudents(students) {
-                studentSelect.innerHTML = '<option value="">Selecione o aluno</option>';
-                studentSelect.disabled = false;
+                console.log('Populando alunos:', students);
                 
-                students.forEach(student => {
-                    const option = document.createElement('option');
-                    option.value = student;
-                    option.textContent = student;
-                    studentSelect.appendChild(option);
-                });
+                studentSelect.innerHTML = '<option value="">Selecione o aluno</option>';
+                
+                if (students && students.length > 0) {
+                    students.forEach(student => {
+                        const option = document.createElement('option');
+                        option.value = student;
+                        option.textContent = student;
+                        studentSelect.appendChild(option);
+                    });
+                    studentSelect.disabled = false;
+                } else {
+                    studentSelect.innerHTML = '<option value="">Nenhum aluno encontrado</option>';
+                    studentSelect.disabled = true;
+                }
             }
 
-            // =========================================================================
-            // FUNÇÕES DE ATUALIZAÇÃO DE INTERFACE
-            // =========================================================================
+            function updateStudentCount(count) {
+                console.log('Atualizando contador de alunos:', count);
+                
+                studentCountText.textContent = `${count} alunos matriculados`;
+                classStudentCount.classList.add('show');
+            }
+
+            function updateStatistics(statistics, studentCounts) {
+                console.log('Atualizando estatísticas:', statistics, studentCounts);
+                
+                if (statistics) {
+                    totalOccurrencesEl.textContent = statistics.totalOccurrences || 0;
+                    totalStudentsEl.textContent = statistics.totalStudents || 0;
+                    totalClassesEl.textContent = statistics.totalClasses || 0;
+                }
+                
+                if (studentCounts) {
+                    morningCountEl.textContent = studentCounts.morning || 0;
+                    afternoonCountEl.textContent = studentCounts.afternoon || 0;
+                    nightCountEl.textContent = studentCounts.night || 0;
+                    
+                    // Atualizar também o total de alunos
+                    totalStudentsEl.textContent = studentCounts.total || 0;
+                }
+            }
+
             function updateConnectionStatus(connected, message) {
                 if (connected) {
                     statusIndicator.className = 'status-indicator status-connected';
@@ -1432,29 +1473,13 @@
                 }
             }
 
-            function updateStatistics(stats) {
-                totalOccurrencesEl.textContent = stats.totalOccurrences || 0;
-                totalStudentsEl.textContent = stats.totalStudents || 0;
-                totalClassesEl.textContent = stats.totalClasses || 0;
-            }
-
-            function updateStudentCounts(counts) {
-                morningCountEl.textContent = counts.morning || 0;
-                afternoonCountEl.textContent = counts.afternoon || 0;
-                nightCountEl.textContent = counts.night || 0;
-            }
-
-            function updateTotalClasses(count) {
-                totalClassesEl.textContent = count;
-            }
-
-            function updateClassStudentCount(count) {
-                if (count > 0) {
-                    studentCountText.textContent = `${count} aluno${count !== 1 ? 's' : ''} matriculado${count !== 1 ? 's' : ''}`;
-                    classStudentCount.classList.add('show');
-                } else {
-                    classStudentCount.classList.remove('show');
-                }
+            function showRegistrosLoading() {
+                registrosList.innerHTML = `
+                    <div class="registros-loading">
+                        <div class="loading-spinner"></div>
+                        Carregando registros...
+                    </div>
+                `;
             }
 
             function updateRegistrosList() {
@@ -1468,34 +1493,22 @@
                     return;
                 }
 
-                const registrosHTML = filteredRegistros.map(registro => `
+                const registrosHtml = filteredRegistros.map(registro => `
                     <div class="registro-item">
                         <div class="registro-header">
                             <div class="registro-student">${registro.student}</div>
                             <div class="registro-date">${registro.date}</div>
                         </div>
                         <div class="registro-details">
-                            <div class="registro-class">
-                                <i class="fas fa-users"></i> ${registro.class}
-                            </div>
-                            <div class="registro-professor">
-                                <i class="fas fa-user-tie"></i> ${registro.professor}
-                            </div>
-                            ${registro.irregularities ? `
-                                <div class="registro-irregularities">
-                                    <i class="fas fa-exclamation-triangle"></i> ${registro.irregularities}
-                                </div>
-                            ` : ''}
-                            ${registro.description ? `
-                                <div class="registro-description">
-                                    <i class="fas fa-comment"></i> ${registro.description}
-                                </div>
-                            ` : ''}
+                            <div class="registro-class">Turma: ${registro.class}</div>
+                            <div class="registro-professor">Professor: ${registro.professor}</div>
+                            ${registro.irregularities ? `<div class="registro-irregularities">Irregularidades: ${registro.irregularities}</div>` : ''}
+                            ${registro.description ? `<div class="registro-description">${registro.description}</div>` : ''}
                         </div>
                     </div>
                 `).join('');
 
-                registrosList.innerHTML = registrosHTML;
+                registrosList.innerHTML = registrosHtml;
             }
 
             function updateRegistrosCount() {
@@ -1567,10 +1580,12 @@
             }
 
             // =========================================================================
-            // MANIPULADORES DE EVENTOS
+            // MANIPULADORES DE EVENTOS - CORRIGIDOS
             // =========================================================================
             function handleClassChange() {
                 const selectedClass = classSelect.value;
+                console.log('Turma selecionada:', selectedClass);
+                
                 if (selectedClass) {
                     loadStudentsByClass(selectedClass);
                 } else {
@@ -1605,7 +1620,12 @@
                     if (result && result.status === 'success') {
                         showNotification('success', result.message || 'Ocorrência registrada com sucesso!');
                         clearForm();
-                        loadInitialData(); // Recarrega todos os dados
+                        
+                        // Recarrega os dados para atualizar estatísticas e registros
+                        await Promise.all([
+                            loadAllData(),
+                            loadRecentOccurrences()
+                        ]);
                     } else {
                         showNotification('error', result.message || 'Erro ao registrar ocorrência');
                     }

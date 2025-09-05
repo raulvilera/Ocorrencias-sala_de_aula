@@ -1191,7 +1191,7 @@
             // =========================================================================
             // CONFIGURAÇÕES E CONSTANTES
             // =========================================================================
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec';
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw3JoXGi7Nmk0glCPAD734XVjVSWLU_hPSkCFUnPaHHx_aFSoQHK3OgESFKQi17oaJ7/exec';
 
             // =========================================================================
             // ELEMENTOS DO DOM
@@ -1303,7 +1303,7 @@
                 try {
                     console.log('Carregando todos os dados...');
                     
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getAllData`);
+                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbw3JoXGi7Nmk0glCPAD734XVjVSWLU_hPSkCFUnPaHHx_aFSoQHK3OgESFKQi17oaJ7/exec'}?action=getAllData`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1360,7 +1360,7 @@
                     // Carregar ocorrências para cada aluno
                     for (const student of students) {
                         try {
-                            const response = await fetch(`${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getStudentOccurrences&studentName=${encodeURIComponent(student)}`);
+                            const response = await fetch(`${'https://script.google.com/macros/s/AKfycbw3JoXGi7Nmk0glCPAD734XVjVSWLU_hPSkCFUnPaHHx_aFSoQHK3OgESFKQi17oaJ7/exec'}?action=getStudentOccurrences&studentName=${encodeURIComponent(student)}`);
                             const result = await response.json();
                             
                             if (result.status === 'success' && result.count > 0) {
@@ -1405,7 +1405,7 @@
                     const refreshIcon = document.getElementById('refreshIcon');
                     refreshIcon.style.animation = 'spin 1s linear infinite';
                     
-                    const response = await fetch(`$'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getRecentOccurrences&limit=20`);
+                    const response = await fetch(`$'https://script.google.com/macros/s/AKfycbw3JoXGi7Nmk0glCPAD734XVjVSWLU_hPSkCFUnPaHHx_aFSoQHK3OgESFKQi17oaJ7/exec'}?action=getRecentOccurrences&limit=20`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1560,7 +1560,7 @@
 
                     console.log('Payload preparado:', payload);
 
-                    const response = await fetch('https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec', {
+                    const response = await fetch('https://script.google.com/macros/s/AKfycbw3JoXGi7Nmk0glCPAD734XVjVSWLU_hPSkCFUnPaHHx_aFSoQHK3OgESFKQi17oaJ7/exec', {
                         method: 'POST',
                         mode: 'cors',
                         headers: {

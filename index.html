@@ -1180,7 +1180,7 @@
             // =========================================================================
             // CONFIGURAÇÕES E CONSTANTES
             // =========================================================================
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUMGKTR-L5_ne21P854tQc5OYKW78T-VvEJ8mlz5l6IChF6TnAmeJqAu02xs8p5-Q/exec'
 ;
 
             const teacherEmails = {
@@ -1367,7 +1367,7 @@
             // =========================================================================
             async function loadClasses() {
                 try {
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getClassList`);
+                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbyUMGKTR-L5_ne21P854tQc5OYKW78T-VvEJ8mlz5l6IChF6TnAmeJqAu02xs8p5-Q/exec'}?action=getClassList`);
                     const data = await response.json();
                     
                     if (data.status === 'success' && data.classes) {
@@ -1394,7 +1394,7 @@
                     studentSelect.innerHTML = '<option value="">Carregando alunos...</option>';
                     studentSelect.disabled = true;
                     
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getStudentsByClass&className=${encodeURIComponent(className)}`);
+                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbyUMGKTR-L5_ne21P854tQc5OYKW78T-VvEJ8mlz5l6IChF6TnAmeJqAu02xs8p5-Q/exec'}?action=getStudentsByClass&className=${encodeURIComponent(className)}`);
                     const data = await response.json();
                     
                     if (data.status === 'success' && data.students) {
@@ -1441,7 +1441,7 @@
 
             async function loadStatistics() {
                 try {
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getStatistics`);
+                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbyUMGKTR-L5_ne21P854tQc5OYKW78T-VvEJ8mlz5l6IChF6TnAmeJqAu02xs8p5-Q/exec'}?action=getStatistics`);
                     const data = await response.json();
                     
                     if (data.status === 'success' && data.statistics) {
@@ -1462,7 +1462,7 @@
 
             async function loadStudentCounts() {
                 try {
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getStudentCountsByPeriod`);
+                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbyUMGKTR-L5_ne21P854tQc5OYKW78T-VvEJ8mlz5l6IChF6TnAmeJqAu02xs8p5-Q/exec'}?action=getStudentCountsByPeriod`);
                     const data = await response.json();
                     
                     if (data.status === 'success' && data.counts) {
@@ -1481,7 +1481,7 @@
                         refreshIcon.style.animation = 'spin 1s linear infinite';
                     }
                     
-                    const response = await fetch(`${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getRecentOccurrences&limit=20`);
+                    const response = await fetch(`${https://script.google.com/macros/s/AKfycbyUMGKTR-L5_ne21P854tQc5OYKW78T-VvEJ8mlz5l6IChF6TnAmeJqAu02xs8p5-Q/exec'}?action=getRecentOccurrences&limit=20`);
                     const data = await response.json();
                     
                     if (data.status === 'success') {

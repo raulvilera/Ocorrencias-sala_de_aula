@@ -1269,7 +1269,7 @@
             // =========================================================================
             // CONFIGURAÇÕES E CONSTANTES
             // =========================================================================
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw90fulXemxKMTqB6mLig7QdNr4aqH2-jj5VFq5iUqtrmCNXg3X7UdRtjVC17cexXJ5/exec';
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQGHvxSicruAMz_i92lM3BRp2vhD-ZCn5aHCXSuUh48IDMOSpbrZ0Hje3nnFZ0tFQp/exec';
 
             // Lista de professores com emails
             const teacherEmails = {
@@ -1393,7 +1393,7 @@
             // =========================================================================
             async function makeGetRequest(params) {
                 try {
-                    const url = new URL(SCRIPT_URL);
+                    const url = new URL('https://script.google.com/macros/s/AKfycbzQGHvxSicruAMz_i92lM3BRp2vhD-ZCn5aHCXSuUh48IDMOSpbrZ0Hje3nnFZ0tFQp/exec');
                     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
                     
                     const response = await fetch(url.toString(), {
@@ -1416,7 +1416,7 @@
 
             async function makePostRequest(data) {
                 try {
-                    const response = await fetch(SCRIPT_URL, {
+                    const response = await fetch('https://script.google.com/macros/s/AKfycbzQGHvxSicruAMz_i92lM3BRp2vhD-ZCn5aHCXSuUh48IDMOSpbrZ0Hje3nnFZ0tFQp/exec', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

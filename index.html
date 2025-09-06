@@ -1181,7 +1181,7 @@
             // CONFIGURAÇÕES E CONSTANTES
             // =========================================================================
             // IMPORTANTE: Substitua pela URL do seu Google Apps Script
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw9lpdfJe4Ij_rg8u0RK7UFiz1uoSVtx7Q0xab4-ABmZi6Lz9RxNy2Fzmnr4VGZbpSB/exec';
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec';
 
             const teacherEmails = {
                 "ALEX LUTH PEREIRA MARANHAO": "luth@prof.educacao.sp.gov.br",
@@ -1355,7 +1355,7 @@
                     updateConnectionStatus(false, 'Testando conexão...');
                     
                     // Verifica se a URL do script está configurada
-                    if (SCRIPT_URL.includes('https://script.google.com/macros/s/AKfycbw9lpdfJe4Ij_rg8u0RK7UFiz1uoSVtx7Q0xab4-ABmZi6Lz9RxNy2Fzmnr4VGZbpSB/exec') {
+                    if (SCRIPT_URL.includes('https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec') {
                         throw new Error('URL do Google Apps Script não configurada');
                     }
                     
@@ -1508,7 +1508,7 @@
             // =========================================================================
             async function loadClasses() {
                 try {
-                    const response = await fetchWithTimeout(`${'https://script.google.com/macros/s/AKfycbw9lpdfJe4Ij_rg8u0RK7UFiz1uoSVtx7Q0xab4-ABmZi6Lz9RxNy2Fzmnr4VGZbpSB/exec'}?action=getClassList`);
+                    const response = await fetchWithTimeout(`${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getClassList`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1541,7 +1541,7 @@
                     studentSelect.disabled = true;
                     studentSelect.innerHTML = '<option value="">Carregando alunos...</option>';
                     
-                    const response = await fetchWithTimeout(`${'https://script.google.com/macros/s/AKfycbw9lpdfJe4Ij_rg8u0RK7UFiz1uoSVtx7Q0xab4-ABmZi6Lz9RxNy2Fzmnr4VGZbpSB/exec'}?action=getStudentsByClass&className=${encodeURIComponent(className)}`);
+                    const response = await fetchWithTimeout(`${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getStudentsByClass&className=${encodeURIComponent(className)}`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1573,7 +1573,7 @@
 
             async function loadStatistics() {
                 try {
-                    const response = await fetchWithTimeout(`${'https://script.google.com/macros/s/AKfycbw9lpdfJe4Ij_rg8u0RK7UFiz1uoSVtx7Q0xab4-ABmZi6Lz9RxNy2Fzmnr4VGZbpSB/exec'}?action=getStatistics`);
+                    const response = await fetchWithTimeout(`${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getStatistics`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1607,7 +1607,7 @@
                     // Adiciona animação de rotação ao ícone de refresh
                     refreshIcon.style.animation = 'spin 1s linear infinite';
                     
-                    const response = await fetchWithTimeout(`${'https://script.google.com/macros/s/AKfycbw9lpdfJe4Ij_rg8u0RK7UFiz1uoSVtx7Q0xab4-ABmZi6Lz9RxNy2Fzmnr4VGZbpSB/exec'}?action=getRecentOccurrences&limit=20`);
+                    const response = await fetchWithTimeout(`${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getRecentOccurrences&limit=20`);
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -1648,7 +1648,7 @@
                         description: formData.description
                     };
 
-                    const response = await fetchWithTimeout('https://script.google.com/macros/s/AKfycbw9lpdfJe4Ij_rg8u0RK7UFiz1uoSVtx7Q0xab4-ABmZi6Lz9RxNy2Fzmnr4VGZbpSB/exec', {
+                    const response = await fetchWithTimeout('https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

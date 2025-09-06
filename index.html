@@ -1149,7 +1149,7 @@
             // =========================================================================
             // CONFIGURAÇÕES E CONSTANTES - ATUALIZAR COM A URL CORRETA DO GOOGLE APPS SCRIPT
             // =========================================================================
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx9KfIesA_LVXPH_x0r-FXqO4lBh_kLabNAPjoT4mJZMQKji5OBaVc9YrP6wxWZzUp4/exec';
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyoR4aKVNH7qpbsFIYfyjUQE8NP__5w60qzenRs7cIcmlKcgx3KNhPPjDTn8QCAfnDP/exec';
 
             // =========================================================================
             // ELEMENTOS DO DOM
@@ -1196,7 +1196,7 @@
              */
             async function makeGetRequest(params) {
                 try {
-                    const url = new URL(SCRIPT_URL);
+                    const url = new URL('https://script.google.com/macros/s/AKfycbyoR4aKVNH7qpbsFIYfyjUQE8NP__5w60qzenRs7cIcmlKcgx3KNhPPjDTn8QCAfnDP/exec');
                     Object.keys(params).forEach(key => {
                         if (params[key] !== null && params[key] !== undefined) {
                             url.searchParams.append(key, params[key]);
@@ -1228,7 +1228,7 @@
              */
             async function makePostRequest(data) {
                 try {
-                    const response = await fetch(SCRIPT_URL, {
+                    const response = await fetch('https://script.google.com/macros/s/AKfycbyoR4aKVNH7qpbsFIYfyjUQE8NP__5w60qzenRs7cIcmlKcgx3KNhPPjDTn8QCAfnDP/exec', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

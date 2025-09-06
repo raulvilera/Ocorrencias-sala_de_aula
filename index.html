@@ -28,14 +28,14 @@
             --afternoon-color: #f39c12;
             --night-color: #9b59b6;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
         }
-        
+
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
             color: var(--text-color);
@@ -43,13 +43,14 @@
             min-height: 100vh;
             padding-bottom: 60px;
         }
-        
+
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
-        
+
+        /* HEADER */
         header {
             background: linear-gradient(135deg, #2ecc71 0%, #3498db 100%);
             border-bottom: 1px solid var(--border-color);
@@ -59,7 +60,7 @@
             top: 0;
             z-index: 100;
         }
-        
+
         .header-content {
             display: flex;
             justify-content: space-between;
@@ -68,13 +69,13 @@
             margin: 0 auto;
             padding: 0 20px;
         }
-        
+
         .logo {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-        
+
         .logo-icon {
             background: rgba(255, 255, 255, 0.2);
             color: white;
@@ -88,93 +89,39 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
         }
-        
+
         .logo-text {
             display: flex;
             flex-direction: column;
         }
-        
+
         .logo h1 {
             font-size: 1.6rem;
             color: white;
             font-weight: 700;
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        
+
         .logo p {
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.9);
             margin-top: 3px;
             text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
-        
+
+        /* MAIN LAYOUT */
         main {
             padding: 30px 0;
         }
-        
+
         .dashboard {
             display: grid;
             grid-template-columns: 1fr 350px 400px;
             gap: 25px;
             margin-bottom: 30px;
         }
-        
-        .stats-card {
-            background: linear-gradient(135deg, #2ecc71 0%, #3498db 100%);
-            color: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .stats-card::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 20px;
-            background: linear-gradient(to top, rgba(255,255,255,0.3), transparent);
-            z-index: 1;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .stat-item {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: var(--transition);
-        }
-        
-        .stat-item:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.25);
-        }
-        
-        .stat-value {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin: 10px 0;
-        }
-        
-        .stat-label {
-            font-size: 0.95rem;
-            opacity: 0.9;
-        }
-        
+
+        /* CARDS */
         .card {
             background-color: var(--card-bg);
             border-radius: 16px;
@@ -185,7 +132,7 @@
             transition: var(--transition);
             position: relative;
         }
-        
+
         .card::after {
             content: '';
             position: absolute;
@@ -196,12 +143,12 @@
             background: linear-gradient(to top, rgba(255,255,255,0.8), transparent);
             z-index: 1;
         }
-        
+
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
         }
-        
+
         .card-header {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
@@ -213,25 +160,25 @@
             gap: 12px;
             position: relative;
         }
-        
+
         .card-body {
             padding: 30px;
             position: relative;
             z-index: 2;
         }
-        
-        /* ESTILOS PARA ÚLTIMOS REGISTROS */
-        .registros-card {
-            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+
+        /* STATS CARD */
+        .stats-card {
+            background: linear-gradient(135deg, #2ecc71 0%, #3498db 100%);
             color: white;
             border-radius: 16px;
+            padding: 25px;
             box-shadow: var(--shadow);
-            overflow: hidden;
             position: relative;
-            height: fit-content;
+            overflow: hidden;
         }
-        
-        .registros-card::after {
+
+        .stats-card::after {
             content: '';
             position: absolute;
             bottom: 0;
@@ -241,198 +188,99 @@
             background: linear-gradient(to top, rgba(255,255,255,0.3), transparent);
             z-index: 1;
         }
-        
-        .registros-header {
-            background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%);
-            color: white;
-            padding: 20px 25px;
-            font-size: 1.35rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
             position: relative;
             z-index: 2;
         }
-        
-        .registros-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .registros-controls {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        .registros-refresh-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.9rem;
-        }
-        
-        .registros-refresh-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .registros-body {
-            padding: 20px 25px;
-            position: relative;
-            z-index: 2;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-        
-        .registros-search {
-            margin-bottom: 20px;
-        }
-        
-        .search-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 14px;
-            transition: var(--transition);
-        }
-        
-        .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: rgba(255, 255, 255, 0.6);
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .registros-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .registro-item {
-            background: rgba(255, 255, 255, 0.1);
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 12px;
             padding: 15px;
-            transition: var(--transition);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
             backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: var(--transition);
         }
-        
-        .registro-item:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.25);
         }
-        
-        .registro-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 10px 0;
         }
-        
-        .registro-student {
-            font-weight: 600;
-            font-size: 1.1rem;
-            color: #fff;
-        }
-        
-        .registro-date {
-            font-size: 0.85rem;
-            opacity: 0.8;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 4px 8px;
-            border-radius: 6px;
-        }
-        
-        .registro-details {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            font-size: 0.9rem;
-        }
-        
-        .registro-class {
-            color: #f1c40f;
-            font-weight: 500;
-        }
-        
-        .registro-professor {
-            color: #e8f5e9;
+
+        .stat-label {
+            font-size: 0.95rem;
             opacity: 0.9;
         }
-        
-        .registro-irregularities {
-            color: #ffcccb;
-            font-style: italic;
-            margin-top: 5px;
-        }
-        
-        .registro-description {
-            color: rgba(255, 255, 255, 0.8);
+
+        /* PERIOD STATS */
+        .period-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
             font-size: 0.85rem;
-            margin-top: 8px;
-            padding: 8px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 6px;
-            border-left: 3px solid #f1c40f;
+            color: rgba(255, 255, 255, 0.85);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 10px;
         }
-        
-        .registros-empty {
+
+        .period-item {
             text-align: center;
-            padding: 40px 20px;
+            flex: 1;
+            transition: var(--transition);
+        }
+
+        .period-item:hover {
+            transform: scale(1.05);
+        }
+
+        .period-value {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .period-manha { color: #f1c40f; }
+        .period-tarde { color: #e67e22; }
+        .period-noite { color: #9b59b6; }
+
+        /* STUDENTS STATS */
+        .students-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.7);
-            font-style: italic;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        .registros-loading {
+
+        .students-item {
             text-align: center;
-            padding: 40px 20px;
-            color: rgba(255, 255, 255, 0.8);
+            flex: 1;
         }
-        
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .registros-count {
+
+        .students-value {
+            font-weight: 500;
             font-size: 0.9rem;
-            opacity: 0.8;
-            margin-left: 10px;
         }
-        
+
+        /* FORM ELEMENTS */
         .form-group {
             margin-bottom: 25px;
             position: relative;
         }
-        
+
         label {
             display: block;
             margin-bottom: 12px;
@@ -442,17 +290,17 @@
             transition: var(--transition);
             cursor: pointer;
         }
-        
+
         .form-group:hover label {
             color: var(--primary-color);
             transform: translateX(5px);
         }
-        
+
         .required::after {
             content: " *";
             color: var(--error-color);
         }
-        
+
         input, select, textarea {
             width: 100%;
             padding: 15px;
@@ -462,14 +310,14 @@
             transition: var(--transition);
             background-color: #f8fafc;
         }
-        
+
         input:hover, select:hover, textarea:hover {
             border-color: var(--primary-color);
             background-color: var(--hover-bg);
             box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
             transform: translateY(-2px);
         }
-        
+
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--primary-color);
@@ -477,67 +325,135 @@
             background-color: white;
             transform: translateY(-2px);
         }
-        
+
         .input-error {
             border-color: var(--error-color) !important;
             box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2) !important;
         }
-        
+
         textarea {
             min-height: 150px;
             resize: vertical;
         }
-        
-        .checkbox-group {
-            margin-bottom: 20px;
+
+        /* DROPDOWN CONTAINERS */
+        .dropdown-container {
+            position: relative;
         }
-        
-        .checkbox-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 18px;
+
+        .dropdown-container select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer;
+            padding-right: 45px;
         }
-        
-        .checkbox-item {
-            background: #f8fafc;
-            padding: 15px;
-            border-radius: 10px;
+
+        .dropdown-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--primary-color);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .dropdown-container:hover .dropdown-icon {
+            color: var(--primary-dark);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* DATE INPUT */
+        .date-input-container {
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .date-input-container:hover {
+            transform: translateY(-2px);
+        }
+
+        .date-input-container input[type="date"] {
+            padding-right: 40px;
+            cursor: pointer;
+        }
+
+        .date-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--primary-color);
+            font-size: 18px;
+            transition: var(--transition);
+        }
+
+        .date-input-container:hover .date-icon {
+            color: var(--primary-dark);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* CLASS INFO SECTION */
+        .class-info-section {
+            background: linear-gradient(135deg, #e8f5e9 0%, #f3e5f5 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
             border: 1px solid #e1e5eb;
             transition: var(--transition);
-            display: flex;
-            align-items: center;
-            position: relative;
-            cursor: pointer;
         }
-        
-        .checkbox-item:hover {
-            background: #e8f0fe;
-            border-color: var(--primary-color);
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+
+        .class-info-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        
-        .checkbox-item input {
-            width: auto;
-            margin-right: 12px;
-            transform: scale(1.2);
-            cursor: pointer;
+
+        .class-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
         }
-        
-        .checkbox-item:hover label {
-            color: var(--primary-dark);
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: var(--transition);
         }
-        
+
+        .info-item:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: scale(1.02);
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* FORM LAYOUT */
         .form-row {
             display: flex;
             gap: 25px;
             margin-bottom: 25px;
         }
-        
+
         .form-col {
             flex: 1;
         }
-        
+
         .section-title {
             font-size: 1.3rem;
             color: var(--primary-color);
@@ -550,46 +466,54 @@
             transition: var(--transition);
             cursor: pointer;
         }
-        
+
         .section-title:hover {
             color: var(--primary-dark);
             transform: translateX(5px);
         }
-        
-        .student-select-container {
-            position: relative;
+
+        /* CHECKBOX GROUP */
+        .checkbox-group {
+            margin-bottom: 20px;
         }
-        
-        .student-select-container::after {
-            content: "\f107";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            color: var(--primary-color);
-            font-size: 20px;
+
+        .checkbox-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 18px;
+        }
+
+        .checkbox-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e1e5eb;
             transition: var(--transition);
-        }
-        
-        .student-select-container:hover::after {
-            color: var(--primary-dark);
-            transform: translateY(-50%) scale(1.1);
-        }
-        
-        select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
+            display: flex;
+            align-items: center;
+            position: relative;
             cursor: pointer;
         }
-        
-        select:hover {
-            background-color: #f0f5ff;
+
+        .checkbox-item:hover {
+            background: #e8f0fe;
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        
+
+        .checkbox-item input {
+            width: auto;
+            margin-right: 12px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .checkbox-item:hover label {
+            color: var(--primary-dark);
+        }
+
+        /* BUTTONS */
         .actions {
             display: flex;
             gap: 18px;
@@ -597,7 +521,7 @@
             border-top: 1px solid var(--border-color);
             margin-top: 25px;
         }
-        
+
         .btn {
             padding: 16px 32px;
             border: none;
@@ -612,67 +536,45 @@
             gap: 12px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
         }
-        
+
         .btn-primary:hover {
             background: linear-gradient(135deg, #0d62d9 0%, #0a4ebf 100%);
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(26, 115, 232, 0.35);
         }
-        
+
         .btn-primary:active {
             transform: translateY(1px);
         }
-        
+
         .btn-secondary {
             background: linear-gradient(135deg, #f8f9fa 0%, #e8eaed 100%);
             color: var(--text-color);
             border: 1px solid var(--border-color);
         }
-        
+
         .btn-secondary:hover {
             background: linear-gradient(135deg, #e8eaed 0%, #d7d9dd 100%);
             transform: translateY(-3px);
         }
-        
+
         .btn-lg {
             padding: 18px 35px;
             font-size: 17px;
         }
-        
+
         .btn:disabled {
             opacity: 0.7;
             cursor: not-allowed;
             transform: none;
         }
-        
-        .alert {
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            display: none;
-            font-size: 17px;
-            font-weight: 500;
-            align-items: center;
-            gap: 15px;
-            transition: var(--transition);
-        }
-        
-        .alert:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .alert-success {
-            background: linear-gradient(135deg, rgba(46, 204, 113, 0.15) 0%, rgba(39, 174, 96, 0.15) 100%);
-            border: 1px solid var(--success-color);
-            color: #27ae60;
-        }
-        
+
+        /* INTEGRATION STATUS */
         .integration-status {
             background: #e8f5e9;
             padding: 15px;
@@ -683,12 +585,12 @@
             gap: 15px;
             transition: var(--transition);
         }
-        
+
         .integration-status:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         .status-indicator {
             width: 12px;
             height: 12px;
@@ -697,48 +599,227 @@
             margin-right: 8px;
             transition: var(--transition);
         }
-        
+
         .status-connected {
             background-color: var(--success-color);
         }
-        
+
         .status-disconnected {
             background-color: var(--error-color);
         }
-        
-        .date-input-container {
+
+        /* REGISTROS CARD */
+        .registros-card {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            color: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
             position: relative;
-            transition: var(--transition);
+            height: fit-content;
         }
-        
-        .date-input-container:hover {
+
+        .registros-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(to top, rgba(255,255,255,0.3), transparent);
+            z-index: 1;
+        }
+
+        .registros-header {
+            background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%);
+            color: white;
+            padding: 20px 25px;
+            font-size: 1.35rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .registros-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .registros-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .registros-refresh-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+
+        .registros-refresh-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
         }
-        
-        .date-input-container input[type="date"] {
-            padding-right: 40px;
-            cursor: pointer;
+
+        .registros-body {
+            padding: 20px 25px;
+            position: relative;
+            z-index: 2;
+            max-height: 500px;
+            overflow-y: auto;
         }
-        
-        .date-input-container::after {
-            content: "\f073";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            color: var(--primary-color);
-            font-size: 18px;
+
+        .registros-search {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
             transition: var(--transition);
         }
-        
-        .date-input-container:hover::after {
-            color: var(--primary-dark);
-            transform: translateY(-50%) scale(1.1);
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
         }
-        
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .registros-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .registro-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .registro-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .registro-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .registro-student {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .registro-date {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .registro-details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+
+        .registro-class {
+            color: #f1c40f;
+            font-weight: 500;
+        }
+
+        .registro-professor {
+            color: #e8f5e9;
+            opacity: 0.9;
+        }
+
+        .registro-irregularities {
+            color: #ffcccb;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .registro-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.85rem;
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+            border-left: 3px solid #f1c40f;
+        }
+
+        .registros-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+        }
+
+        .registros-loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .registros-count {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-left: 10px;
+        }
+
         .loading {
             display: inline-block;
             width: 20px;
@@ -749,7 +830,8 @@
             animation: spin 1s ease-in-out infinite;
             margin-right: 10px;
         }
-        
+
+        /* NOTIFICATIONS */
         .notification {
             position: fixed;
             top: 20px;
@@ -765,30 +847,30 @@
             transform: translateX(100%);
             transition: all 0.4s ease;
         }
-        
+
         .notification.show {
             opacity: 1;
             transform: translateX(0);
         }
-        
+
         .notification.success {
             background: var(--success-color);
             color: white;
         }
-        
+
         .notification.error {
             background: var(--error-color);
             color: white;
         }
-        
+
         .notification .icon {
             font-size: 1.5rem;
         }
-        
+
         .notification .content {
             flex-grow: 1;
         }
-        
+
         .notification .close {
             background: none;
             border: none;
@@ -796,7 +878,32 @@
             cursor: pointer;
             font-size: 1.2rem;
         }
-        
+
+        /* ALERTS */
+        .alert {
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: none;
+            font-size: 17px;
+            font-weight: 500;
+            align-items: center;
+            gap: 15px;
+            transition: var(--transition);
+        }
+
+        .alert:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.15) 0%, rgba(39, 174, 96, 0.15) 100%);
+            border: 1px solid var(--success-color);
+            color: #27ae60;
+        }
+
+        /* FOOTER */
         footer {
             background-color: var(--footer-bg);
             border-top: 1px solid var(--border-color);
@@ -805,7 +912,7 @@
             color: var(--light-text);
             font-size: 15px;
         }
-        
+
         .footer-links {
             display: flex;
             justify-content: center;
@@ -813,7 +920,7 @@
             margin-bottom: 15px;
             flex-wrap: wrap;
         }
-        
+
         .footer-links a {
             color: var(--primary-color);
             text-decoration: none;
@@ -822,63 +929,14 @@
             align-items: center;
             gap: 8px;
         }
-        
+
         .footer-links a:hover {
             color: var(--primary-dark);
             text-decoration: underline;
             transform: translateY(-2px);
         }
-        
-        .period-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.85);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            padding-top: 10px;
-        }
-        
-        .period-item {
-            text-align: center;
-            flex: 1;
-            transition: var(--transition);
-        }
-        
-        .period-item:hover {
-            transform: scale(1.05);
-        }
-        
-        .period-value {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-        
-        .period-manha { color: #f1c40f; }
-        .period-tarde { color: #e67e22; }
-        .period-noite { color: #9b59b6; }
-        
-        /* Seção para estatísticas de alunos por período */
-        .students-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.7);
-            padding-top: 8px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .students-item {
-            text-align: center;
-            flex: 1;
-        }
-        
-        .students-value {
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-        
+
+        /* RESPONSIVE DESIGN */
         @media (max-width: 1200px) {
             .dashboard {
                 grid-template-columns: 1fr 350px;
@@ -889,13 +947,13 @@
                 margin-top: 25px;
             }
         }
-        
+
         @media (max-width: 992px) {
             .dashboard {
                 grid-template-columns: 1fr;
             }
         }
-        
+
         @media (max-width: 768px) {
             .form-row {
                 flex-direction: column;
@@ -931,6 +989,10 @@
             .registro-header {
                 flex-direction: column;
                 gap: 10px;
+            }
+            
+            .class-info-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -973,11 +1035,12 @@
                                     <div class="form-col">
                                         <div class="form-group">
                                             <label for="professor" class="required">Nome do professor</label>
-                                            <div class="student-select-container">
+                                            <div class="dropdown-container">
                                                 <select id="professor" required>
                                                     <option value="">Selecione seu nome</option>
                                                     <!-- Professores serão preenchidos via JS -->
                                                 </select>
+                                                <i class="dropdown-icon fas fa-chevron-down"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -985,6 +1048,7 @@
                                         <div class="form-group date-input-container">
                                             <label for="occurrenceDate" class="required">Data da ocorrência</label>
                                             <input type="date" id="occurrenceDate" required>
+                                            <i class="date-icon fas fa-calendar-alt"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -993,22 +1057,41 @@
                                     <div class="form-col">
                                         <div class="form-group">
                                             <label for="studentClass" class="required">Turma</label>
-                                            <div class="student-select-container">
+                                            <div class="dropdown-container">
                                                 <select id="studentClass" required>
                                                     <option value="">Selecione a turma</option>
                                                     <!-- Turmas serão carregadas dinamicamente -->
                                                 </select>
+                                                <i class="dropdown-icon fas fa-chevron-down"></i>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-col">
                                         <div class="form-group">
                                             <label for="student" class="required">Nome do aluno</label>
-                                            <div class="student-select-container">
+                                            <div class="dropdown-container">
                                                 <select id="student" required disabled>
                                                     <option value="">Selecione primeiro a turma</option>
                                                 </select>
+                                                <i class="dropdown-icon fas fa-chevron-down"></i>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Seção de informações da turma selecionada -->
+                                <div id="classInfo" class="class-info-section" style="display: none;">
+                                    <div class="section-title">
+                                        <i class="fas fa-info-circle"></i> Informações da Turma
+                                    </div>
+                                    <div class="class-info-grid">
+                                        <div class="info-item">
+                                            <div class="info-label">Total de Alunos:</div>
+                                            <div class="info-value" id="totalStudentsInClass">0</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-label">Período:</div>
+                                            <div class="info-value" id="classPeriod">-</div>
                                         </div>
                                     </div>
                                 </div>
@@ -1117,7 +1200,7 @@
                         </div>
                     </div>
                     
-                    <!-- Nova seção para número de alunos por período -->
+                    <!-- Seção para número de alunos por período -->
                     <div class="students-stats">
                         <div class="students-item">
                             <div class="students-value" id="morningStudents">0</div>
@@ -1188,6 +1271,7 @@
             // =========================================================================
             const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw90fulXemxKMTqB6mLig7QdNr4aqH2-jj5VFq5iUqtrmCNXg3X7UdRtjVC17cexXJ5/exec';
 
+            // Lista de professores com emails
             const teacherEmails = {
                 "ALEX LUTH PEREIRA MARANHAO": "luth@prof.educacao.sp.gov.br",
                 "ALEXSANDRA PAULA VARELLA DE SOUZA": "avarella@prof.educacao.sp.gov.br",
@@ -1245,30 +1329,21 @@
                 "MAURICIO DE BARROS SANTOS": "mauriciobsantos@prof.educacao.sp.gov.br",
                 "MICHELE DE PINHO MORAES": "michelepinho@prof.educacao.sp.gov.br",
                 "MOISES ANTONIO DE BARROS": "moisesbarros@prof.educacao.sp.gov.br",
-                "PAULA ARMANI VILA": "paulaarmani@prof.educacao.sp.gov.br",
-                "PAULO ROBERTO DA SILVA ITO": "pauloito@prof.educacao.sp.gov.br",
-                "PEDRO ZANOTTI FILHO": "pedrozanotti@prof.educacao.sp.gov.br",
-                "RAUL PEREIRA VILERA JUNIOR": "vilera@prof.educacao.sp.gov.br",
-                "REGIANE CURTI DE SOUZA OLIVEIRA": "regianecurti@prof.educacao.sp.gov.br",
-                "REGINA DA SILVA CASTRO": "reginasilvacastro@prof.educacao.sp.gov.br",
-                "RICARDO AMERICO DA SILVA": "ricardoamerico@prof.educacao.sp.gov.br",
-                "ROBERTO SALGADO": "robertosalgado@prof.educacao.sp.gov.br",
-                "RODRIGO VIEIRA": "rodrigovieira1@prof.educacao.sp.gov.br",
-                "ROSANGELA CAFASSO MOREIRA": "cafasso@prof.educacao.sp.gov.br",
-                "ROSIMERY DE SOUZA PESSOA": "rosimerypessoa@prof.educacao.sp.gov.br",
-                "ROSMARA DA SILVA CARDOSO": "rosmaracardoso@prof.educacao.sp.gov.br",
-                "SANDRA CRISTINA MACEDO MORAES": "sandracristinamacedo@prof.educacao.sp.gov.br",
-                "SELMA GOMES DA SILVA": "selmagomess@prof.educacao.sp.gov.br",
-                "SERGIO AGRIPINO VILLA NOVA": "sergioagripino@prof.educacao.sp.gov.br",
-                "SOLANGE ALMEIDA DA SILVA": "almeidafazio@prof.educacao.sp.gov.br",
-                "SUZINEIDE SILVA DE FREITAS": "suzineidefreitas@prof.educacao.sp.gov.br",
-                "THIAGO FABIANO BRITO": "thiagofabiano@prof.educacao.sp.gov.br",
-                "TITTO AUGUSTO NASCIMENTO SILVA": "titto@prof.educacao.sp.gov.br",
-                "VANDERSON HYPPOLITO": "vhypolito@prof.educacao.sp.gov.br",
-                "VANESSA IVETE GOMES DOS SANTOS": "vanessaivete@prof.educacao.sp.gov.br",
-                "VANIA PENHA DE BARROS": "vaniapenha@prof.educacao.sp.gov.br",
-                "VIVIANE LEAL CAMERA DE MORAES": "camera@prof.educacao.sp.gov.br",
-                "WILSON RODRIGUES MOTA": "wmota@prof.educacao.sp.gov.br"
+                "PATRICIA APARECIDA SILVA": "patriciasilva@prof.educacao.sp.gov.br",
+                "PAULO CESAR GOMES": "paulocesargomes@prof.educacao.sp.gov.br",
+                "PEDRO HENRIQUE SANTOS": "pedrohenrique@prof.educacao.sp.gov.br",
+                "RAFAEL OLIVEIRA COSTA": "rafaeloliveira@prof.educacao.sp.gov.br",
+                "RENATA CRISTINA ALVES": "renatacristina@prof.educacao.sp.gov.br",
+                "RICARDO FERREIRA LIMA": "ricardoferreira@prof.educacao.sp.gov.br",
+                "ROBERTA SANTOS SILVA": "robertasantos@prof.educacao.sp.gov.br",
+                "RODRIGO ALMEIDA PEREIRA": "rodrigoalmeida@prof.educacao.sp.gov.br",
+                "SANDRA MARIA COSTA": "sandramaria@prof.educacao.sp.gov.br",
+                "SERGIO ANTONIO SILVA": "sergioantonio@prof.educacao.sp.gov.br",
+                "SIMONE APARECIDA SANTOS": "simoneaparecida@prof.educacao.sp.gov.br",
+                "TATIANA CRISTINA OLIVEIRA": "tatianacristina@prof.educacao.sp.gov.br",
+                "THIAGO HENRIQUE COSTA": "thiagohenrique@prof.educacao.sp.gov.br",
+                "VANESSA SILVA SANTOS": "vanessasilva@prof.educacao.sp.gov.br",
+                "WAGNER JOSE OLIVEIRA": "wagnerjose@prof.educacao.sp.gov.br"
             };
 
             // =========================================================================
@@ -1280,7 +1355,11 @@
             const studentSelect = document.getElementById('student');
             const clearBtn = document.getElementById('clearBtn');
             const submitBtn = document.getElementById('submitBtn');
-            
+            const notification = document.getElementById('notification');
+            const notificationIcon = notification.querySelector('.icon');
+            const notificationContent = notification.querySelector('.content');
+            const notificationClose = notification.querySelector('.close');
+
             // Elementos de estatísticas
             const totalOccurrencesEl = document.getElementById('totalOccurrences');
             const totalTeachersEl = document.getElementById('totalTeachers');
@@ -1288,96 +1367,40 @@
             const morningCountEl = document.getElementById('morningCount');
             const afternoonCountEl = document.getElementById('afternoonCount');
             const nightCountEl = document.getElementById('nightCount');
-            
-            // Novos elementos para número de alunos por período
             const morningStudentsEl = document.getElementById('morningStudents');
             const afternoonStudentsEl = document.getElementById('afternoonStudents');
             const nightStudentsEl = document.getElementById('nightStudents');
-            
+
             // Elementos dos últimos registros
             const registrosList = document.getElementById('registrosList');
-            const registrosCount = document.getElementById('registrosCount');
+            const searchRegistros = document.getElementById('searchRegistros');
             const refreshRegistrosBtn = document.getElementById('refreshRegistrosBtn');
             const refreshIcon = document.getElementById('refreshIcon');
-            const searchRegistros = document.getElementById('searchRegistros');
-            
-            // Elementos de notificação
-            const notification = document.getElementById('notification');
-            const notificationIcon = notification.querySelector('.icon');
-            const notificationContent = notification.querySelector('.content');
-            const notificationClose = notification.querySelector('.close');
+            const registrosCount = document.getElementById('registrosCount');
 
-            // =========================================================================
-            // VARIÁVEIS GLOBAIS
-            // =========================================================================
+            // Elementos de informações da turma
+            const classInfoSection = document.getElementById('classInfo');
+            const totalStudentsInClassEl = document.getElementById('totalStudentsInClass');
+            const classPeriodEl = document.getElementById('classPeriod');
+
+            // Variáveis globais
             let allRegistros = [];
             let filteredRegistros = [];
             let autoRefreshInterval = null;
 
             // =========================================================================
-            // FUNÇÕES DE INICIALIZAÇÃO
+            // FUNÇÕES DE REQUISIÇÃO HTTP
             // =========================================================================
-            
-            function initialize() {
-                setupEventListeners();
-                populateTeachers();
-                setDefaultDate();
-                fetchAllData();
-                loadRecentOccurrences();
-                startAutoRefresh();
-            }
-
-            function setupEventListeners() {
-                form.addEventListener('submit', handleFormSubmit);
-                classSelect.addEventListener('change', handleClassChange);
-                clearBtn.addEventListener('click', clearForm);
-                refreshRegistrosBtn.addEventListener('click', () => {
-                    refreshIcon.classList.add('fa-spin');
-                    loadRecentOccurrences();
-                    setTimeout(() => {
-                        refreshIcon.classList.remove('fa-spin');
-                    }, 1000);
-                });
-                searchRegistros.addEventListener('input', handleSearchRegistros);
-                notificationClose.addEventListener('click', () => {
-                    notification.classList.remove('show');
-                });
-            }
-
-            function populateTeachers() {
-                const sortedTeachers = Object.keys(teacherEmails).sort();
-                sortedTeachers.forEach(teacher => {
-                    const option = document.createElement('option');
-                    option.value = teacher;
-                    option.textContent = teacher;
-                    professorSelect.appendChild(option);
-                });
-            }
-
-            function setDefaultDate() {
-                const today = new Date();
-                const formattedDate = today.toISOString().split('T')[0];
-                document.getElementById('occurrenceDate').value = formattedDate;
-            }
-
-            // =========================================================================
-            // FUNÇÕES DE COMUNICAÇÃO COM O BACKEND
-            // =========================================================================
-
             async function makeGetRequest(params) {
                 try {
-                    const url = new URL('https://script.google.com/macros/s/AKfycbw90fulXemxKMTqB6mLig7QdNr4aqH2-jj5VFq5iUqtrmCNXg3X7UdRtjVC17cexXJ5/exec');
-                    Object.keys(params).forEach(key => {
-                        if (params[key] !== null && params[key] !== undefined) {
-                            url.searchParams.append(key, params[key]);
-                        }
-                    });
+                    const url = new URL(SCRIPT_URL);
+                    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
                     
                     const response = await fetch(url.toString(), {
                         method: 'GET',
                         headers: {
-                            'Accept': 'application/json',
-                        }
+                            'Content-Type': 'application/json',
+                        },
                     });
                     
                     if (!response.ok) {
@@ -1393,7 +1416,7 @@
 
             async function makePostRequest(data) {
                 try {
-                    const response = await fetch('https://script.google.com/macros/s/AKfycbw90fulXemxKMTqB6mLig7QdNr4aqH2-jj5VFq5iUqtrmCNXg3X7UdRtjVC17cexXJ5/exec', {
+                    const response = await fetch(SCRIPT_URL, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -1413,30 +1436,47 @@
             }
 
             // =========================================================================
-            // FUNÇÕES DE CARREGAMENTO DE DADOS
+            // FUNÇÕES DE INICIALIZAÇÃO
             // =========================================================================
+            function setDefaultDate() {
+                const today = new Date();
+                const formattedDate = today.toISOString().split('T')[0];
+                document.getElementById('occurrenceDate').value = formattedDate;
+            }
 
-            async function fetchAllData() {
+            async function loadProfessors() {
                 try {
-                    const result = await makeGetRequest({ action: 'getAllData' });
-                    if (result && result.status === 'success') {
-                        updateDashboard(result.occurrences);
-                        await loadClassList();
-                        await fetchStatistics();
-                        await fetchStudentCounts(); // Nova função para carregar número de alunos
-                    }
+                    const professorNames = Object.keys(teacherEmails).sort();
+                    professorSelect.innerHTML = '<option value="">Selecione seu nome</option>';
+                    
+                    professorNames.forEach(name => {
+                        const option = document.createElement('option');
+                        option.value = name;
+                        option.textContent = name;
+                        professorSelect.appendChild(option);
+                    });
                 } catch (error) {
-                    console.error('Erro ao carregar dados:', error);
-                    showNotification('error', 'Erro ao carregar dados do sistema');
+                    console.error('Erro ao carregar professores:', error);
+                    showNotification('error', 'Erro ao carregar lista de professores');
                 }
             }
 
-            async function loadClassList() {
+            async function loadClasses() {
                 try {
                     const result = await makeGetRequest({ action: 'getClassList' });
                     if (result && result.status === 'success') {
-                        populateClassSelect(result.classes);
-                        totalClassesEl.textContent = result.classes.length;
+                        classSelect.innerHTML = '<option value="">Selecione a turma</option>';
+                        
+                        result.classes.forEach(className => {
+                            if (className && className.trim() !== '') {
+                                const option = document.createElement('option');
+                                option.value = className;
+                                option.textContent = className;
+                                classSelect.appendChild(option);
+                            }
+                        });
+                    } else {
+                        throw new Error(result.message || 'Erro ao carregar turmas');
                     }
                 } catch (error) {
                     console.error('Erro ao carregar turmas:', error);
@@ -1444,56 +1484,77 @@
                 }
             }
 
-            function populateClassSelect(classes) {
-                classSelect.innerHTML = '<option value="">Selecione a turma</option>';
-                classes.forEach(className => {
-                    if (className && className.trim() !== '') {
-                        const option = document.createElement('option');
-                        option.value = className;
-                        option.textContent = className;
-                        classSelect.appendChild(option);
-                    }
-                });
-            }
-
             async function loadStudentsByClass(className) {
                 try {
+                    studentSelect.innerHTML = '<option value="">Carregando alunos...</option>';
+                    studentSelect.disabled = true;
+                    
                     const result = await makeGetRequest({ 
                         action: 'getStudentsByClass', 
                         className: className 
                     });
                     
                     if (result && result.status === 'success') {
-                        populateStudentSelect(result.students);
+                        studentSelect.innerHTML = '<option value="">Selecione o aluno</option>';
+                        
+                        result.students.forEach(studentName => {
+                            if (studentName && studentName.trim() !== '') {
+                                const option = document.createElement('option');
+                                option.value = studentName;
+                                option.textContent = studentName;
+                                studentSelect.appendChild(option);
+                            }
+                        });
+                        
+                        studentSelect.disabled = false;
+                        
+                        // Atualiza informações da turma
+                        updateClassInfo(className, result.students.length);
                     } else {
-                        showNotification('error', result.message || 'Erro ao carregar alunos da turma');
-                        studentSelect.innerHTML = '<option value="">Erro ao carregar alunos</option>';
-                        studentSelect.disabled = true;
+                        throw new Error(result.message || 'Erro ao carregar alunos');
                     }
                 } catch (error) {
                     console.error('Erro ao carregar alunos:', error);
-                    showNotification('error', 'Erro ao carregar alunos da turma');
                     studentSelect.innerHTML = '<option value="">Erro ao carregar alunos</option>';
-                    studentSelect.disabled = true;
+                    showNotification('error', 'Erro ao carregar lista de alunos');
                 }
             }
 
-            function populateStudentSelect(students) {
-                studentSelect.innerHTML = '<option value="">Selecione o aluno</option>';
+            function updateClassInfo(className, studentCount) {
+                // Determina o período baseado no nome da turma
+                const classNameUpper = className.toUpperCase();
+                let period = 'Não identificado';
                 
-                if (students && students.length > 0) {
-                    students.forEach(student => {
-                        if (student && student.trim() !== '') {
-                            const option = document.createElement('option');
-                            option.value = student;
-                            option.textContent = student;
-                            studentSelect.appendChild(option);
-                        }
-                    });
-                    studentSelect.disabled = false;
-                } else {
-                    studentSelect.innerHTML = '<option value="">Nenhum aluno encontrado</option>';
-                    studentSelect.disabled = true;
+                if (classNameUpper.includes('MANHA')) {
+                    period = 'Manhã';
+                } else if (classNameUpper.includes('TARDE')) {
+                    period = 'Tarde';
+                } else if (classNameUpper.includes('NOITE')) {
+                    period = 'Noite';
+                }
+                
+                // Atualiza os elementos
+                totalStudentsInClassEl.textContent = studentCount;
+                classPeriodEl.textContent = period;
+                
+                // Mostra a seção de informações
+                classInfoSection.style.display = 'block';
+                
+                // Animação suave
+                classInfoSection.style.opacity = '0';
+                setTimeout(() => {
+                    classInfoSection.style.opacity = '1';
+                }, 100);
+            }
+
+            async function fetchAllData() {
+                try {
+                    const result = await makeGetRequest({ action: 'getAllData' });
+                    if (result && result.status === 'success') {
+                        updateDashboard(result.occurrences);
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar dados:', error);
                 }
             }
 
@@ -1518,60 +1579,75 @@
                     morningCountEl.textContent = stats.periodCounts?.manha || 0;
                     afternoonCountEl.textContent = stats.periodCounts?.tarde || 0;
                     nightCountEl.textContent = stats.periodCounts?.noite || 0;
+                    
+                    // Atualiza número de alunos por período
+                    if (stats.studentsByPeriod) {
+                        morningStudentsEl.textContent = stats.studentsByPeriod.manha || 0;
+                        afternoonStudentsEl.textContent = stats.studentsByPeriod.tarde || 0;
+                        nightStudentsEl.textContent = stats.studentsByPeriod.noite || 0;
+                    }
                 }
             }
 
-            // Nova função para carregar número de alunos por período
+            // Nova função melhorada para carregar número de alunos por período
             async function fetchStudentCounts() {
                 try {
-                    // Carrega todas as turmas e conta alunos por período
-                    const classResult = await makeGetRequest({ action: 'getClassList' });
-                    if (classResult && classResult.status === 'success') {
-                        let morningStudents = 0;
-                        let afternoonStudents = 0;
-                        let nightStudents = 0;
-
-                        // Para cada turma, carrega os alunos e conta por período
-                        for (const className of classResult.classes) {
-                            if (className && className.trim() !== '') {
-                                try {
-                                    const studentsResult = await makeGetRequest({ 
-                                        action: 'getStudentsByClass', 
-                                        className: className 
-                                    });
-                                    
-                                    if (studentsResult && studentsResult.status === 'success') {
-                                        const studentCount = studentsResult.students.length;
-                                        const classNameUpper = className.toUpperCase();
-                                        
-                                        if (classNameUpper.includes('MANHA')) {
-                                            morningStudents += studentCount;
-                                        } else if (classNameUpper.includes('TARDE')) {
-                                            afternoonStudents += studentCount;
-                                        } else if (classNameUpper.includes('NOITE')) {
-                                            nightStudents += studentCount;
-                                        }
-                                    }
-                                } catch (error) {
-                                    console.error(`Erro ao carregar alunos da turma ${className}:`, error);
-                                }
-                            }
-                        }
-
-                        // Atualiza os elementos na interface
-                        morningStudentsEl.textContent = morningStudents;
-                        afternoonStudentsEl.textContent = afternoonStudents;
-                        nightStudentsEl.textContent = nightStudents;
+                    const result = await makeGetRequest({ action: 'getStudentCountsByPeriod' });
+                    if (result && result.status === 'success') {
+                        morningStudentsEl.textContent = result.counts.manha || 0;
+                        afternoonStudentsEl.textContent = result.counts.tarde || 0;
+                        nightStudentsEl.textContent = result.counts.noite || 0;
                     }
                 } catch (error) {
                     console.error('Erro ao carregar contagem de alunos:', error);
+                    
+                    // Fallback: carrega manualmente se a função do backend não estiver disponível
+                    try {
+                        const classResult = await makeGetRequest({ action: 'getClassList' });
+                        if (classResult && classResult.status === 'success') {
+                            let morningStudents = 0;
+                            let afternoonStudents = 0;
+                            let nightStudents = 0;
+
+                            for (const className of classResult.classes) {
+                                if (className && className.trim() !== '') {
+                                    try {
+                                        const studentsResult = await makeGetRequest({ 
+                                            action: 'getStudentsByClass', 
+                                            className: className 
+                                        });
+                                        
+                                        if (studentsResult && studentsResult.status === 'success') {
+                                            const studentCount = studentsResult.students.length;
+                                            const classNameUpper = className.toUpperCase();
+                                            
+                                            if (classNameUpper.includes('MANHA')) {
+                                                morningStudents += studentCount;
+                                            } else if (classNameUpper.includes('TARDE')) {
+                                                afternoonStudents += studentCount;
+                                            } else if (classNameUpper.includes('NOITE')) {
+                                                nightStudents += studentCount;
+                                            }
+                                        }
+                                    } catch (error) {
+                                        console.error(`Erro ao carregar alunos da turma ${className}:`, error);
+                                    }
+                                }
+                            }
+
+                            morningStudentsEl.textContent = morningStudents;
+                            afternoonStudentsEl.textContent = afternoonStudents;
+                            nightStudentsEl.textContent = nightStudents;
+                        }
+                    } catch (fallbackError) {
+                        console.error('Erro no fallback de contagem de alunos:', fallbackError);
+                    }
                 }
             }
 
             // =========================================================================
             // FUNÇÕES DOS ÚLTIMOS REGISTROS
             // =========================================================================
-
             async function loadRecentOccurrences() {
                 try {
                     registrosList.innerHTML = `
@@ -1674,7 +1750,6 @@
             }
 
             function startAutoRefresh() {
-                // Atualiza a cada 30 segundos
                 autoRefreshInterval = setInterval(() => {
                     loadRecentOccurrences();
                 }, 30000);
@@ -1690,7 +1765,6 @@
             // =========================================================================
             // MANIPULADORES DE EVENTOS
             // =========================================================================
-
             function handleClassChange() {
                 const selectedClass = classSelect.value;
                 if (selectedClass) {
@@ -1698,6 +1772,7 @@
                 } else {
                     studentSelect.innerHTML = '<option value="">Selecione primeiro a turma</option>';
                     studentSelect.disabled = true;
+                    classInfoSection.style.display = 'none';
                 }
             }
 
@@ -1708,24 +1783,20 @@
                 const originalText = submitButton.innerHTML;
                 
                 try {
-                    // Desabilita o botão e mostra loading
                     submitButton.disabled = true;
                     submitButton.innerHTML = '<div class="loading"></div> Registrando...';
                     
-                    // Coleta os dados do formulário
                     const formData = collectFormData();
                     
-                    // Valida os dados
                     if (!validateFormData(formData)) {
                         return;
                     }
                     
-                    // Envia os dados para o backend na ordem correta
                     const payload = {
                         action: 'addOccurrence',
                         date: formData.date,
                         professor: formData.professor,
-                        class: formData.class, // Classificação (turma)
+                        class: formData.class,
                         student: formData.student,
                         irregularities: formData.irregularities,
                         description: formData.description,
@@ -1737,9 +1808,10 @@
                     if (result && result.status === 'success') {
                         showNotification('success', result.message || 'Ocorrência registrada com sucesso!');
                         clearForm();
-                        fetchAllData(); // Atualiza as estatísticas
-                        fetchStatistics(); // Atualiza as estatísticas específicas
-                        loadRecentOccurrences(); // Atualiza os últimos registros
+                        fetchAllData();
+                        fetchStatistics();
+                        fetchStudentCounts();
+                        loadRecentOccurrences();
                     } else {
                         showNotification('error', result.message || 'Erro ao registrar ocorrência');
                     }
@@ -1748,7 +1820,6 @@
                     console.error('Erro ao enviar formulário:', error);
                     showNotification('error', 'Erro ao registrar ocorrência. Tente novamente.');
                 } finally {
-                    // Restaura o botão
                     submitButton.disabled = false;
                     submitButton.innerHTML = originalText;
                 }
@@ -1757,7 +1828,6 @@
             // =========================================================================
             // FUNÇÕES AUXILIARES
             // =========================================================================
-
             function collectFormData() {
                 const irregularities = Array.from(document.querySelectorAll('input[name="irregularity"]:checked'))
                     .map(checkbox => checkbox.value)
@@ -1800,6 +1870,7 @@
                 form.reset();
                 studentSelect.innerHTML = '<option value="">Selecione primeiro a turma</option>';
                 studentSelect.disabled = true;
+                classInfoSection.style.display = 'none';
                 setDefaultDate();
             }
 
@@ -1810,7 +1881,6 @@
                 
                 totalOccurrencesEl.textContent = occurrences.length;
                 
-                // Conta ocorrências por período
                 let morningCount = 0;
                 let afternoonCount = 0;
                 let nightCount = 0;
@@ -1837,10 +1907,47 @@
                 notificationContent.textContent = message;
                 notification.classList.add('show');
                 
-                // Remove automaticamente após 5 segundos
                 setTimeout(() => {
                     notification.classList.remove('show');
                 }, 5000);
+            }
+
+            // =========================================================================
+            // EVENT LISTENERS
+            // =========================================================================
+            classSelect.addEventListener('change', handleClassChange);
+            form.addEventListener('submit', handleFormSubmit);
+            clearBtn.addEventListener('click', clearForm);
+            searchRegistros.addEventListener('input', handleSearchRegistros);
+            
+            refreshRegistrosBtn.addEventListener('click', () => {
+                refreshIcon.style.animation = 'spin 1s linear infinite';
+                loadRecentOccurrences().finally(() => {
+                    refreshIcon.style.animation = '';
+                });
+            });
+            
+            notificationClose.addEventListener('click', () => {
+                notification.classList.remove('show');
+            });
+
+            // =========================================================================
+            // INICIALIZAÇÃO
+            // =========================================================================
+            async function init() {
+                try {
+                    setDefaultDate();
+                    await loadProfessors();
+                    await loadClasses();
+                    await fetchAllData();
+                    await fetchStatistics();
+                    await fetchStudentCounts();
+                    await loadRecentOccurrences();
+                    startAutoRefresh();
+                } catch (error) {
+                    console.error('Erro na inicialização:', error);
+                    showNotification('error', 'Erro ao inicializar o sistema');
+                }
             }
 
             // =========================================================================
@@ -1850,10 +1957,8 @@
                 stopAutoRefresh();
             });
 
-            // =========================================================================
-            // INICIALIZAÇÃO
-            // =========================================================================
-            initialize();
+            // Inicia o sistema
+            init();
         });
     </script>
 </body>

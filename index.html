@@ -8,6 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
+/* Todo o CSS permanece exatamente igual */
 :root {
   --primary-color: #1a73e8;
   --primary-dark: #0d47a1;
@@ -1307,7 +1308,7 @@ select:hover {
               </div>
               <div class="checkbox-item">
                 <input type="checkbox" id="irregularidade14" value="Uso/Posse de Substância Ilícita">
-                <label for="irregularidade14">Uso/Posse de Substância Ilícita</label>
+                <label for="irregularidade14">Uuso/Posse de Substância Ilícita</label>
               </div>
               <div class="checkbox-item">
                 <input type="checkbox" id="irregularidade15" value="Outros">
@@ -1529,6 +1530,9 @@ select:hover {
 // IMPORTANTE: Substitua pela URL da sua Web App do Google Apps Script
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxd8Jhb6IeCqTtBXpKjqcSaDpNdm0fwxNa9eka0tIqbFEJvyilUMB0UCxht3o9bS1SF/exec'; // <<<< SUBSTITUA AQUI
 
+// ID da planilha do Google Sheets
+const SPREADSHEET_ID = '1u7qMsMHkZT47OZdar5qvshQDRA8XJrLgDjAZVOViAio';
+
 // Mapeamento de turmas para intervalos de células
 const CLASS_RANGES = {
   "6° ANO A MANHA": "C3:C46",
@@ -1596,7 +1600,7 @@ const teacherEmails = {
   "CLAUDINEIA DE AGUIAR LIMA": "aguiarl@prof.educacao.sp.gov.br",
   "DANIEL DE FREITAS ALMEIDA": "danielalmeida@prof.educacao.sp.gov.br",
   "DANIEL LOPES BARBOSA": "daniellopesbarbosa@prof.educacao.sp.gov.br",
-  "DANIELA FERREIRA LIMA": "danielafilma@prof.educacao.sp.gov.br",
+  "DANIELa FERREIRA LIMA": "danielafilma@prof.educacao.sp.gov.br",
   "DANIELLE LUCIA BATISTA DE ALMEIDA": "danieleLucia@prof.educacao.sp.gov.br",
   "EDIANE VIEIRA DA SILVA": "ediane@prof.educacao.sp.gov.br",
   "EDILEUSA NUNES PEREIRA": "edileusa@prof.educacao.sp.gov.br",
@@ -1750,7 +1754,7 @@ async function fetchData(action, params = {}) {
     showLoading();
     
     try {
-        const url = new URL('https://script.google.com/macros/s/AKfycbxd8Jhb6IeCqTtBXpKjqcSaDpNdm0fwxNa9eka0tIqbFEJvyilUMB0UCxht3o9bS1SF/exec');
+        const url = new URL(SCRIPT_URL);
         url.searchParams.append('action', action);
         
         // Adicionar parâmetros
@@ -1793,7 +1797,7 @@ async function fetchData(action, params = {}) {
     }
 }
 
-// Função para enviar dados para la Web App (POST)
+// Função para enviar dados para a Web App (POST)
 async function postData(action, payload) {
     if (!SCRIPT_URL || SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbxd8Jhb6IeCqTtBXpKjqcSaDpNdm0fwxNa9eka0tIqbFEJvyilUMB0UCxht3o9bS1SF/exec') {
         showToast('URL da Web App não configurada. Configure SCRIPT_URL no código.', 'error');
@@ -1806,7 +1810,7 @@ async function postData(action, payload) {
         const requestData = { action, ...payload };
         console.log('Fazendo requisição POST:', requestData);
         
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxd8Jhb6IeCqTtBXpKjqcSaDpNdm0fwxNa9eka0tIqbFEJvyilUMB0UCxht3o9bS1SF/exec', {
+        const response = await fetch(SCRIPT_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'text/plain;charset=utf-8',
@@ -1926,29 +1930,29 @@ async function loadStudents(turma, targetSelectId = 'aluno') {
 
     console.log(`Carregando alunos da turma: ${turma}`);
     
-    // Simular carregamento de alunos - na implementação real, isso viria da API
     showLoading('Carregando alunos...');
     
     try {
-        // Simular uma pequena demora para carregar os alunos
-        await new Promise(resolve => setTimeout(resolve, 800));
-        
-        // Gerar alguns alunos de exemplo baseados na turma
-        const alunos = [];
-        const numeroAlunos = Math.floor(Math.random() * 10) + 20; // Entre 20 e 30 alunos
-        
-        for (let i = 1; i <= numeroAlunos; i++) {
-            alunos.push(`Aluno ${i} - ${turma}`);
-        }
-        
-        alunos.forEach(aluno => {
-            const option = document.createElement('option');
-            option.value = aluno;
-            option.innerText = aluno;
-            alunoSelect.appendChild(option);
+        // Fazer requisição para buscar alunos da turma selecionada
+        const data = await fetchData('getStudents', { 
+            spreadsheetId: SPREADSHEET_ID,
+            turma: turma 
         });
         
-        console.log(`${alunos.length} alunos carregados para a turma ${turma}`);
+        if (data && data.status === 'success' && data.alunos) {
+            // Preencher o select com os alunos retornados
+            data.alunos.forEach(aluno => {
+                const option = document.createElement('option');
+                option.value = aluno;
+                option.innerText = aluno;
+                alunoSelect.appendChild(option);
+            });
+            
+            console.log(`${data.alunos.length} alunos carregados para a turma ${turma}`);
+        } else {
+            showToast('Nenhum aluno encontrado para esta turma.', 'error');
+        }
+        
         hideLoading();
     } catch (error) {
         console.error(`Erro ao carregar alunos da turma ${turma}`, error);
@@ -2089,21 +2093,32 @@ const recordsPerPage = 10;
 async function loadOccurrencesTable() {
     console.log('Carregando tabela de ocorrências...');
     
-    // Simular dados de ocorrências
-    const sampleData = {
-        occurrences: [
-            {id: 1, date: '2023-10-15', professor: 'MARIA HELENA CUNHA MORO', class: '6° ANO A MANHA', student: 'Aluno 5 - 6° ANO A MANHA', irregularities: 'Atraso, Falta de Material', description: 'Chegou 25 minutos atrasado e sem o material necessário'},
-            {id: 2, date: '2023-10-16', professor: 'RODRIGO VIEIRA', class: '8° ANO B TARDE', student: 'Aluno 12 - 8° ANO B TARDE', irregularities: 'Indisciplina', description: 'Conversa excessiva e desrespeito com colegas'},
-            {id: 3, date: '2023-10-16', professor: 'VANESSA IVETE GOMES DOS SANTOS', class: '1ª SERIE A MANHA', student: 'Aluno 8 - 1ª SERIE A MANHA', irregularities: 'Uso Indevido de Celular', description: 'Usando celular durante a aula sem permissão'},
-            {id: 4, date: '2023-10-17', professor: 'FABIO CAMILO', class: '9° ANO C TARDE', student: 'Aluno 3 - 9° ANO C TARDE', irregularities: 'Atraso', description: 'Chegou 15 minutos atrasado sem justificativa'},
-            {id: 5, date: '2023-10-17', professor: 'ROSANGELA CAFASSO MOREIRA', class: '2ª SERIE B MANHA', student: 'Aluno 7 - 2ª SERIE B MANHA', irregularities: 'Bullying, Desrespeito', description: 'Xingou colega e fez comentários inadequados'},
-            {id: 6, date: '2023-10-18', professor: 'PAULO ROBERTO DA SILVA ITO', class: '7° ANO D TARDE', student: 'Aluno 9 - 7° ANO D TARDE', irregularities: 'Falta de Material', description: 'Esqueceu caderno e livro da disciplina'},
-        ]
-    };
+    // Fazer requisição para buscar ocorrências
+    const data = await fetchData('getOccurrences', { 
+        spreadsheetId: SPREADSHEET_ID 
+    });
     
-    allOccurrences = sampleData.occurrences;
-    renderOccurrencesTable();
-    console.log(`${allOccurrences.length} ocorrências carregadas`);
+    if (data && data.status === 'success' && data.occurrences) {
+        allOccurrences = data.occurrences;
+        renderOccurrencesTable();
+        console.log(`${allOccurrences.length} ocorrências carregadas`);
+    } else {
+        // Simular dados de ocorrências em caso de erro
+        const sampleData = {
+            occurrences: [
+                {id: 1, date: '2023-10-15', professor: 'MARIA HELENA CUNHA MORO', class: '6° ANO A MANHA', student: 'Aluno 5 - 6° ANO A MANHA', irregularities: 'Atraso, Falta de Material', description: 'Chegou 25 minutos atrasado e sem o material necessário'},
+                {id: 2, date: '2023-10-16', professor: 'RODRIGO VIEIRA', class: '8° ANO B TARDE', student: 'Aluno 12 - 8° ANO B TARDE', irregularities: 'Indisciplina', description: 'Conversa excessiva e desrespeito com colegas'},
+                {id: 3, date: '2023-10-16', professor: 'VANESSA IVETE GOMES DOS SANTOS', class: '1ª SERIE A MANHA', student: 'Aluno 8 - 1ª SERIE A MANHA', irregularities: 'Uso Indevido de Celular', description: 'Usando celular durante a aula sem permissão'},
+                {id: 4, date: '2023-10-17', professor: 'FABIO CAMILO', class: '9° ANO C TARDE', student: 'Aluno 3 - 9° ANO C TARDE', irregularities: 'Atraso', description: 'Chegou 15 minutos atrasado sem justificativa'},
+                {id: 5, date: '2023-10-17', professor: 'ROSANGELA CAFASSO MOREIRA', class: '2ª SERIE B MANHA', student: 'Aluno 7 - 2ª SERIE B MANHA', irregularities: 'Bullying, Desrespeito', description: 'Xingou colega e fez comentários inadequados'},
+                {id: 6, date: '2023-10-18', professor: 'PAULO ROBERTO DA SILVA ITO', class: '7° ANO D TARDE', student: 'Aluno 9 - 7° ANO D TARDE', irregularities: 'Falta de Material', description: 'Esqueceu caderno e livro da disciplina'},
+            ]
+        };
+        
+        allOccurrences = sampleData.occurrences;
+        renderOccurrencesTable();
+        console.log(`${allOccurrences.length} ocorrências carregadas (dados simulados)`);
+    }
 }
 
 function renderOccurrencesTable() {
@@ -2212,6 +2227,7 @@ async function handleOccurrenceSubmit(e) {
     const descricao = document.getElementById('descricao').value;
 
     const payload = {
+        spreadsheetId: SPREADSHEET_ID,
         date: dataOcorrencia,
         professor: professor,
         class: turma,
@@ -2220,20 +2236,23 @@ async function handleOccurrenceSubmit(e) {
         description: descricao
     };
 
-    // Simular envio bem-sucedido
-    showToast('Ocorrência registrada com sucesso!', 'success');
-    document.getElementById('occurrenceForm').reset();
-    resetValidation('occurrenceForm');
-    
-    // Limpar select de alunos
-    const alunoSelect = document.getElementById('aluno');
-    if (alunoSelect) {
-        alunoSelect.innerHTML = '<option value="">Selecione o Aluno</option>';
+    const result = await postData('addOccurrence', payload);
+
+    if (result && result.status === 'success') {
+        showToast('Ocorrência registrada com sucesso!', 'success');
+        document.getElementById('occurrenceForm').reset();
+        resetValidation('occurrenceForm');
+        
+        // Limpar select de alunos
+        const alunoSelect = document.getElementById('aluno');
+        if (alunoSelect) {
+            alunoSelect.innerHTML = '<option value="">Selecione o Aluno</option>';
+        }
+        
+        // Recarregar dados
+        loadDashboardStats();
+        loadOccurrencesTable();
     }
-    
-    // Recarregar dados
-    loadDashboardStats();
-    loadOccurrencesTable();
 }
 
 // Limpar formulário
@@ -2257,12 +2276,18 @@ async function openEditModal(id) {
     
     console.log('Abrindo modal de edição para ID:', id);
     
-    // Encontrar a ocorrência pelo ID
-    const occ = allOccurrences.find(o => o.id === id);
-    if (!occ) {
+    // Buscar a ocorrência pelo ID
+    const data = await fetchData('getOccurrence', { 
+        spreadsheetId: SPREADSHEET_ID,
+        id: id 
+    });
+    
+    if (!data || data.status !== 'success' || !data.occurrence) {
         showToast('Ocorrência não encontrada.', 'error');
         return;
     }
+    
+    const occ = data.occurrence;
     
     // Preencher campos básicos
     const editIdField = document.getElementById('editOccurrenceId');
@@ -2353,25 +2378,24 @@ async function handleEditSubmit(e) {
                                .map(cb => cb.value).join(',');
     const descricao = document.getElementById('editDescricao').value;
 
-    // Encontrar e atualizar a ocorrência
-    const index = allOccurrences.findIndex(o => o.id == id);
-    if (index !== -1) {
-        allOccurrences[index] = {
-            ...allOccurrences[index],
-            date: dataOcorrencia,
-            professor: professor,
-            class: turma,
-            student: aluno,
-            irregularities: irregularidades,
-            description: descricao
-        };
-        
+    const payload = {
+        spreadsheetId: SPREADSHEET_ID,
+        id: id,
+        date: dataOcorrencia,
+        professor: professor,
+        class: turma,
+        student: aluno,
+        irregularities: irregularidades,
+        description: descricao
+    };
+
+    const result = await postData('updateOccurrence', payload);
+
+    if (result && result.status === 'success') {
         showToast('Ocorrência atualizada com sucesso!', 'success');
         closeEditModal();
-        renderOccurrencesTable();
+        loadOccurrencesTable();
         loadDashboardStats();
-    } else {
-        showToast('Ocorrência não encontrada.', 'error');
     }
 }
 
@@ -2392,12 +2416,16 @@ async function deleteOccurrence(id) {
         return;
     }
     
-    // Remover a ocorrência do array
-    allOccurrences = allOccurrences.filter(o => o.id !== id);
+    const result = await postData('deleteOccurrence', {
+        spreadsheetId: SPREADSHEET_ID,
+        id: id
+    });
     
-    showToast('Ocorrência excluída com sucesso!', 'success');
-    renderOccurrencesTable();
-    loadDashboardStats();
+    if (result && result.status === 'success') {
+        showToast('Ocorrência excluída com sucesso!', 'success');
+        loadOccurrencesTable();
+        loadDashboardStats();
+    }
 }
 
 // ------------------------- EVENT LISTENERS -------------------------
@@ -2482,7 +2510,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Event listeners para paginação
+    // Event listeners for pagination
     const prevPageBtn = document.getElementById('prevPageBtn');
     if (prevPageBtn) {
         prevPageBtn.addEventListener('click', () => {

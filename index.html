@@ -8,7 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-/* Todo o CSS permanece exatamente igual */
+/* Estilos mantidos exatamente iguais */
 :root {
   --primary-color: #1a73e8;
   --primary-dark: #0d47a1;
@@ -1604,7 +1604,7 @@ const teacherEmails = {
   "DANIELLE LUCIA BATISTA DE ALMEIDA": "danieleLucia@prof.educacao.sp.gov.br",
   "EDIANE VIEIRA DA SILVA": "ediane@prof.educacao.sp.gov.br",
   "EDILEUSA NUNES PEREIRA": "edileusa@prof.educacao.sp.gov.br",
-  "EDUARDO HENRIQUE DA FONSECA": "henriquefonseca@prof.educacao.sp.gov.br",
+  "EDUARDA HENRIQUE DA FONSECA": "henriquefonseca@prof.educacao.sp.gov.br",
   "ELIANE SANTOS SILVA": "essantos@prof.educacao.sp.gov.br",
   "ELIAS MONTEIRO DA SILVA": "elias1@prof.educacao.sp.gov.br",
   "ELISABETE APARECIDA PIRES": "elisabetepires@prof.educacao.sp.gov.br",
@@ -1746,7 +1746,7 @@ function resetValidation(formId) {
 
 // Função para buscar dados da Web App (GET)
 async function fetchData(action, params = {}) {
-    // CORREÇÃO: Verificação robusta da SCRIPT_URL
+    // Verificação robusta da SCRIPT_URL
     if (!SCRIPT_URL || SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbyTtXaLxDd4JqUH543LxrCj66wgqTC_FI8Ib_4zicdJcU7ZRL-xReIhAaDV5IhmJKNh/exec') {
         showToast('URL da Web App não configurada. Configure SCRIPT_URL no código.', 'error');
         return null;
@@ -1755,7 +1755,7 @@ async function fetchData(action, params = {}) {
     showLoading();
     
     try {
-        const url = new URL('https://script.google.com/macros/s/AKfycbyTtXaLxDd4JqUH543LxrCj66wgqTC_FI8Ib_4zicdJcU7ZRL-xReIhAaDV5IhmJKNh/exec');
+        const url = new URL(SCRIPT_URL);
         url.searchParams.append('action', action);
         
         // Adicionar parâmetros
@@ -1793,7 +1793,6 @@ async function fetchData(action, params = {}) {
     } catch (error) {
         hideLoading();
         console.error('Erro na requisição GET:', error);
-        // CORREÇÃO: Mostrar a mensagem de erro real
         showToast(`Erro ao buscar dados: ${error.message}`, 'error');
         return null;
     }
@@ -1801,7 +1800,7 @@ async function fetchData(action, params = {}) {
 
 // Função para enviar dados para a Web App (POST)
 async function postData(action, payload) {
-    // CORREÇÃO: Verificação robusta da SCRIPT_URL
+    // Verificação robusta da SCRIPT_URL
     if (!SCRIPT_URL || SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbyTtXaLxDd4JqUH543LxrCj66wgqTC_FI8Ib_4zicdJcU7ZRL-xReIhAaDV5IhmJKNh/exec') {
         showToast('URL da Web App não configurada. Configure SCRIPT_URL no código.', 'error');
         return null;
@@ -1813,11 +1812,10 @@ async function postData(action, payload) {
         const requestData = { action, ...payload };
         console.log('Fazendo requisição POST:', requestData);
         
-        // CORREÇÃO: Usar a constante SCRIPT_URL em vez de URL fixa
         const response = await fetch(SCRIPT_URL, {
             method: 'POST',
             headers: {
-                'Content-Type': 'text/plain;charset=utf-8',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(requestData),
         });
@@ -1841,7 +1839,6 @@ async function postData(action, payload) {
     } catch (error) {
         hideLoading();
         console.error('Erro na requisição POST:', error);
-        // CORREÇÃO: Mostrar a mensagem de erro real
         showToast(`Erro ao enviar dados: ${error.message}`, 'error');
         return null;
     }
@@ -1938,13 +1935,11 @@ async function loadStudents(turma, targetSelectId = 'aluno') {
     showLoading('Carregando alunos...');
     
     try {
-        // CORREÇÃO: Usar sempre { turma } nas chamadas
         const data = await fetchData('getStudents', { 
             spreadsheetId: SPREADSHEET_ID,
             turma: turma 
         });
         
-        // CORREÇÃO: Usar sempre data.alunos em vez de data.students
         if (data && data.status === 'success' && data.alunos) {
             // Preencher o select com os alunos retornados
             data.alunos.forEach(aluno => {
@@ -1962,7 +1957,6 @@ async function loadStudents(turma, targetSelectId = 'aluno') {
         hideLoading();
     } catch (error) {
         console.error(`Erro ao carregar alunos da turma ${turma}`, error);
-        // CORREÇÃO: Mostrar a mensagem de erro real
         showToast(`Erro ao carregar alunos da turma ${turma}: ${error.message}`, 'error');
         hideLoading();
     }
@@ -1972,28 +1966,53 @@ async function loadStudents(turma, targetSelectId = 'aluno') {
 async function loadDashboardStats() {
     console.log('Carregando estatísticas do dashboard...');
     
-    // Simular dados de estatísticas
-    document.getElementById('totalStudentsCount').innerText = '850';
-    document.getElementById('totalOccurrencesCount').innerText = '127';
-    document.getElementById('todayOccurrencesCount').innerText = '5';
-    document.getElementById('pendingOccurrencesCount').innerText = '12';
-    
-    document.getElementById('morningStudents').innerText = '320';
-    document.getElementById('afternoonStudents').innerText = '380';
-    document.getElementById('nightStudents').innerText = '150';
+    try {
+        const data = await fetchData('getStatistics', {
+            spreadsheetId: SPREADSHEET_ID
+        });
+        
+        if (data && data.status === 'success') {
+            document.getElementById('totalStudentsCount').innerText = data.totalStudents || '0';
+            document.getElementById('totalOccurrencesCount').innerText = data.totalOccurrences || '0';
+            document.getElementById('todayOccurrencesCount').innerText = data.todayOccurrences || '0';
+            document.getElementById('pendingOccurrencesCount').innerText = data.pendingOccurrences || '0';
+            
+            document.getElementById('morningStudents').innerText = data.morningStudents || '0';
+            document.getElementById('afternoonStudents').innerText = data.afternoonStudents || '0';
+            document.getElementById('nightStudents').innerText = data.nightStudents || '0';
 
-    // Simular dados para o gráfico
-    const occurrences = [
-        {irregularities: 'Atraso, Falta de Material'},
-        {irregularities: 'Indisciplina'},
-        {irregularities: 'Uso Indevido de Celular'},
-        {irregularities: 'Atraso'},
-        {irregularities: 'Bullying, Desrespeito'},
-        {irregularities: 'Falta de Material'},
-        {irregularities: 'Indisciplina, Desrespeito'},
-    ];
-    
-    renderOccurrenceChart(occurrences);
+            // Renderizar gráfico com dados reais
+            if (data.occurrences) {
+                renderOccurrenceChart(data.occurrences);
+            }
+        } else {
+            // Dados simulados em caso de falha
+            document.getElementById('totalStudentsCount').innerText = '850';
+            document.getElementById('totalOccurrencesCount').innerText = '127';
+            document.getElementById('todayOccurrencesCount').innerText = '5';
+            document.getElementById('pendingOccurrencesCount').innerText = '12';
+            
+            document.getElementById('morningStudents').innerText = '320';
+            document.getElementById('afternoonStudents').innerText = '380';
+            document.getElementById('nightStudents').innerText = '150';
+
+            // Simular dados para o gráfico
+            const occurrences = [
+                {irregularities: 'Atraso, Falta de Material'},
+                {irregularities: 'Indisciplina'},
+                {irregularities: 'Uso Indevido de Celular'},
+                {irregularities: 'Atraso'},
+                {irregularities: 'Bullying, Desrespeito'},
+                {irregularities: 'Falta de Material'},
+                {irregularities: 'Indisciplina, Desrespeito'},
+            ];
+            
+            renderOccurrenceChart(occurrences);
+        }
+    } catch (error) {
+        console.error('Erro ao carregar estatísticas:', error);
+        showToast('Erro ao carregar estatísticas do dashboard', 'error');
+    }
 }
 
 // Renderizar gráfico de ocorrências
@@ -2313,7 +2332,6 @@ async function openEditModal(id) {
 
     // Carregar alunos da turma e selecionar o aluno
     if (occ.class) {
-        // CORREÇÃO: Usar sempre { turma } nas chamadas
         await loadStudents(occ.class, 'editAluno');
         const editAlunoSelect = document.getElementById('editAluno');
         if (editAlunoSelect) {
@@ -2452,7 +2470,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const turmaSelect = document.getElementById('turma');
     if (turmaSelect) {
         turmaSelect.addEventListener('change', (e) => {
-            // CORREÇÃO: Usar sempre { turma } nas chamadas
             loadStudents(e.target.value, 'aluno');
         });
     }
@@ -2461,7 +2478,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const editTurmaSelect = document.getElementById('editTurma');
     if (editTurmaSelect) {
         editTurmaSelect.addEventListener('change', (e) => {
-            // CORREÇÃO: Usar sempre { turma } nas chamadas
             loadStudents(e.target.value, 'editAluno');
         });
     }
@@ -2563,6 +2579,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTeachers();
     loadDashboardStats();
     loadOccurrencesTable();
+    testConnection();
 });
 
 // Testar conexão com o Google Apps Script
@@ -2578,8 +2595,8 @@ async function testConnection() {
         messageElement.innerText = 'Conectando ao Google Sheets...';
     }
 
-    // CORREÇÃO: Verificação robusta da SCRIPT_URL
-    if (!SCRIPT_URL || SCRIPT_URL ==='https://script.google.com/macros/s/AKfycbyTtXaLxDd4JqUH543LxrCj66wgqTC_FI8Ib_4zicdJcU7ZRL-xReIhAaDV5IhmJKNh/exec') {
+    // Verificação robusta da SCRIPT_URL
+    if (!SCRIPT_URL || SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbyTtXaLxDd4JqUH543LxrCj66wgqTC_FI8Ib_4zicdJcU7ZRL-xReIhAaDV5IhmJKNh/exec') {
         if (statusIndicator) statusIndicator.classList.add('status-disconnected');
         if (messageElement) messageElement.innerText = 'URL da Web App não configurada';
         return;
@@ -2588,7 +2605,6 @@ async function testConnection() {
     try {
         const data = await fetchData('testConnection');
         
-        // CORREÇÃO: Melhor tratamento de erros com mensagem específica
         if (data && data.status === 'success') {
             if (statusIndicator) statusIndicator.classList.add('status-connected');
             if (messageElement) messageElement.innerText = 'Conectado ao Google Sheets';
@@ -2601,12 +2617,11 @@ async function testConnection() {
         }
     } catch (error) {
         if (statusIndicator) statusIndicator.classList.add('status-disconnected');
-        // CORREÇÃO: Mostrar a mensagem de erro real
         if (messageElement) messageElement.innerText = `Erro de conexão: ${error.message}`;
     }
 }
 
-// Funções de Exportação (Excel и PDF)
+// Funções de Exportação (Excel e PDF)
 function exportTableToExcel(tableID, filename = '') {
     const table = document.getElementById(tableID);
     if (!table) return;
@@ -2634,9 +2649,6 @@ function exportTableToPdf(tableID, filename = '') {
         showToast('Erro ao exportar arquivo PDF', 'error');
     }
 }
-
-// Inicializar teste de conexão
-testConnection();
 </script>
 
 <!-- Scripts externos -->

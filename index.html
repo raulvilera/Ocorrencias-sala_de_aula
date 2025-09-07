@@ -1528,7 +1528,7 @@ select:hover {
 
 <script>
 // IMPORTANTE: Substitua pela URL da sua Web App do Google Apps Script
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzC4uvFZsuA4Hmh5QSZCNRi_XA6vYDo91YFNGkUXHrZSedbCzhjFpR3bPI1FupV53ja/exec'; // <<<< SUBSTITUA AQUI
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyTtXaLxDd4JqUH543LxrCj66wgqTC_FI8Ib_4zicdJcU7ZRL-xReIhAaDV5IhmJKNh/exec'; // <<<< SUBSTITUA AQUI
 
 // ID da planilha do Google Sheets
 const SPREADSHEET_ID = '1u7qMsMHkZT47OZdar5qvshQDRA8XJrLgDjAZVOViAio';
@@ -1747,7 +1747,7 @@ function resetValidation(formId) {
 // Função para buscar dados da Web App (GET)
 async function fetchData(action, params = {}) {
     // CORREÇÃO: Verificação robusta da SCRIPT_URL
-    if (!SCRIPT_URL || SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzC4uvFZsuA4Hmh5QSZCNRi_XA6vYDo91YFNGkUXHrZSedbCzhjFpR3bPI1FupV53ja/exec') {
+    if (!SCRIPT_URL || SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbyTtXaLxDd4JqUH543LxrCj66wgqTC_FI8Ib_4zicdJcU7ZRL-xReIhAaDV5IhmJKNh/exec') {
         showToast('URL da Web App não configurada. Configure SCRIPT_URL no código.', 'error');
         return null;
     }
@@ -1755,7 +1755,7 @@ async function fetchData(action, params = {}) {
     showLoading();
     
     try {
-        const url = new URL(SCRIPT_URL);
+        const url = new URL('https://script.google.com/macros/s/AKfycbyTtXaLxDd4JqUH543LxrCj66wgqTC_FI8Ib_4zicdJcU7ZRL-xReIhAaDV5IhmJKNh/exec');
         url.searchParams.append('action', action);
         
         // Adicionar parâmetros
@@ -1802,7 +1802,7 @@ async function fetchData(action, params = {}) {
 // Função para enviar dados para a Web App (POST)
 async function postData(action, payload) {
     // CORREÇÃO: Verificação robusta da SCRIPT_URL
-    if (!SCRIPT_URL || SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzC4uvFZsuA4Hmh5QSZCNRi_XA6vYDo91YFNGkUXHrZSedbCzhjFpR3bPI1FupV53ja/exec') {
+    if (!SCRIPT_URL || SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbyTtXaLxDd4JqUH543LxrCj66wgqTC_FI8Ib_4zicdJcU7ZRL-xReIhAaDV5IhmJKNh/exec') {
         showToast('URL da Web App não configurada. Configure SCRIPT_URL no código.', 'error');
         return null;
     }
@@ -2579,7 +2579,7 @@ async function testConnection() {
     }
 
     // CORREÇÃO: Verificação robusta da SCRIPT_URL
-    if (!SCRIPT_URL || SCRIPT_URL ==='https://script.google.com/macros/s/AKfycbzC4uvFZsuA4Hmh5QSZCNRi_XA6vYDo91YFNGkUXHrZSedbCzhjFpR3bPI1FupV53ja/exec') {
+    if (!SCRIPT_URL || SCRIPT_URL ==='https://script.google.com/macros/s/AKfycbyTtXaLxDd4JqUH543LxrCj66wgqTC_FI8Ib_4zicdJcU7ZRL-xReIhAaDV5IhmJKNh/exec') {
         if (statusIndicator) statusIndicator.classList.add('status-disconnected');
         if (messageElement) messageElement.innerText = 'URL da Web App não configurada';
         return;

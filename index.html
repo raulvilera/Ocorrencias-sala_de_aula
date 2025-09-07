@@ -2362,7 +2362,7 @@ async function testConnection() {
         messageElement.innerText = 'Conectando ao Google Sheets...';
     }
 
-    if (!SCRIPT_URL || SCRIPT_URL === 'YOUR_WEB_APP_URL_HERE') {
+    if (!SCRIPT_URL || SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbxd8Jhb6IeCqTtBXpKjqcSaDpNdm0fwxNa9eka0tIqbFEJvyilUMB0UCxht3o9bS1SF/exec') {
         if (statusIndicator) statusIndicator.classList.add('status-disconnected');
         if (messageElement) messageElement.innerText = 'URL da Web App não configurada';
         return;

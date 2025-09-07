@@ -1746,6 +1746,7 @@ function resetValidation(formId) {
 
 // Função para buscar dados da Web App (GET)
 async function fetchData(action, params = {}) {
+    // CORREÇÃO: Verificação robusta da SCRIPT_URL
     if (!SCRIPT_URL || SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzC4uvFZsuA4Hmh5QSZCNRi_XA6vYDo91YFNGkUXHrZSedbCzhjFpR3bPI1FupV53ja/exec') {
         showToast('URL da Web App não configurada. Configure SCRIPT_URL no código.', 'error');
         return null;
@@ -1792,6 +1793,7 @@ async function fetchData(action, params = {}) {
     } catch (error) {
         hideLoading();
         console.error('Erro na requisição GET:', error);
+        // CORREÇÃO: Mostrar a mensagem de erro real
         showToast(`Erro ao buscar dados: ${error.message}`, 'error');
         return null;
     }
@@ -1799,6 +1801,7 @@ async function fetchData(action, params = {}) {
 
 // Função para enviar dados para a Web App (POST)
 async function postData(action, payload) {
+    // CORREÇÃO: Verificação robusta da SCRIPT_URL
     if (!SCRIPT_URL || SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzC4uvFZsuA4Hmh5QSZCNRi_XA6vYDo91YFNGkUXHrZSedbCzhjFpR3bPI1FupV53ja/exec') {
         showToast('URL da Web App não configurada. Configure SCRIPT_URL no código.', 'error');
         return null;
@@ -1810,7 +1813,8 @@ async function postData(action, payload) {
         const requestData = { action, ...payload };
         console.log('Fazendo requisição POST:', requestData);
         
-        const response = await fetch('https://script.google.com/macros/s/AKfycbzC4uvFZsuA4Hmh5QSZCNRi_XA6vYDo91YFNGkUXHrZSedbCzhjFpR3bPI1FupV53ja/exec', {
+        // CORREÇÃO: Usar a constante SCRIPT_URL em vez de URL fixa
+        const response = await fetch(SCRIPT_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'text/plain;charset=utf-8',
@@ -1837,6 +1841,7 @@ async function postData(action, payload) {
     } catch (error) {
         hideLoading();
         console.error('Erro na requisição POST:', error);
+        // CORREÇÃO: Mostrar a mensagem de erro real
         showToast(`Erro ao enviar dados: ${error.message}`, 'error');
         return null;
     }
@@ -1933,12 +1938,13 @@ async function loadStudents(turma, targetSelectId = 'aluno') {
     showLoading('Carregando alunos...');
     
     try {
-        // Fazer requisição para buscar alunos da turma selecionada
+        // CORREÇÃO: Usar sempre { turma } nas chamadas
         const data = await fetchData('getStudents', { 
             spreadsheetId: SPREADSHEET_ID,
             turma: turma 
         });
         
+        // CORREÇÃO: Usar sempre data.alunos em vez de data.students
         if (data && data.status === 'success' && data.alunos) {
             // Preencher o select com os alunos retornados
             data.alunos.forEach(aluno => {
@@ -1956,7 +1962,8 @@ async function loadStudents(turma, targetSelectId = 'aluno') {
         hideLoading();
     } catch (error) {
         console.error(`Erro ao carregar alunos da turma ${turma}`, error);
-        showToast(`Erro ao carregar alunos da turma ${turma}`, 'error');
+        // CORREÇÃO: Mostrar a mensagem de erro real
+        showToast(`Erro ao carregar alunos da turma ${turma}: ${error.message}`, 'error');
         hideLoading();
     }
 }
@@ -2306,6 +2313,7 @@ async function openEditModal(id) {
 
     // Carregar alunos da turma e selecionar o aluno
     if (occ.class) {
+        // CORREÇÃO: Usar sempre { turma } nas chamadas
         await loadStudents(occ.class, 'editAluno');
         const editAlunoSelect = document.getElementById('editAluno');
         if (editAlunoSelect) {
@@ -2444,6 +2452,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const turmaSelect = document.getElementById('turma');
     if (turmaSelect) {
         turmaSelect.addEventListener('change', (e) => {
+            // CORREÇÃO: Usar sempre { turma } nas chamadas
             loadStudents(e.target.value, 'aluno');
         });
     }
@@ -2452,6 +2461,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const editTurmaSelect = document.getElementById('editTurma');
     if (editTurmaSelect) {
         editTurmaSelect.addEventListener('change', (e) => {
+            // CORREÇÃO: Usar sempre { turma } nas chamadas
             loadStudents(e.target.value, 'editAluno');
         });
     }
@@ -2568,17 +2578,32 @@ async function testConnection() {
         messageElement.innerText = 'Conectando ao Google Sheets...';
     }
 
+    // CORREÇÃO: Verificação robusta da SCRIPT_URL
     if (!SCRIPT_URL || SCRIPT_URL ==='https://script.google.com/macros/s/AKfycbzC4uvFZsuA4Hmh5QSZCNRi_XA6vYDo91YFNGkUXHrZSedbCzhjFpR3bPI1FupV53ja/exec') {
         if (statusIndicator) statusIndicator.classList.add('status-disconnected');
         if (messageElement) messageElement.innerText = 'URL da Web App não configurada';
         return;
     }
 
-    // Simular conexão bem-sucedida
-    setTimeout(() => {
-        if (statusIndicator) statusIndicator.classList.add('status-connected');
-        if (messageElement) messageElement.innerText = 'Conectado ao Google Sheets';
-    }, 1500);
+    try {
+        const data = await fetchData('testConnection');
+        
+        // CORREÇÃO: Melhor tratamento de erros com mensagem específica
+        if (data && data.status === 'success') {
+            if (statusIndicator) statusIndicator.classList.add('status-connected');
+            if (messageElement) messageElement.innerText = 'Conectado ao Google Sheets';
+        } else {
+            if (statusIndicator) statusIndicator.classList.add('status-disconnected');
+            if (messageElement) messageElement.innerText = 'Falha na conexão com Web App';
+            if (data && data.message) {
+                if (messageElement) messageElement.innerText += `: ${data.message}`;
+            }
+        }
+    } catch (error) {
+        if (statusIndicator) statusIndicator.classList.add('status-disconnected');
+        // CORREÇÃO: Mostrar a mensagem de erro real
+        if (messageElement) messageElement.innerText = `Erro de conexão: ${error.message}`;
+    }
 }
 
 // Funções de Exportação (Excel и PDF)

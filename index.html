@@ -1650,7 +1650,7 @@
             const SPREADSHEET_ID = "1u7qMsMHkZT47OZdar5qvshQDRA8XJrLgDjAZVOViAio";
             const SHEET_NAME = "OCORRENCIASDOSPROFESSORES";
             const STUDENT_SHEET_NAME = "BANCODEDADOSGERAL";
-            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwr2-R9puLSqIOlwx1BHMxIul9iM1bbHdYNxBsgjSksFgOPf09oXzIU64u2ppaxwUnx/exec";
+            const SCRIPT_URL ='https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec';
 
             // Armazenar gráficos
             const charts = {};
@@ -1816,7 +1816,7 @@
 
             // Função para enviar dados do formulário com melhor tratamento de CORS
             async function sendFormData(formData) {
-                const url = SCRIPT_URL;
+                const url = 'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec';
                 const payload = {
                     action: 'addOccurrence',
                     spreadsheetId: SPREADSHEET_ID,
@@ -1849,7 +1849,7 @@
                     studentSelect.innerHTML = '<option value="">Carregando alunos...</option>';
                     studentSelect.disabled = true;
 
-                    const url = `${SCRIPT_URL}?action=getStudentsByClass&spreadsheetId=${SPREADSHEET_ID}&sheetName=${STUDENT_SHEET_NAME}&class=${encodeURIComponent(className)}`;
+                    const url = `${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getStudentsByClass&spreadsheetId=${SPREADSHEET_ID}&sheetName=${STUDENT_SHEET_NAME}&class=${encodeURIComponent(className)}`;
                     const data = await safeFetch(url);
 
                     if (data && data.status === "success" && Array.isArray(data.students)) {
@@ -1883,7 +1883,7 @@
             // Função para carregar ocorrências do aluno selecionado
             async function loadStudentOccurrences(studentName) {
                 try {
-                    const url = `${SCRIPT_URL}?action=getStudentOccurrences&spreadsheetId=${SPREADSHEET_ID}&sheetName=${SHEET_NAME}&student=${encodeURIComponent(studentName)}`;
+                    const url = `${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getStudentOccurrences&spreadsheetId=${SPREADSHEET_ID}&sheetName=${SHEET_NAME}&student=${encodeURIComponent(studentName)}`;
                     const data = await safeFetch(url);
 
                     if (data && data.status === "success") {
@@ -1903,7 +1903,7 @@
             async function loadIrregularityStats() {
                 try {
                     console.log('Carregando estatísticas de irregularidades...');
-                    const url = `${SCRIPT_URL}?action=getIrregularityStats&spreadsheetId=${SPREADSHEET_ID}&sheetName=${SHEET_NAME}`;
+                    const url = `${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getIrregularityStats&spreadsheetId=${SPREADSHEET_ID}&sheetName=${SHEET_NAME}`;
                     const data = await safeFetch(url);
 
                     if (data && data.status === "success" && data.irregularities) {
@@ -1992,7 +1992,7 @@
             async function loadStatistics() {
                 try {
                     console.log('Carregando estatísticas gerais...');
-                    const url = `${SCRIPT_URL}?action=getStatistics&spreadsheetId=${SPREADSHEET_ID}&sheetName=${SHEET_NAME}`;
+                    const url = `${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getStatistics&spreadsheetId=${SPREADSHEET_ID}&sheetName=${SHEET_NAME}`;
                     const data = await safeFetch(url);
 
                     if (data && data.status === "success") {
@@ -2247,7 +2247,7 @@
                 registrosTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Carregando registros...</td></tr>';
                 
                 try {
-                    const url = `${SCRIPT_URL}?action=getAllOccurrences&spreadsheetId=${SPREADSHEET_ID}&sheetName=${SHEET_NAME}`;
+                    const url = `${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getAllOccurrences&spreadsheetId=${SPREADSHEET_ID}&sheetName=${SHEET_NAME}`;
                     const data = await safeFetch(url);
                     
                     if (data && data.status === "success" && Array.isArray(data.occurrences)) {
@@ -2478,7 +2478,7 @@
             async function loadStudentPeriodStats() {
                 try {
                     console.log('Carregando estatísticas de alunos por período...');
-                    const url = `${SCRIPT_URL}?action=getStudentPeriodStats&spreadsheetId=${SPREADSHEET_ID}&sheetName=${STUDENT_SHEET_NAME}`;
+                    const url = `${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getStudentPeriodStats&spreadsheetId=${SPREADSHEET_ID}&sheetName=${STUDENT_SHEET_NAME}`;
                     const data = await safeFetch(url);
                     
                     if (data && data.status === "success") {
@@ -2514,7 +2514,7 @@
             // Função para exportar dados para Excel
             exportBtn.addEventListener('click', async function() {
                 try {
-                    const url = `${SCRIPT_URL}?action=getAllOccurrences&spreadsheetId=${SPREADSHEET_ID}&sheetName=${SHEET_NAME}`;
+                    const url = `${'https://script.google.com/macros/s/AKfycbx8IcZa7r9vqPhr7h3raIsYWRgWuiOA3XInZPi1qcZwv6O3TdmwsN8c57gV2TbjJV1a/exec'}?action=getAllOccurrences&spreadsheetId=${SPREADSHEET_ID}&sheetName=${SHEET_NAME}`;
                     const data = await safeFetch(url);
                     
                     if (data && data.status === "success" && Array.isArray(data.occurrences)) {

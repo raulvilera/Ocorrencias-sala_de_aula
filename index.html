@@ -831,7 +831,7 @@
     <script>
         // Configurações da API
         const API_CONFIG = {
-            SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzYourScriptIdHere/exec',
+            SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbz0p3Xf1R3_gtaUH2bp1CZHJW4p_DIZpQWvFP7CIeP0EPEt4Efo-Yexl2OWbRvuAUe5/exec',
             SPREADSHEET_ID: '1u7qMsMHkZT47OZdar5qvshQDRA8XJrLgDjAZVOViAio'
         };
 
@@ -1127,7 +1127,7 @@
         }
 
         async function loadStudents(className) {
-            const url = `${API_CONFIG.SCRIPT_URL}?action=getStudents&turma=${encodeURIComponent(className)}`;
+            const url = `${API_CONFIG.'https://script.google.com/macros/s/AKfycbz0p3Xf1R3_gtaUH2bp1CZHJW4p_DIZpQWvFP7CIeP0EPEt4Efo-Yexl2OWbRvuAUe5/exec'}?action=getStudents&turma=${encodeURIComponent(className)}`;
             const response = await makeApiRequest(url);
             
             if (response.status !== 'success') {
@@ -1138,7 +1138,7 @@
         }
 
         async function loadStudentStats(studentName) {
-            const url = `${API_CONFIG.SCRIPT_URL}?action=getStudentStats&student=${encodeURIComponent(studentName)}`;
+            const url = `${API_CONFIG.'https://script.google.com/macros/s/AKfycbz0p3Xf1R3_gtaUH2bp1CZHJW4p_DIZpQWvFP7CIeP0EPEt4Efo-Yexl2OWbRvuAUe5/exec'}?action=getStudentStats&student=${encodeURIComponent(studentName)}`;
             const response = await makeApiRequest(url);
             
             if (response.status !== 'success') {
@@ -1152,7 +1152,7 @@
         }
 
         async function loadGeneralStats() {
-            const url = `${API_CONFIG.SCRIPT_URL}?action=getStudentPeriodStats`;
+            const url = `${API_CONFIG.'https://script.google.com/macros/s/AKfycbz0p3Xf1R3_gtaUH2bp1CZHJW4p_DIZpQWvFP7CIeP0EPEt4Efo-Yexl2OWbRvuAUe5/exec'}?action=getStudentPeriodStats`;
             const response = await makeApiRequest(url);
             
             if (response.status !== 'success') {
@@ -1167,7 +1167,7 @@
         }
 
         async function submitOccurrence(data) {
-            const response = await makeApiRequest(API_CONFIG.SCRIPT_URL, {
+            const response = await makeApiRequest(API_CONFIG.'https://script.google.com/macros/s/AKfycbz0p3Xf1R3_gtaUH2bp1CZHJW4p_DIZpQWvFP7CIeP0EPEt4Efo-Yexl2OWbRvuAUe5/exec', {
                 method: 'POST',
                 body: data
             });
@@ -1239,7 +1239,7 @@
         // Função para testar conexão
         async function testConnection() {
             try {
-                const url = `${API_CONFIG.SCRIPT_URL}?action=testConnection`;
+                const url = `${API_CONFIG.'https://script.google.com/macros/s/AKfycbz0p3Xf1R3_gtaUH2bp1CZHJW4p_DIZpQWvFP7CIeP0EPEt4Efo-Yexl2OWbRvuAUe5/exec'}?action=testConnection`;
                 const response = await makeApiRequest(url);
                 return response.status === 'success';
             } catch (error) {

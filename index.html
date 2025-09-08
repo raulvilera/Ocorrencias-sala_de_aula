@@ -7,9 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
     <style>
         :root {
             --primary-color: #1a73e8;
@@ -31,14 +28,14 @@
             --afternoon-color: #f39c12;
             --night-color: #9b59b6;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
         }
-        
+
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
             color: var(--text-color);
@@ -46,13 +43,13 @@
             min-height: 100vh;
             padding-bottom: 60px;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-        
+
         header {
             background: linear-gradient(135deg, #2ecc71 0%, #3498db 100%);
             border-bottom: 1px solid var(--border-color);
@@ -62,7 +59,7 @@
             top: 0;
             z-index: 100;
         }
-        
+
         .header-content {
             display: flex;
             justify-content: space-between;
@@ -71,13 +68,13 @@
             margin: 0 auto;
             padding: 0 20px;
         }
-        
+
         .logo {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-        
+
         .logo-icon {
             background: rgba(255, 255, 255, 0.2);
             color: white;
@@ -91,37 +88,37 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
         }
-        
+
         .logo-text {
             display: flex;
             flex-direction: column;
         }
-        
+
         .logo h1 {
             font-size: 1.6rem;
             color: white;
             font-weight: 700;
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        
+
         .logo p {
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.9);
             margin-top: 3px;
             text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
-        
+
         main {
             padding: 30px 0;
         }
-        
+
         .dashboard {
             display: grid;
             grid-template-columns: 1fr 350px;
             gap: 25px;
-            margin-bottom: 30px;
+            margin-top: 30px;
         }
-        
+
         .stats-card {
             background: linear-gradient(135deg, #2ecc71 0%, #3498db 100%);
             color: white;
@@ -131,7 +128,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .stats-card::after {
             content: '';
             position: absolute;
@@ -142,7 +139,7 @@
             background: linear-gradient(to top, rgba(255,255,255,0.3), transparent);
             z-index: 1;
         }
-        
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -151,7 +148,7 @@
             position: relative;
             z-index: 2;
         }
-        
+
         .stat-item {
             background: rgba(255, 255, 255, 0.15);
             border-radius: 12px;
@@ -161,23 +158,23 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             transition: var(--transition);
         }
-        
+
         .stat-item:hover {
             transform: translateY(-5px);
             background: rgba(255, 255, 255, 0.25);
         }
-        
+
         .stat-value {
             font-size: 2.2rem;
             font-weight: 700;
             margin: 10px 0;
         }
-        
+
         .stat-label {
             font-size: 0.95rem;
             opacity: 0.9;
         }
-        
+
         .card {
             background-color: var(--card-bg);
             border-radius: 16px;
@@ -188,7 +185,7 @@
             transition: var(--transition);
             position: relative;
         }
-        
+
         .card::after {
             content: '';
             position: absolute;
@@ -199,12 +196,12 @@
             background: linear-gradient(to top, rgba(255,255,255,0.8), transparent);
             z-index: 1;
         }
-        
+
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
         }
-        
+
         .card-header {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
@@ -216,13 +213,13 @@
             gap: 12px;
             position: relative;
         }
-        
+
         .card-body {
             padding: 30px;
             position: relative;
             z-index: 2;
         }
-        
+
         .student-occurrences-card {
             background: linear-gradient(135deg, #2ecc71 0%, #3498db 100%);
             color: white;
@@ -234,7 +231,7 @@
             margin-top: 25px;
             display: none;
         }
-        
+
         .student-occurrences-card::after {
             content: '';
             position: absolute;
@@ -245,7 +242,7 @@
             background: linear-gradient(to top, rgba(255,255,255,0.3), transparent);
             z-index: 1;
         }
-        
+
         .student-occurrences-content {
             display: flex;
             flex-direction: column;
@@ -254,32 +251,32 @@
             position: relative;
             z-index: 2;
         }
-        
+
         .student-occurrences-name {
             font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 15px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        
+
         .student-occurrences-count {
             font-size: 3rem;
             font-weight: 700;
             margin: 10px 0;
             text-shadow: 0 3px 6px rgba(0,0,0,0.3);
         }
-        
+
         .student-occurrences-label {
             font-size: 1.1rem;
             opacity: 0.9;
             text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
-        
+
         .form-group {
             margin-bottom: 25px;
             position: relative;
         }
-        
+
         label {
             display: block;
             margin-bottom: 12px;
@@ -289,17 +286,17 @@
             transition: var(--transition);
             cursor: pointer;
         }
-        
+
         .form-group:hover label {
             color: var(--primary-color);
             transform: translateX(5px);
         }
-        
+
         .required::after {
             content: " *";
             color: var(--error-color);
         }
-        
+
         input, select, textarea {
             width: 100%;
             padding: 15px;
@@ -309,14 +306,14 @@
             transition: var(--transition);
             background-color: #f8fafc;
         }
-        
+
         input:hover, select:hover, textarea:hover {
             border-color: var(--primary-color);
             background-color: var(--hover-bg);
             box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
             transform: translateY(-2px);
         }
-        
+
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--primary-color);
@@ -324,27 +321,27 @@
             background-color: white;
             transform: translateY(-2px);
         }
-        
+
         .input-error {
             border-color: var(--error-color) !important;
             box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2) !important;
         }
-        
+
         textarea {
             min-height: 150px;
             resize: vertical;
         }
-        
+
         .checkbox-group {
             margin-bottom: 20px;
         }
-        
+
         .checkbox-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 18px;
         }
-        
+
         .checkbox-item {
             background: #f8fafc;
             padding: 15px;
@@ -356,49 +353,25 @@
             position: relative;
             cursor: pointer;
         }
-        
+
         .checkbox-item:hover {
             background: #e8f0fe;
             border-color: var(--primary-color);
             transform: translateY(-5px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        
+
         .checkbox-item input {
             width: auto;
             margin-right: 12px;
             transform: scale(1.2);
             cursor: pointer;
         }
-        
+
         .checkbox-item:hover label {
             color: var(--primary-dark);
         }
-        
-        .chart-container {
-            position: relative;
-            width: 50px;
-            height: 50px;
-            margin-right: 15px;
-            transition: var(--transition);
-        }
-        
-        .checkbox-item:hover .chart-container {
-            transform: scale(1.1);
-        }
-        
-        .chart-value {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-weight: 700;
-            font-size: 14px;
-            color: var(--primary-dark);
-            transition: var(--transition);
-            z-index: 10;
-        }
-        
+
         .actions {
             display: flex;
             gap: 18px;
@@ -406,7 +379,7 @@
             border-top: 1px solid var(--border-color);
             margin-top: 25px;
         }
-        
+
         .btn {
             padding: 16px 32px;
             border: none;
@@ -421,44 +394,44 @@
             gap: 12px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
         }
-        
+
         .btn-primary:hover {
             background: linear-gradient(135deg, #0d62d9 0%, #0a4ebf 100%);
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(26, 115, 232, 0.35);
         }
-        
+
         .btn-primary:active {
             transform: translateY(1px);
         }
-        
+
         .btn-secondary {
             background: linear-gradient(135deg, #f8f9fa 0%, #e8eaed 100%);
             color: var(--text-color);
             border: 1px solid var(--border-color);
         }
-        
+
         .btn-secondary:hover {
             background: linear-gradient(135deg, #e8eaed 0%, #d7d9dd 100%);
             transform: translateY(-3px);
         }
-        
+
         .btn-lg {
             padding: 18px 35px;
             font-size: 17px;
         }
-        
+
         .btn:disabled {
             opacity: 0.7;
             cursor: not-allowed;
             transform: none;
         }
-        
+
         footer {
             background-color: var(--footer-bg);
             border-top: 1px solid var(--border-color);
@@ -467,30 +440,7 @@
             color: var(--light-text);
             font-size: 15px;
         }
-        
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .footer-links a {
-            color: var(--primary-color);
-            text-decoration: none;
-            transition: color 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .footer-links a:hover {
-            color: var(--primary-dark);
-            text-decoration: underline;
-            transform: translateY(-2px);
-        }
-        
+
         .alert {
             padding: 20px;
             border-radius: 10px;
@@ -502,22 +452,28 @@
             gap: 15px;
             transition: var(--transition);
         }
-        
+
         .alert:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         .alert-success {
             background: linear-gradient(135deg, rgba(46, 204, 113, 0.15) 0%, rgba(39, 174, 96, 0.15) 100%);
             border: 1px solid var(--success-color);
             color: #27ae60;
         }
-        
+
+        .alert-error {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.15) 0%, rgba(192, 57, 43, 0.15) 100%);
+            border: 1px solid var(--error-color);
+            color: #c0392b;
+        }
+
         .student-select-container {
             position: relative;
         }
-        
+
         .student-select-container::after {
             content: "\f107";
             font-family: "Font Awesome 6 Free";
@@ -531,22 +487,22 @@
             font-size: 20px;
             transition: var(--transition);
         }
-        
+
         .student-select-container:hover::after {
             color: var(--primary-dark);
             transform: translateY(-50%) scale(1.1);
         }
-        
+
         .form-row {
             display: flex;
             gap: 25px;
             margin-bottom: 25px;
         }
-        
+
         .form-col {
             flex: 1;
         }
-        
+
         .section-title {
             font-size: 1.3rem;
             color: var(--primary-color);
@@ -559,137 +515,23 @@
             transition: var(--transition);
             cursor: pointer;
         }
-        
+
         .section-title:hover {
             color: var(--primary-dark);
             transform: translateX(5px);
         }
-        
-        select option:nth-child(even) {
-            background-color: #f0f5ff;
-        }
-        
-        select option:nth-child(odd) {
-            background-color: white;
-        }
-        
-        select:focus option:checked {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            color: white;
-        }
-        
-        .status-indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 8px;
-            transition: var(--transition);
-        }
-        
-        .status-connected {
-            background-color: var(--success-color);
-        }
-        
-        .status-disconnected {
-            background-color: var(--error-color);
-        }
-        
-        .integration-status {
-            background: #e8f5e9;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: var(--transition);
-        }
-        
-        .integration-status:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .date-input-container {
-            position: relative;
-            transition: var(--transition);
-        }
-        
-        .date-input-container:hover {
-            transform: translateY(-2px);
-        }
-        
-        .date-input-container input[type="date"] {
-            padding-right: 40px;
-            cursor: pointer;
-        }
-        
-        .date-input-container::after {
-            content: "\f073";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            color: var(--primary-color);
-            font-size: 18px;
-            transition: var(--transition);
-        }
-        
-        .date-input-container:hover::after {
-            color: var(--primary-dark);
-            transform: translateY(-50%) scale(1.1);
-        }
-        
+
         select {
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
             cursor: pointer;
         }
-        
+
         select:hover {
             background-color: #f0f5ff;
         }
-        
-        .stats-chart-container {
-            height: 200px;
-            margin-top: 20px;
-            position: relative;
-        }
-        
-        .period-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.85);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            padding-top: 10px;
-        }
-        
-        .period-item {
-            text-align: center;
-            flex: 1;
-            transition: var(--transition);
-        }
-        
-        .period-item:hover {
-            transform: scale(1.05);
-        }
-        
-        .period-value {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-        
-        .period-manha { color: #f1c40f; }
-        .period-tarde { color: #e67e22; }
-        .period-noite { color: #9b59b6; }
-        
+
         .class-total-card {
             background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
             color: white;
@@ -701,7 +543,7 @@
             margin-top: 25px;
             display: none;
         }
-        
+
         .class-total-card::after {
             content: '';
             position: absolute;
@@ -712,7 +554,7 @@
             background: linear-gradient(to top, rgba(255,255,255,0.3), transparent);
             z-index: 1;
         }
-        
+
         .class-total-content {
             display: flex;
             flex-direction: column;
@@ -721,314 +563,83 @@
             position: relative;
             z-index: 2;
         }
-        
+
         .class-total-label {
             font-size: 1.1rem;
             opacity: 0.9;
             text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
-        
+
         .class-total-count {
             font-size: 2.5rem;
             font-weight: 700;
             margin: 10px 0;
             text-shadow: 0 3px 6px rgba(0,0,0,0.3);
         }
-        
-        .class-students-card {
-            background: linear-gradient(135deg, #3498db 0%, #1a73e8 100%);
-            color: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-            margin-top: 25px;
-            display: none;
-        }
-        
-        .class-students-card::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 20px;
-            background: linear-gradient(to top, rgba(255,255,255,0.3), transparent);
-            z-index: 1;
-        }
-        
-        .class-students-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .class-students-label {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
-        
-        .class-students-count {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin: 10px 0;
-            text-shadow: 0 3px 6px rgba(0,0,0,0.3);
-        }
-        
-        .registros-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background-color: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .registros-table th {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            position: sticky;
-            top: 0;
-        }
-        
-        .registros-table td {
-            padding: 15px;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-color);
-        }
-        
-        .registros-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .registros-table tr:hover {
-            background-color: var(--hover-bg);
-        }
-        
-        .registros-table .actions-cell {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
-        
-        .btn-action {
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .btn-edit {
-            background-color: #f0f5ff;
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-        }
-        
-        .btn-edit:hover {
-            background-color: #e0eaff;
-        }
-        
-        .btn-delete {
-            background-color: #fff0f0;
-            color: var(--error-color);
-            border: 1px solid var(--error-color);
-        }
-        
-        .btn-delete:hover {
-            background-color: #ffe0e0;
-        }
-        
-        .registros-table .history-row {
-            background-color: #f9f9f9;
-        }
-        
-        .registros-table .history-row td {
-            padding: 10px 15px;
-            font-size: 0.9rem;
-        }
-        
-        .registros-table .history-table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #f0f5ff;
-            border-radius: 8px;
-        }
-        
-        .registros-table .history-table th {
-            background-color: #d0e0ff;
-            color: var(--text-color);
-            padding: 10px;
-            font-size: 0.85rem;
-        }
-        
-        .registros-table .history-table td {
-            padding: 8px 10px;
-            font-size: 0.85rem;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .registros-table .history-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .table-actions {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 15px;
-            gap: 15px;
-        }
-        
-        .no-records {
-            text-align: center;
-            padding: 20px;
-            color: var(--light-text);
-            font-style: italic;
-        }
-        
-        .form-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 18px;
-            margin: 25px 0;
-            flex-wrap: wrap;
-        }
-        
+
         .loading {
             display: inline-block;
             width: 20px;
             height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
             border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
+            animation: spin 1s linear infinite;
         }
-        
+
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 1000;
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            transition: var(--transition);
+        }
+
+        .status-connected {
+            background-color: var(--success-color);
+        }
+
+        .status-disconnected {
+            background-color: var(--error-color);
+        }
+
+        .integration-status {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
             display: flex;
             align-items: center;
-            gap: 12px;
-            opacity: 0;
-            transform: translateX(100%);
-            transition: all 0.4s ease;
+            gap: 15px;
+            transition: var(--transition);
         }
-        
-        .notification.show {
-            opacity: 1;
-            transform: translateX(0);
+
+        .integration-status:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        
-        .notification.success {
-            background: var(--success-color);
-            color: white;
-        }
-        
-        .notification.error {
-            background: var(--error-color);
-            color: white;
-        }
-        
-        .notification .icon {
-            font-size: 1.5rem;
-        }
-        
-        .notification .content {
-            flex-grow: 1;
-        }
-        
-        .notification .close {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
-        
-        @media (max-width: 992px) {
+
+        @media (max-width: 768px) {
             .dashboard {
                 grid-template-columns: 1fr;
             }
-        }
-        
-        @media (max-width: 768px) {
+            
             .form-row {
                 flex-direction: column;
-                gap: 20px;
-            }
-            
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            
-            .actions {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
             }
             
             .checkbox-container {
                 grid-template-columns: 1fr;
             }
             
-            .chart-container {
-                width: 40px;
-                height: 40px;
-            }
-            
-            .period-stats {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .registros-table {
-                font-size: 0.9rem;
-            }
-            
-            .registros-table th, 
-            .registros-table td {
-                padding: 10px;
-            }
-            
-            .registros-table .actions-cell {
-                flex-direction: column;
-                gap: 5px;
-            }
-            
-            .form-actions {
-                flex-direction: column;
-                gap: 10px;
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -1038,1216 +649,610 @@
         <div class="header-content">
             <div class="logo">
                 <div class="logo-icon">
-                    <i class="fas fa-graduation-cap"></i>
+                    <i class="fas fa-clipboard-list"></i>
                 </div>
                 <div class="logo-text">
-                    <h1>Registro de Ocorrências Escolares</h1>
-                    <p>Sistema integrado com Firebase</p>
+                    <h1>Sistema de Ocorrências</h1>
+                    <p>Gestão Escolar Inteligente</p>
                 </div>
+            </div>
+            <div class="integration-status">
+                <span class="status-indicator status-connected" id="connectionStatus"></span>
+                <span id="connectionText">Conectado ao Google Sheets</span>
             </div>
         </div>
     </header>
-    
-    <div class="container">
-        <main>
+
+    <main>
+        <div class="container">
+            <div class="alert alert-success" id="successAlert">
+                <i class="fas fa-check-circle"></i>
+                <span id="successMessage"></span>
+            </div>
+
+            <div class="alert alert-error" id="errorAlert">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span id="errorMessage"></span>
+            </div>
+
             <div class="dashboard">
-                <div>
-                    <div class="integration-status">
-                        <i class="fas fa-plug"></i>
-                        <div>
-                            <strong>Status de integração:</strong> 
-                            <span class="status-indicator status-connected"></span>
-                            Conectado ao Firebase
-                        </div>
-                    </div>
-                    
+                <div class="main-content">
                     <div class="card">
                         <div class="card-header">
-                            <i class="fas fa-clipboard-list"></i> Informações da Ocorrência
+                            <i class="fas fa-plus-circle"></i>
+                            Registrar Nova Ocorrência
                         </div>
                         <div class="card-body">
                             <form id="occurrenceForm">
                                 <div class="form-row">
                                     <div class="form-col">
                                         <div class="form-group">
-                                            <label for="professor" class="required">Nome do professor</label>
-                                            <div class="student-select-container">
-                                                <select id="professor" required>
-                                                    <option value="">Selecione seu nome</option>
-                                                    <!-- Professores serão preenchidos via JS -->
-                                                </select>
-                                            </div>
+                                            <label for="date" class="required">Data da Ocorrência</label>
+                                            <input type="date" id="date" name="date" required>
                                         </div>
                                     </div>
                                     <div class="form-col">
-                                        <div class="form-group date-input-container">
-                                            <label for="occurrenceDate" class="required">Data da ocorrência</label>
-                                            <input type="date" id="occurrenceDate" required>
+                                        <div class="form-group">
+                                            <label for="professor" class="required">Professor</label>
+                                            <input type="text" id="professor" name="professor" placeholder="Nome do professor" required>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-row">
                                     <div class="form-col">
                                         <div class="form-group">
-                                            <label for="studentClass" class="required">Turma</label>
-                                            <div class="student-select-container">
-                                                <select id="studentClass" required>
-                                                    <option value="">Selecione a turma</option>
-                                                    <!-- Turmas serão preenchidas via JS -->
-                                                </select>
-                                            </div>
+                                            <label for="class" class="required">Turma</label>
+                                            <select id="class" name="class" required>
+                                                <option value="">Selecione uma turma</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-col">
-                                        <div class="form-group">
-                                            <label for="student" class="required">Nome do aluno</label>
-                                            <div class="student-select-container">
-                                                <select id="student" required disabled>
-                                                    <option value="">Selecione primeiro a turma</option>
-                                                </select>
-                                            </div>
+                                        <div class="form-group student-select-container">
+                                            <label for="student" class="required">Aluno</label>
+                                            <select id="student" name="student" required disabled>
+                                                <option value="">Primeiro selecione uma turma</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="section-title">
-                                    <i class="fas fa-exclamation-triangle"></i> Irregularidades
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    Tipo de Irregularidade
                                 </div>
-                                
+
                                 <div class="checkbox-group">
-                                    <label>Selecione as irregularidades (opcional):</label>
                                     <div class="checkbox-container">
                                         <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Não fez a lição"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity1" name="irregularity" value="Não fez a lição">
-                                            <label for="irregularity1">Não fez a lição</label>
+                                            <input type="checkbox" id="atraso" name="irregularities" value="Atraso">
+                                            <label for="atraso">Atraso</label>
                                         </div>
                                         <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Não trouxe material"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity2" name="irregularity" value="Não trouxe material">
-                                            <label for="irregularity2">Não trouxe material</label>
+                                            <input type="checkbox" id="falta" name="irregularities" value="Falta">
+                                            <label for="falta">Falta</label>
                                         </div>
                                         <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Fora do lugar constantemente durante a aula"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity3" name="irregularity" value="Fora do lugar constantemente durante a aula">
-                                            <label for="irregularity3">Fora do lugar durante a aula</label>
+                                            <input type="checkbox" id="indisciplina" name="irregularities" value="Indisciplina">
+                                            <label for="indisciplina">Indisciplina</label>
                                         </div>
                                         <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Chegou atrasado"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity4" name="irregularity" value="Chegou atrasado">
-                                            <label for="irregularity4">Chegou atrasado</label>
+                                            <input type="checkbox" id="desrespeito" name="irregularities" value="Desrespeito">
+                                            <label for="desrespeito">Desrespeito</label>
                                         </div>
                                         <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Circulando no corredor durante a aula"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity5" name="irregularity" value="Circulando no corredor durante a aula">
-                                            <label for="irregularity5">Circulando no corredor</label>
+                                            <input type="checkbox" id="nao_fez_atividade" name="irregularities" value="Não fez atividade">
+                                            <label for="nao_fez_atividade">Não fez atividade</label>
                                         </div>
                                         <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Uso indevido do celular durante a aula"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity6" name="irregularity" value="Uso indevido do celular durante a aula">
-                                            <label for="irregularity6">Uso indevido do celular</label>
+                                            <input type="checkbox" id="sem_material" name="irregularities" value="Sem material">
+                                            <label for="sem_material">Sem material</label>
                                         </div>
                                         <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Interrompe a aula constantemente"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity7" name="irregularity" value="Interrompe a aula constantemente">
-                                            <label for="irregularity7">Interrompe a aula constantemente</label>
+                                            <input type="checkbox" id="uso_celular" name="irregularities" value="Uso inadequado de celular">
+                                            <label for="uso_celular">Uso inadequado de celular</label>
                                         </div>
                                         <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Falta de cuidado com o ambiente e o material"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity8" name="irregularity" value="Falta de cuidado com o ambiente e o material">
-                                            <label for="irregularity8">Falta de cuidado com ambiente/material</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <div class="chart-container">
-                                                <canvas class="donut-chart" width="50" height="50" data-irregularity="Vestimenta inadequada"></canvas>
-                                                <span class="chart-value">0</span>
-                                            </div>
-                                            <input type="checkbox" id="irregularity9" name="irregularity" value="Vestimenta inadequada">
-                                            <label for="irregularity9">Vestimenta inadequada</label>
+                                            <input type="checkbox" id="outros" name="irregularities" value="Outros">
+                                            <label for="outros">Outros</label>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group">
-                                    <label for="description">Breve relato do ocorrido</label>
-                                    <textarea id="description" placeholder="Descreva detalhadamente a ocorrência..."></textarea>
+                                    <label for="description">Descrição Detalhada</label>
+                                    <textarea id="description" name="description" placeholder="Descreva detalhadamente a ocorrência..."></textarea>
                                 </div>
-                                
-                                <div class="form-actions">
-                                    <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
-                                        <i class="fas fa-paper-plane"></i> CADASTRAR
+
+                                <div class="actions">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-save"></i>
+                                        Registrar Ocorrência
                                     </button>
-                                    <button type="button" id="clearBtn" class="btn btn-secondary">
-                                        <i class="fas fa-broom"></i> Limpar formulário
+                                    <button type="button" class="btn btn-secondary" onclick="clearForm()">
+                                        <i class="fas fa-eraser"></i>
+                                        Limpar Formulário
                                     </button>
-                                    <button type="button" id="exportBtn" class="btn btn-secondary">
-                                        <i class="fas fa-file-export"></i> Exportar Dados
-                                    </button>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label>Registros de Ocorrências</label>
-                                    <div class="table-container" style="overflow-x: auto;">
-                                        <table id="registrosTable" class="registros-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Data</th>
-                                                    <th>Professor</th>
-                                                    <th>Turma</th>
-                                                    <th>Aluno</th>
-                                                    <th>Irregularidades</th>
-                                                    <th>Descrição</th>
-                                                    <th>Ações</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <!-- Os registros serão carregados via JavaScript -->
-                                            </tbody>
-                                        </table>
-                                    </div>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-                
-                <div>
+
+                <div class="sidebar">
                     <div class="stats-card">
-                        <div class="card-header">
-                            <i class="fas fa-chart-line"></i> Estatísticas do Sistema
-                        </div>
+                        <h3><i class="fas fa-chart-bar"></i> Estatísticas Gerais</h3>
                         <div class="stats-grid">
                             <div class="stat-item">
-                                <div class="stat-value" id="totalOccurrences">0</div>
-                                <div class="stat-label">Ocorrências registradas</div>
+                                <div class="stat-value" id="totalStudents">-</div>
+                                <div class="stat-label">Total de Alunos</div>
                             </div>
-                            
-                            <div class="stat-item" id="classStudentsCard" style="display: none;">
-                                <div class="stat-value" id="classStudentsCount">0</div>
-                                <div class="stat-label">Alunos na turma</div>
-                                <div class="period-stats">
-                                    <div class="period-item">
-                                        <div class="period-value" id="selectedClassPeriod">-</div>
-                                        <div class="period-label">Período</div>
-                                    </div>
-                                </div>
-                            </div>
-                            
                             <div class="stat-item">
-                                <div class="stat-value" id="totalStudents">0</div>
-                                <div class="stat-label">Total de alunos</div>
+                                <div class="stat-value" id="morningStudents">-</div>
+                                <div class="stat-label">Manhã</div>
                             </div>
-                            
                             <div class="stat-item">
-                                <div class="stat-value" id="totalClasses">0</div>
-                                <div class="stat-label">Turmas cadastradas</div>
+                                <div class="stat-value" id="afternoonStudents">-</div>
+                                <div class="stat-label">Tarde</div>
                             </div>
-                        </div>
-                        
-                        <div class="period-stats">
-                            <div class="period-item period-manha">
-                                <div class="period-value" id="morningCount">0</div>
-                                <div class="period-label">Manhã</div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="nightStudents">-</div>
+                                <div class="stat-label">Noite</div>
                             </div>
-                            <div class="period-item period-tarde">
-                                <div class="period-value" id="afternoonCount">0</div>
-                                <div class="period-label">Tarde</div>
-                            </div>
-                            <div class="period-item period-noite">
-                                <div class="period-value" id="nightCount">0</div>
-                                <div class="period-label">Noite</div>
-                            </div>
-                        </div>
-                        
-                        <div class="stats-chart-container">
-                            <canvas id="studentsChart"></canvas>
                         </div>
                     </div>
-                    
+
+                    <div class="class-total-card" id="classTotalCard">
+                        <div class="class-total-content">
+                            <div class="class-total-label">Alunos na Turma</div>
+                            <div class="class-total-count" id="classTotalCount">0</div>
+                        </div>
+                    </div>
+
                     <div class="student-occurrences-card" id="studentOccurrencesCard">
                         <div class="student-occurrences-content">
-                            <div class="student-occurrences-name" id="studentOccurrencesName">Nome do Aluno</div>
+                            <div class="student-occurrences-name" id="studentOccurrencesName"></div>
                             <div class="student-occurrences-count" id="studentOccurrencesCount">0</div>
-                            <div class="student-occurrences-label">Ocorrências registradas</div>
+                            <div class="student-occurrences-label">Ocorrências Anteriores</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
-    
-    <footer>
-        <div class="footer-links">
-            <a href="#"><i class="fas fa-home"></i> Início</a>
-            <a href="#"><i class="fas fa-chart-bar"></i> Relatórios</a>
-            <a href="#"><i class="fas fa-cog"></i> Configurações</a>
-            <a href="#"><i class="fas fa-question-circle"></i> Ajuda</a>
         </div>
-        <p>&copy; 2024 Sistema de Registro de Ocorrências Escolares. Todos os direitos reservados.</p>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Sistema de Ocorrências Escolares. Todos os direitos reservados.</p>
+        </div>
     </footer>
-    
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle icon" id="notificationIcon"></i>
-        <div class="content" id="notificationContent">Mensagem de notificação</div>
-        <button class="close" id="notificationClose">&times;</button>
-    </div>
 
     <script>
-        // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyADNkhFVUUnO6tk12eg0Yxc9BbjuZisYg0",
-            authDomain: "sistema-ocorrencias-escolares.firebaseapp.com",
-            projectId: "sistema-ocorrencias-escolares",
-            storageBucket: "sistema-ocorrencias-escolares.firebasestorage.app",
-            messagingSenderId: "200247454143",
-            appId: "1:200247454143:web:0198647df50136b3d3d90a"
+        // Configurações da API
+        const API_CONFIG = {
+            SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzYourScriptIdHere/exec',
+            SPREADSHEET_ID: '1u7qMsMHkZT47OZdar5qvshQDRA8XJrLgDjAZVOViAio'
         };
 
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const occurrencesCollection = db.collection('occurrences');
+        // Classes disponíveis
+        const CLASSES = [
+            "6° ANO A MANHA", "6° ANO B MANHA", "6° ANO C MANHA", "6° ANO D MANHA",
+            "6° ANO E TARDE", "6° ANO F TARDE",
+            "7° ANO A TARDE", "7° ANO B TARDE", "7° ANO C TARDE", "7° ANO D TARDE", "7° ANO E TARDE", "7° ANO F TARDE",
+            "8° ANO A TARDE", "8° ANO B TARDE", "8° ANO C TARDE", "8° ANO D TARDE",
+            "9° ANO A TARDE", "9° ANO B TARDE", "9° ANO C TARDE", "9° ANO D TARDE",
+            "1ª SERIE A MANHA", "1ª SERIE B MANHA", "1ª SERIE C MANHA", "1ª SERIE D MANHA", "1ª SERIE E MANHA", "1ª SERIE F MANHA",
+            "1ª SERIE G TARDE", "1ª SERIE H NOITE", "1ª SERIE I NOITE",
+            "2ª SERIE A MANHA", "2ª SERIE B MANHA", "2ª SERIE C MANHA", "2ª SERIE D MANHA", "2ª SERIE E MANHA",
+            "2ª SERIE F NOITE", "2ª SERIE G NOITE", "2ª SERIE H NOITE",
+            "3ª SERIE A MANHA", "3ª SERIE B MANHA", "3ª SERIE C MANHA",
+            "3ª SERIE D NOITE", "3ª SERIE E NOITE", "3ª SERIE F NOITE"
+        ];
 
-        // Elementos do DOM
-        const form = document.getElementById('occurrenceForm');
-        const professorSelect = document.getElementById('professor');
-        const classSelect = document.getElementById('studentClass');
-        const studentSelect = document.getElementById('student');
-        const submitBtn = document.getElementById('submitBtn');
-        const clearBtn = document.getElementById('clearBtn');
-        const exportBtn = document.getElementById('exportBtn');
-        const registrosTable = document.getElementById('registrosTable');
-        const registrosTableBody = registrosTable.querySelector('tbody');
-        const notification = document.getElementById('notification');
-        const notificationIcon = document.getElementById('notificationIcon');
-        const notificationContent = document.getElementById('notificationContent');
-        const notificationClose = document.getElementById('notificationClose');
-        const studentOccurrencesCard = document.getElementById('studentOccurrencesCard');
-        const studentOccurrencesName = document.getElementById('studentOccurrencesName');
-        const studentOccurrencesCount = document.getElementById('studentOccurrencesCount');
-        const classStudentsCard = document.getElementById('classStudentsCard');
-        const classStudentsCount = document.getElementById('classStudentsCount');
-        const selectedClassPeriod = document.getElementById('selectedClassPeriod');
-        const totalOccurrencesEl = document.getElementById('totalOccurrences');
-        const totalStudentsEl = document.getElementById('totalStudents');
-        const morningCountEl = document.getElementById('morningCount');
-        const afternoonCountEl = document.getElementById('afternoonCount');
-        const nightCountEl = document.getElementById('nightCount');
-
-        // Variáveis globais
-        let currentEditId = null;
-        let charts = {};
-
-        // Dados completos dos professores
-        const teacherEmails = {
-            "ALEX LUTH PEREIRA MARANHAO": "luth@prof.educacao.sp.gov.br",
-            "ALEXSANDRA PAULA VARELLA DE SOUZA": "avarella@prof.educacao.sp.gov.br",
-            "ALISON VASCONCELOS BESERRA": "alisonv@prof.educacao.sp.gov.br",
-            "AMAURI TEODORO DE OLIVEIRA": "amaurit@prof.educacao.sp.gov.br",
-            "ANA PAULA DOS SANTOS": "paulasantosa@prof.educacao.sp.gov.br",
-            "ANDREIA DOS SANTOS FREITAS": "sanfreitas@prof.educacao.sp.gov.br",
-            "ANDREIA MADUREIRA REIS": "andreiamadureira@prof.educacao.sp.gov.br",
-            "ANTONIO CARLOS DE OLIVEIRA": "antoniocarloso@prof.educacao.sp.gov.br",
-            "ANTONIO RAMOS DE ARAUJO": "antonioramosaraujo@prof.educacao.sp.gov.br",
-            "ANTONIO WILTON WANDERLEY CABRAL": "antoniowilton@prof.educacao.sp.gov.br",
-            "AUGUSTO LINO PESSOA NETO": "augustolino@prof.educacao.sp.gov.br",
-            "AUREA MARIA DE JESUS MARQUES": "aureamaria@prof.educacao.sp.gov.br",
-            "CAROLINA PERNOMIAN PARUSSOLO": "carolinapernomian@prof.educacao.sp.gov.br",
-            "CASSIA OLIVEIRA ANTONIAZI": "cassiaosilva@prof.educacao.sp.gov.br",
-            "CLAUDINEIA DE AGUIAR LIMA": "aguiarl@prof.educacao.sp.gov.br",
-            "DANIEL DE FREITAS ALMEIDA": "danielalmeida@prof.educacao.sp.gov.br",
-            "DANIEL LOPES BARBOSA": "daniellopesbarbosa@prof.educacao.sp.gov.br",
-            "DANIELA FERREIRA LIMA": "danielafilma@prof.educacao.sp.gov.br",
-            "DANIELLE LUCIA BATISTA DE ALMEIDA": "danieleLucia@prof.educacao.sp.gov.br",
-            "EDIANE VIEIRA DA SILVA": "ediane@prof.educacao.sp.gov.br",
-            "EDILEUSA NUNES PEREIRA": "edileusa@prof.educacao.sp.gov.br",
-            "EDUARDO HENRIQUE DA FONSECA": "henriquefonseca@prof.educacao.sp.gov.br",
-            "ELIANE SANTOS SILVA": "essantos@prof.educacao.sp.gov.br",
-            "ELIAS MONTEIRO DA SILVA": "elias1@prof.educacao.sp.gov.br",
-            "ELISABETE APARECIDA PIRES": "elisabetepires@prof.educacao.sp.gov.br",
-            "ELZA DE FARIA PEREIRA": "elzafariapereira@prof.educacao.sp.gov.br",
-            "EMERSON GABLER DE ALMEIDA": "egabler@prof.educacao.sp.gov.br",
-            "EUZELI ARAUJO DE OLIVEIRA": "euzeli@prof.educacao.sp.gov.br",
-            "FABIANO AUGUSTO PIEDADE": "fabianoaugusto@prof.educacao.sp.gov.br",
-            "FABIO CAMILO": "camilof@prof.educacao.sp.gov.br",
-            "FERNANDO JOSE DA SILVA FILHO": "fernandojs@prof.educacao.sp.gov.br",
-            "FLAVIA CRISTINA APARECIDA BICHLER": "flaviacri@prof.educacao.sp.gov.br",
-            "FLAVIO CARDOSO FLEURY": "flaviofleury@prof.educacao.sp.gov.br",
-            "FRANCISCA EDIVANIA DE MORAIS COSTA": "fedivania@prof.educacao.sp.gov.br",
-            "GABRIELA SERIGHELLI DE MELO": "gabrielaserighelli@prof.educacao.sp.gov.br",
-            "GELSON DE ALMEIDA BATISTA": "gelsonalmeida@prof.educacao.sp.gov.br",
-            "GENILTON DE OLIVEIRA SILVA": "genilton@prof.educacao.sp.gov.br",
-            "GIANI CRISTINA DO PRADO": "gianiprado@prof.educacao.sp.gov.br",
-            "INGRYD CAROLINA SUGUIMOTO VIEIRA": "ingryd@prof.educacao.sp.gov.br",
-            "IVANILDES DOS SANTOS OSHIKAWA": "oshikawa@prof.educacao.sp.gov.br",
-            "JANINA DOS PASSOS BRAGA DE ALMEIDA": "janinabraga@prof.educacao.sp.gov.br",
-            "JOSE APARECIDO DA SILVA": "joseaparecidosilva@prof.educacao.sp.gov.br",
-            "JUAREZ GOMES DE MAGALHAES FILHO": "juarezgomes@prof.educacao.sp.gov.br",
-            "JUREMA SOLEDADE FURINI SANTOS": "juremas@prof.educacao.sp.gov.br",
-            "KATIUSCIA ALVES BOMFIM": "katiusciabornfim@prof.educacao.sp.gov.br",
-            "LUANA CAROLINE ALVES LIMA": "luanalima01@prof.educacao.sp.gov.br",
-            "LUANA DE FREITAS SILVA": "luanafreitas@prof.educacao.sp.gov.br",
-            "LUCIANA NOVAIS CORREIA SANTOS": "novaiscorreia@prof.educacao.sp.gov.br",
-            "LUCIANO MOREIRA DE AZEVEDO": "lucianomoreira@prof.educacao.sp.gov.br",
-            "MARCIEL DA SILVA": "marcielsilva@prof.educacao.sp.gov.br",
-            "MARIA HELENA CUNHA MORO": "marcunha@prof.educacao.sp.gov.br",
-            "MARIA QUITÉRIA FERREIRA DOS SANTOS": "quiteriasantos@prof.educacao.sp.gov.br",
-            "MARINA DA CONCEICAO FRANCISCO SILVA": "marinafrancisco@prof.educacao.sp.gov.br",
-            "MAURICIO DE BARROS SANTOS": "mauriciobsantos@prof.educacao.sp.gov.br",
-            "MICHELE DE PINHO MORAES": "michelepinho@prof.educacao.sp.gov.br",
-            "MOISES ANTONIO DE BARROS": "moisesbarros@prof.educacao.sp.gov.br",
-            "PAULA ARMANI VILA": "paulaarmani@prof.educacao.sp.gov.br",
-            "PAULO ROBERTO DA SILVA ITO": "pauloito@prof.educacao.sp.gov.br",
-            "PEDRO ZANOTTI FILHO": "pedrozanotti@prof.educacao.sp.gov.br",
-            "RAUL PEREIRA VILERA JUNIOR": "vilera@prof.educacao.sp.gov.br",
-            "REGIANE CURTI DE SOUZA OLIVEIRA": "regianecurti@prof.educacao.sp.gov.br",
-            "REGINA DA SILVA CASTRO": "reginasilvacastro@prof.educacao.sp.gov.br",
-            "RICARDO AMERICO DA SILVA": "ricardoamerico@prof.educacao.sp.gov.br",
-            "ROBERTO SALGADO": "robertosalgado@prof.educacao.sp.gov.br",
-            "RODRIGO VIEIRA": "rodrigovieira1@prof.educacao.sp.gov.br",
-            "ROSANGELA CAFASSO MOREIRA": "cafasso@prof.educacao.sp.gov.br",
-            "ROSIMERY DE SOUZA PESSOA": "rosimerypessoa@prof.educacao.sp.gov.br",
-            "ROSMARA DA SILVA CARDOSO": "rosmaracardoso@prof.educacao.sp.gov.br",
-            "SANDRA CRISTINA MACEDO MORAES": "sandracristinamacedo@prof.educacao.sp.gov.br",
-            "SELMA GOMES DA SILVA": "selmagomess@prof.educacao.sp.gov.br",
-            "SERGIO AGRIPINO VILLA NOVA": "sergioagripino@prof.educacao.sp.gov.br",
-            "SOLANGE ALMEIDA DA SILVA": "almeidafazio@prof.educacao.sp.gov.br",
-            "SUZINEIDE SILVA DE FREITAS": "suzineidefreitas@prof.educacao.sp.gov.br",
-            "THIAGO FABIANO BRITO": "thiagofabiano@prof.educacao.sp.gov.br",
-            "TITTO AUGUSTO NASCIMENTO SILVA": "titto@prof.educacao.sp.gov.br",
-            "VANDERSON HYPPOLITO": "vhypolito@prof.educacao.sp.gov.br",
-            "VANESSA IVETE GOMES DOS SANTOS": "vanessaivete@prof.educacao.sp.gov.br",
-            "VANIA PENHA DE BARROS": "vaniapenha@prof.educacao.sp.gov.br",
-            "VIVIANE LEAL CAMERA DE MORAES": "camera@prof.educacao.sp.gov.br",
-            "WILSON RODRIGUES MOTA": "wmota@prof.educacao.sp.gov.br"
+        // Estado da aplicação
+        let appState = {
+            students: [],
+            selectedClass: '',
+            selectedStudent: '',
+            isLoading: false
         };
 
-        // Preencher dropdown de professores
-        const teacherNames = Object.keys(teacherEmails);
-        teacherNames.forEach(teacherName => {
-            const option = document.createElement('option');
-            option.value = teacherName;
-            option.textContent = teacherName;
-            professorSelect.appendChild(option);
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
         });
 
-        // Submissão do formulário
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            // Validação básica
-            const professor = professorSelect.value;
-            const date = document.getElementById('occurrenceDate').value;
-            const studentClass = classSelect.value;
-            const student = studentSelect.value;
-            
-            if (!professor || !date || !studentClass || !student) {
-                showNotification('error', 'Por favor, preencha todos os campos obrigatórios');
-                return;
-            }
-            
-            // Coletar irregularidades selecionadas
-            const irregularities = [];
-            document.querySelectorAll('input[name="irregularity"]:checked').forEach(checkbox => {
-                irregularities.push(checkbox.value);
-            });
-            
-            const description = document.getElementById('description').value;
-            
-            // Dados da ocorrência
-            const occurrenceData = {
-                professor: professor,
-                date: date,
-                class: studentClass,
-                student: student,
-                irregularities: irregularities.join(', '),
-                description: description,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            
-            // Mostrar loading
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<div class="loading"></div> Salvando...';
-            
-            // Salvar no Firebase
-            const success = await saveOccurrence(occurrenceData);
-            
-            if (success) {
-                // Limpar formulário
-                clearBtn.click();
-                
-                // Recarregar tabela
-                loadRegistrosTable();
-                
-                // Atualizar estatísticas
-                loadOccurrenceStats();
-            }
-            
-            // Restaurar botão
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> CADASTRAR';
-        });
-
-        // Carregar estatísticas de ocorrências
-        async function loadOccurrenceStats() {
+        async function initializeApp() {
             try {
-                const querySnapshot = await occurrencesCollection.get();
-                totalOccurrencesEl.textContent = querySnapshot.size;
+                showLoading(true);
+                
+                // Configurar data atual
+                document.getElementById('date').valueAsDate = new Date();
+                
+                // Carregar turmas
+                loadClasses();
+                
+                // Carregar estatísticas gerais
+                await loadGeneralStats();
+                
+                // Configurar event listeners
+                setupEventListeners();
+                
+                showSuccess('Sistema inicializado com sucesso!');
+                updateConnectionStatus(true);
+                
             } catch (error) {
-                console.error('Erro ao carregar estatísticas:', error);
-                totalOccurrencesEl.textContent = "0";
+                console.error('Erro na inicialização:', error);
+                showError('Erro ao inicializar o sistema. Verifique sua conexão.');
+                updateConnectionStatus(false);
+            } finally {
+                showLoading(false);
             }
         }
 
-        // Definir data atual
-        document.addEventListener('DOMContentLoaded', function() {
-            const today = new Date();
-            const formattedDate = today.toISOString().split('T')[0];
-            document.getElementById('occurrenceDate').value = formattedDate;
-
-            // Preencher turmas dinamicamente
-            async function loadClasses() {
-                try {
-                    const url = `${"https://script.google.com/macros/s/AKfycbyd7_1sU7gupYuLiKK7PGfJct0gJ0jTHlIQPH7K47J9evgk-uriRndG0YjpxHz703_y/exec"}?action=getClasses`;
-                    console.log('Carregando turmas da URL:', url);
-                    
-                    const response = await fetch(url);
-                    console.log('Resposta da API:', response.status, response.statusText);
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-                    
-                    const data = await response.json();
-                    console.log('Dados recebidos:', data);
-                    
-                    if (data && data.status === "success" && Array.isArray(data.classes)) {
-                        // Limpar dropdown
-                        while (classSelect.options.length > 1) {
-                            classSelect.remove(1);
-                        }
-                        
-                        // Preencher com turmas
-                        data.classes.forEach(turma => {
-                            const option = document.createElement('option');
-                            option.value = turma;
-                            option.textContent = turma;
-                            classSelect.appendChild(option);
-                        });
-                        
-                        document.getElementById('totalClasses').textContent = data.classes.length;
-                        console.log(`${data.classes.length} turmas carregadas com sucesso`);
-                    } else {
-                        console.error('Formato de dados inválido:', data);
-                        showNotification('error', 'Erro: Formato de dados inválido da API');
-                        
-                        // Fallback: usar turmas de exemplo
-                        loadFallbackClasses();
-                    }
-                } catch (error) {
-                    console.error('Erro ao carregar turmas:', error);
-                    showNotification('error', `Erro ao carregar turmas: ${error.message}`);
-                    
-                    // Fallback: usar turmas de exemplo
-                    loadFallbackClasses();
-                }
-            }
-
-            // Função de fallback para carregar turmas de exemplo
-            function loadFallbackClasses() {
-                console.log('Carregando turmas de fallback...');
-                const fallbackClasses = [
-                    "1º ANO A - MANHÃ", "1º ANO B - MANHÃ", "1º ANO C - MANHÃ",
-                    "2º ANO A - MANHÃ", "2º ANO B - MANHÃ", "2º ANO C - MANHÃ",
-                    "3º ANO A - MANHÃ", "3º ANO B - MANHÃ", "3º ANO C - MANHÃ",
-                    "1º ANO A - TARDE", "1º ANO B - TARDE", "1º ANO C - TARDE",
-                    "2º ANO A - TARDE", "2º ANO B - TARDE", "2º ANO C - TARDE",
-                    "3º ANO A - TARDE", "3º ANO B - TARDE", "3º ANO C - TARDE",
-                    "1º ANO A - NOITE", "1º ANO B - NOITE",
-                    "2º ANO A - NOITE", "2º ANO B - NOITE",
-                    "3º ANO A - NOITE", "3º ANO B - NOITE"
-                ];
-                
-                // Limpar dropdown
-                while (classSelect.options.length > 1) {
-                    classSelect.remove(1);
-                }
-                
-                // Preencher com turmas de fallback
-                fallbackClasses.forEach(turma => {
-                    const option = document.createElement('option');
-                    option.value = turma;
-                    option.textContent = turma;
-                    classSelect.appendChild(option);
-                });
-                
-                document.getElementById('totalClasses').textContent = fallbackClasses.length;
-                showNotification('success', 'Turmas de exemplo carregadas');
-            }
-
-            // Contar turmas disponíveis
-            loadClasses();
-
-            // Função para mostrar notificações
-            function showNotification(type, message) {
-                notification.classList.remove('success', 'error');
-                notification.classList.add(type);
-                notificationContent.textContent = message;
-                
-                if (type === 'success') {
-                    notificationIcon.className = 'fas fa-check-circle icon';
-                } else {
-                    notificationIcon.className = 'fas fa-exclamation-circle icon';
-                }
-                
-                notification.classList.add('show');
-                
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 5000);
-            }
+        function loadClasses() {
+            const classSelect = document.getElementById('class');
+            classSelect.innerHTML = '<option value="">Selecione uma turma</option>';
             
-            notificationClose.addEventListener('click', () => {
-                notification.classList.remove('show');
+            CLASSES.forEach(className => {
+                const option = document.createElement('option');
+                option.value = className;
+                option.textContent = className;
+                classSelect.appendChild(option);
             });
+        }
 
-            // Função para criar gráficos de rosca
-            function createDonutChart(canvas, value, maxValue = 10) {
-                const ctx = canvas.getContext('2d');
-                const chartKey = canvas.getAttribute('data-irregularity');
+        function setupEventListeners() {
+            // Mudança de turma
+            document.getElementById('class').addEventListener('change', handleClassChange);
+            
+            // Mudança de aluno
+            document.getElementById('student').addEventListener('change', handleStudentChange);
+            
+            // Submissão do formulário
+            document.getElementById('occurrenceForm').addEventListener('submit', handleFormSubmit);
+        }
 
-                // Destruir gráfico anterior se existir
-                if (charts[chartKey]) {
-                    charts[chartKey].destroy();
-                }
-
-                charts[chartKey] = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        datasets: [{
-                            data: [value, maxValue - value],
-                            backgroundColor: [
-                                '#3498db', // Cor da ocorrência
-                                '#e0e0e0' // Cor de fundo
-                            ],
-                            borderWidth: 0
-                        }]
-                    },
-                    options: {
-                        cutout: '70%',
-                        responsive: false,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: { enabled: false }
-                        }
-                    }
-                });
-
-                // Atualizar o número de ocorrências
-                const chartValue = canvas.parentElement.querySelector('.chart-value');
-                chartValue.textContent = value;
+        async function handleClassChange(event) {
+            const selectedClass = event.target.value;
+            appState.selectedClass = selectedClass;
+            
+            const studentSelect = document.getElementById('student');
+            const classTotalCard = document.getElementById('classTotalCard');
+            const studentOccurrencesCard = document.getElementById('studentOccurrencesCard');
+            
+            if (!selectedClass) {
+                studentSelect.innerHTML = '<option value="">Primeiro selecione uma turma</option>';
+                studentSelect.disabled = true;
+                classTotalCard.style.display = 'none';
+                studentOccurrencesCard.style.display = 'none';
+                return;
             }
 
-            // Carregar alunos quando uma turma for selecionada
-            classSelect.addEventListener('change', function() {
-                const selectedClass = this.value;
+            try {
+                showLoading(true);
                 studentSelect.innerHTML = '<option value="">Carregando alunos...</option>';
                 studentSelect.disabled = true;
-                studentOccurrencesCard.style.display = 'none';
-                classStudentsCard.style.display = 'none';
 
-                // Resetar gráficos
-                const chartCanvases = document.querySelectorAll('.donut-chart');
-                chartCanvases.forEach(canvas => {
-                    createDonutChart(canvas, 0);
-                });
+                // Carregar alunos da turma
+                const students = await loadStudents(selectedClass);
+                appState.students = students;
 
-                if (!selectedClass) {
-                    studentSelect.innerHTML = '<option value="">Selecione uma turma</option>';
-                    return;
-                }
-
-                // Buscar alunos reais da planilha
-                const url = `${"https://script.google.com/macros/s/AKfycbyd7_1sU7gupYuLiKK7PGfJct0gJ0jTHlIQPH7K47J9evgk-uriRndG0YjpxHz703_y/exec"}?action=getStudents&class=${encodeURIComponent(selectedClass)}`;
-                console.log('Carregando alunos da URL:', url);
-                
-                fetch(url)
-                    .then(response => {
-                        console.log('Resposta da API de alunos:', response.status, response.statusText);
-                        
-                        if (!response.ok) {
-                            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                        }
-                        
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Dados de alunos recebidos:', data);
-                        
-                        if (data && data.status === "success" && Array.isArray(data.students)) {
-                            studentSelect.innerHTML = '<option value="">Selecione um aluno</option>';
-                            data.students.forEach(student => {
-                                const option = document.createElement('option');
-                                option.value = student;
-                                option.textContent = student;
-                                studentSelect.appendChild(option);
-                            });
-                            studentSelect.disabled = false;
-                            
-                            // Atualizar o card com o total de alunos na turma
-                            classStudentsCount.textContent = data.students.length;
-                            
-                            // Determinar o período da turma
-                            const periodo = selectedClass.includes("MANHÃ") ? "Manhã" : 
-                                           selectedClass.includes("TARDE") ? "Tarde" : 
-                                           selectedClass.includes("NOITE") ? "Noite" : "Desconhecido";
-                            selectedClassPeriod.textContent = periodo;
-                            
-                            classStudentsCard.style.display = 'block';
-                            console.log(`${data.students.length} alunos carregados com sucesso`);
-                        } else {
-                            console.error('Formato de dados de alunos inválido:', data);
-                            
-                            // Fallback: usar alunos de exemplo
-                            loadFallbackStudents(selectedClass);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erro ao carregar alunos:', error);
-                        showNotification('error', `Erro ao carregar alunos: ${error.message}`);
-                        
-                        // Fallback: usar alunos de exemplo
-                        loadFallbackStudents(selectedClass);
-                    });
-            });
-
-            // Função de fallback para carregar alunos de exemplo
-            function loadFallbackStudents(selectedClass) {
-                console.log('Carregando alunos de fallback para a turma:', selectedClass);
-                
-                const fallbackStudents = [
-                    "Ana Beatriz Silva", "Bruno Costa Santos", "Camila Oliveira Lima", "Daniel Pereira Souza",
-                    "Eduarda Ferreira Alves", "Felipe Rodrigues Martins", "Gabriela Santos Costa", "Henrique Lima Oliveira",
-                    "Isabela Alves Pereira", "João Pedro Silva Santos", "Larissa Costa Ferreira", "Matheus Oliveira Lima",
-                    "Natália Pereira Alves", "Pedro Henrique Santos Costa", "Rafaela Lima Oliveira", "Samuel Costa Pereira",
-                    "Thais Oliveira Santos", "Victor Hugo Lima Silva", "Yasmin Pereira Costa", "Zeca Santos Oliveira",
-                    "Amanda Silva Costa", "Carlos Eduardo Pereira", "Débora Lima Santos", "Eduardo Costa Oliveira",
-                    "Fernanda Pereira Lima", "Gustavo Santos Silva", "Helena Costa Pereira", "Igor Lima Santos",
-                    "Juliana Oliveira Costa", "Kevin Pereira Santos"
-                ];
-                
+                // Atualizar dropdown de alunos
                 studentSelect.innerHTML = '<option value="">Selecione um aluno</option>';
-                fallbackStudents.forEach(student => {
+                students.forEach(student => {
                     const option = document.createElement('option');
                     option.value = student;
                     option.textContent = student;
                     studentSelect.appendChild(option);
                 });
+                
                 studentSelect.disabled = false;
-                
-                // Atualizar o card com o total de alunos na turma
-                classStudentsCount.textContent = fallbackStudents.length;
-                
-                // Determinar o período da turma
-                const periodo = selectedClass.includes("MANHÃ") ? "Manhã" : 
-                               selectedClass.includes("TARDE") ? "Tarde" : 
-                               selectedClass.includes("NOITE") ? "Noite" : "Desconhecido";
-                selectedClassPeriod.textContent = periodo;
-                
-                classStudentsCard.style.display = 'block';
-                showNotification('success', 'Alunos de exemplo carregados');
-            }
 
-            // Quando um aluno é selecionado
-            studentSelect.addEventListener('change', function() {
-                if (this.value) {
-                    // Mostrar o card de ocorrências do aluno
-                    studentOccurrencesCard.style.display = 'block';
-                    studentOccurrencesName.textContent = this.value;
-                    studentOccurrencesCount.textContent = "Carregando...";
-                    
-                    // Buscar estatísticas do aluno
-                    getStudentStats(this.value);
-                } else {
-                    studentOccurrencesCard.style.display = 'none';
-                    // Resetar gráficos
-                    const chartCanvases = document.querySelectorAll('.donut-chart');
-                    chartCanvases.forEach(canvas => {
-                        createDonutChart(canvas, 0);
-                    });
-                }
-            });
+                // Mostrar total de alunos na turma
+                document.getElementById('classTotalCount').textContent = students.length;
+                classTotalCard.style.display = 'block';
 
-            // Função para buscar estatísticas do aluno (Firebase)
-            async function getStudentStats(studentName) {
-                try {
-                    const querySnapshot = await occurrencesCollection
-                        .where('student', '==', studentName)
-                        .get();
-                    
-                    const total = querySnapshot.size;
-                    studentOccurrencesCount.textContent = total;
-                    
-                    // Contar ocorrências por irregularidade
-                    const detailedStats = {};
-                    querySnapshot.forEach(doc => {
-                        const data = doc.data();
-                        if (data.irregularities) {
-                            const irregularities = data.irregularities.split(', ');
-                            irregularities.forEach(irr => {
-                                detailedStats[irr] = (detailedStats[irr] || 0) + 1;
-                            });
-                        }
-                    });
-                    
-                    // Atualizar gráficos com os dados detalhados
-                    updateAllCharts(detailedStats);
-                } catch (error) {
-                    console.error('Erro ao buscar estatísticas do aluno:', error);
-                    studentOccurrencesCount.textContent = "0";
-                    showNotification('error', 'Erro ao carregar estatísticas');
-                }
-            }
+                showSuccess(`${students.length} alunos carregados para a turma ${selectedClass}`);
 
-            // Função para atualizar todos os gráficos
-            function updateAllCharts(stats) {
-                const chartCanvases = document.querySelectorAll('.donut-chart');
-                chartCanvases.forEach(canvas => {
-                    const irregularity = canvas.getAttribute('data-irregularity');
-                    const count = stats[irregularity] || 0;
-                    createDonutChart(canvas, count);
-                });
-            }
-
-            // Limpar formulário
-            clearBtn.addEventListener('click', function() {
-                form.reset();
-                document.getElementById('occurrenceDate').value = formattedDate;
-                professorSelect.selectedIndex = 0;
-                studentSelect.innerHTML = '<option value="">Selecione primeiro a turma</option>';
+            } catch (error) {
+                console.error('Erro ao carregar alunos:', error);
+                showError('Erro ao carregar lista de alunos');
+                studentSelect.innerHTML = '<option value="">Erro ao carregar alunos</option>';
                 studentSelect.disabled = true;
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function handleStudentChange(event) {
+            const selectedStudent = event.target.value;
+            appState.selectedStudent = selectedStudent;
+            
+            const studentOccurrencesCard = document.getElementById('studentOccurrencesCard');
+            
+            if (!selectedStudent) {
                 studentOccurrencesCard.style.display = 'none';
-                classStudentsCard.style.display = 'none';
-                classSelect.selectedIndex = 0;
-                currentEditId = null;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> CADASTRAR';
+                return;
+            }
 
-                // Resetar gráficos
-                const chartCanvases = document.querySelectorAll('.donut-chart');
-                chartCanvases.forEach(canvas => {
-                    createDonutChart(canvas, 0);
-                });
-
-                // Desmarcar todos os checkboxes
-                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                    checkbox.checked = false;
-                });
+            try {
+                showLoading(true);
                 
-                // Remover erros de validação
-                document.querySelectorAll('.input-error').forEach(el => {
-                    el.classList.remove('input-error');
-                });
+                // Carregar estatísticas do aluno
+                const stats = await loadStudentStats(selectedStudent);
+                
+                // Atualizar card de ocorrências do aluno
+                document.getElementById('studentOccurrencesName').textContent = selectedStudent;
+                document.getElementById('studentOccurrencesCount').textContent = stats.totalOccurrences || 0;
+                studentOccurrencesCard.style.display = 'block';
+
+                if (stats.totalOccurrences > 0) {
+                    showWarning(`Atenção: ${selectedStudent} já possui ${stats.totalOccurrences} ocorrência(s) registrada(s).`);
+                }
+
+            } catch (error) {
+                console.error('Erro ao carregar estatísticas do aluno:', error);
+                showError('Erro ao carregar histórico do aluno');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            if (appState.isLoading) return;
+
+            try {
+                showLoading(true);
+                
+                // Validar formulário
+                if (!validateForm()) {
+                    return;
+                }
+
+                // Coletar dados do formulário
+                const formData = collectFormData();
+                
+                // Enviar dados
+                await submitOccurrence(formData);
+                
+                showSuccess('Ocorrência registrada com sucesso!');
+                
+                // Limpar formulário
+                clearForm();
+                
+                // Recarregar estatísticas
+                await loadGeneralStats();
+                if (appState.selectedStudent) {
+                    await handleStudentChange({ target: { value: appState.selectedStudent } });
+                }
+
+            } catch (error) {
+                console.error('Erro ao registrar ocorrência:', error);
+                showError('Erro ao registrar ocorrência. Tente novamente.');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function validateForm() {
+            const requiredFields = ['date', 'professor', 'class', 'student'];
+            let isValid = true;
+
+            // Limpar erros anteriores
+            document.querySelectorAll('.input-error').forEach(el => {
+                el.classList.remove('input-error');
             });
 
-            // Função para salvar ocorrência no Firebase
-            async function saveOccurrence(occurrenceData) {
-                try {
-                    if (currentEditId) {
-                        // Atualizar ocorrência existente
-                        await occurrencesCollection.doc(currentEditId).update(occurrenceData);
-                        showNotification('success', 'Ocorrência atualizada com sucesso!');
-                    } else {
-                        // Adicionar nova ocorrência
-                        await occurrencesCollection.add(occurrenceData);
-                        showNotification('success', 'Ocorrência registrada com sucesso!');
-                    }
-                    return true;
-                } catch (error) {
-                    console.error('Erro ao salvar ocorrência:', error);
-                    showNotification('error', 'Erro ao registrar ocorrência');
-                    return false;
-                }
-            }
-
-            // Função para carregar registros na tabela (Firebase)
-            async function loadRegistrosTable() {
-                registrosTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Carregando registros...</td></tr>';
-                
-                try {
-                    const querySnapshot = await occurrencesCollection.orderBy('date', 'desc').get();
-                    
-                    if (querySnapshot.empty) {
-                        registrosTableBody.innerHTML = '<tr><td colspan="7" class="no-records">Nenhum registro encontrado</td></tr>';
-                        return;
-                    }
-                    
-                    registrosTableBody.innerHTML = '';
-                    querySnapshot.forEach(doc => {
-                        const data = doc.data();
-                        const row = document.createElement('tr');
-                        row.setAttribute('data-id', doc.id);
-                        
-                        // Formatar data
-                        const dateObj = new Date(data.date);
-                        const formattedDate = dateObj.toLocaleDateString('pt-BR');
-                        
-                        row.innerHTML = `
-                            <td>${formattedDate}</td>
-                            <td>${data.professor}</td>
-                            <td>${data.class}</td>
-                            <td>${data.student}</td>
-                            <td>${data.irregularities || '-'}</td>
-                            <td>${data.description || '-'}</td>
-                            <td class="actions-cell">
-                                <button class="btn-action btn-edit" data-id="${doc.id}">
-                                    <i class="fas fa-edit"></i> Editar
-                                </button>
-                                <button class="btn-action btn-delete" data-id="${doc.id}">
-                                    <i class="fas fa-trash"></i> Excluir
-                                </button>
-                            </td>
-                        `;
-                        
-                        registrosTableBody.appendChild(row);
-                        
-                        // Adicionar evento de duplo clique para expandir
-                        row.addEventListener('dblclick', async () => {
-                            // Se já estiver expandido, recolher
-                            if (row.nextElementSibling && row.nextElementSibling.classList.contains('history-row')) {
-                                row.nextElementSibling.remove();
-                                return;
-                            }
-                            
-                            // Buscar histórico do aluno
-                            const historyRow = document.createElement('tr');
-                            historyRow.className = 'history-row';
-                            historyRow.innerHTML = `<td colspan="7">Carregando histórico...</td>`;
-                            row.parentNode.insertBefore(historyRow, row.nextSibling);
-                            
-                            try {
-                                const historyQuery = await occurrencesCollection
-                                    .where('student', '==', data.student)
-                                    .orderBy('date', 'desc')
-                                    .get();
-                                
-                                if (historyQuery.empty) {
-                                    historyRow.innerHTML = `<td colspan="7">Nenhum histórico encontrado para ${data.student}</td>`;
-                                    return;
-                                }
-                                
-                                let historyHtml = `
-                                    <td colspan="7">
-                                        <strong>Histórico de ${data.student}:</strong>
-                                        <table class="history-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Data</th>
-                                                    <th>Professor</th>
-                                                    <th>Irregularidades</th>
-                                                    <th>Descrição</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                `;
-                                
-                                historyQuery.forEach(historyDoc => {
-                                    const historyData = historyDoc.data();
-                                    const historyDate = new Date(historyData.date).toLocaleDateString('pt-BR');
-                                    historyHtml += `
-                                        <tr>
-                                            <td>${historyDate}</td>
-                                            <td>${historyData.professor}</td>
-                                            <td>${historyData.irregularities || '-'}</td>
-                                            <td>${historyData.description || '-'}</td>
-                                        </tr>
-                                    `;
-                                });
-                                
-                                historyHtml += `
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                `;
-                                
-                                historyRow.innerHTML = historyHtml;
-                            } catch (error) {
-                                console.error('Erro ao carregar histórico:', error);
-                                historyRow.innerHTML = `<td colspan="7">Erro ao carregar histórico</td>`;
-                            }
-                        });
-                    });
-                } catch (error) {
-                    console.error('Erro ao carregar registros:', error);
-                    registrosTableBody.innerHTML = '<tr><td colspan="7" class="no-records">Erro ao carregar registros</td></tr>';
-                }
-            }
-
-            // Função para atualizar gráfico de distribuição por período
-            function updateStudentsPeriodChart(data) {
-                const ctx = document.getElementById('studentsChart').getContext('2d');
-                
-                // Destruir gráfico anterior se existir
-                if (charts.studentsChart) {
-                    charts.studentsChart.destroy();
-                }
-                
-                charts.studentsChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Manhã', 'Tarde', 'Noite'],
-                        datasets: [{
-                            label: 'Alunos por Período',
-                            data: [data.morningCount, data.afternoonCount, data.nightCount],
-                            backgroundColor: [
-                                'rgba(52, 152, 219, 0.8)',
-                                'rgba(243, 156, 18, 0.8)',
-                                'rgba(155, 89, 182, 0.8)'
-                            ],
-                            borderColor: [
-                                'rgba(52, 152, 219, 1)',
-                                'rgba(243, 156, 18, 1)',
-                                'rgba(155, 89, 182, 1)'
-                            ],
-                            borderWidth: 2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return `${context.dataset.label}: ${context.parsed.y}`;
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Quantidade de Alunos'
-                                }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Período'
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-            
-            // Carregar estatísticas de alunos por período
-            async function loadStudentPeriodStats() {
-                try {
-                    const url = `${"https://script.google.com/macros/s/AKfycbyd7_1sU7gupYuLiKK7PGfJct0gJ0jTHlIQPH7K47J9evgk-uriRndG0YjpxHz703_y/exec"}?action=getStudentPeriodStats`;
-                    const response = await fetch(url);
-                    const data = await response.json();
-                    
-                    if (data && data.status === "success") {
-                        totalStudentsEl.textContent = data.totalStudents;
-                        morningCountEl.textContent = data.morningCount;
-                        afternoonCountEl.textContent = data.afternoonCount;
-                        nightCountEl.textContent = data.nightCount;
-                        
-                        // Atualizar gráfico de distribuição por período
-                        updateStudentsPeriodChart(data);
-                    } else {
-                        throw new Error(data?.message || "Erro ao carregar estatísticas de alunos");
-                    }
-                } catch (error) {
-                    console.error('Erro ao carregar estatísticas de alunos:', error);
-                    // Usar dados simulados para demonstração
-                    const demoData = {
-                        totalStudents: 1050,
-                        morningCount: 450,
-                        afternoonCount: 380,
-                        nightCount: 220
-                    };
-                    totalStudentsEl.textContent = demoData.totalStudents;
-                    morningCountEl.textContent = demoData.morningCount;
-                    afternoonCountEl.textContent = demoData.afternoonCount;
-                    nightCountEl.textContent = demoData.nightCount;
-                    updateStudentsPeriodChart(demoData);
-                }
-            }
-            
-            // Função para exportar dados para Excel
-            exportBtn.addEventListener('click', async function() {
-                try {
-                    const querySnapshot = await occurrencesCollection.orderBy('date', 'desc').get();
-                    
-                    if (querySnapshot.empty) {
-                        showNotification('info', 'Nenhum dado para exportar');
-                        return;
-                    }
-                    
-                    // Preparar dados para exportação
-                    const exportData = [];
-                    querySnapshot.forEach(doc => {
-                        const data = doc.data();
-                        const date = new Date(data.date).toLocaleDateString('pt-BR');
-                        exportData.push({
-                            'Data': date,
-                            'Professor': data.professor,
-                            'Turma': data.class,
-                            'Aluno': data.student,
-                            'Irregularidades': data.irregularities || '',
-                            'Descrição': data.description || ''
-                        });
-                    });
-                    
-                    // Criar planilha
-                    const worksheet = XLSX.utils.json_to_sheet(exportData);
-                    const workbook = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(workbook, worksheet, "OCORRENCIASDOSPROFESSORES");
-                    
-                    // Exportar para arquivo Excel
-                    XLSX.writeFile(workbook, 'ocorrencias_escolares.xlsx');
-                } catch (error) {
-                    console.error('Erro ao exportar dados:', error);
-                    showNotification('error', 'Erro ao exportar dados');
-                }
-            });
-            
-            // Delegation para botões de editar e excluir
-            registrosTable.addEventListener('click', function(e) {
-                const target = e.target;
-                const editBtn = target.closest('.btn-edit');
-                const deleteBtn = target.closest('.btn-delete');
-                
-                if (editBtn) {
-                    const occurrenceId = editBtn.getAttribute('data-id');
-                    editOccurrence(occurrenceId);
-                }
-                
-                if (deleteBtn) {
-                    const occurrenceId = deleteBtn.getAttribute('data-id');
-                    if (confirm('Tem certeza que deseja excluir esta ocorrência?')) {
-                        deleteOccurrence(occurrenceId);
-                    }
+            // Validar campos obrigatórios
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    field.classList.add('input-error');
+                    isValid = false;
                 }
             });
 
-            // Função para editar ocorrência
-            async function editOccurrence(occurrenceId) {
-                try {
-                    const doc = await occurrencesCollection.doc(occurrenceId).get();
-                    
-                    if (!doc.exists) {
-                        showNotification('error', 'Ocorrência não encontrada');
-                        return;
-                    }
-                    
-                    const occurrence = doc.data();
-                    
-                    // Preencher formulário com os dados da ocorrência
-                    professorSelect.value = occurrence.professor;
-                    document.getElementById('occurrenceDate').value = occurrence.date;
-                    classSelect.value = occurrence.class;
-                    
-                    // Disparar evento para carregar alunos
-                    const event = new Event('change');
-                    classSelect.dispatchEvent(event);
-                    
-                    // Aguardar um pouco para o carregamento dos alunos
-                    setTimeout(() => {
-                        studentSelect.value = occurrence.student;
-                        
-                        // Disparar evento para carregar estatísticas do aluno
-                        studentSelect.dispatchEvent(new Event('change'));
-                        
-                        // Preencher irregularidades
-                        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                            if (occurrence.irregularities && occurrence.irregularities.includes(checkbox.value)) {
-                                checkbox.checked = true;
-                            } else {
-                                checkbox.checked = false;
-                            }
-                        });
-                        
-                        // Preencher descrição
-                        document.getElementById('description').value = occurrence.description || '';
-                        
-                        // Alterar botão para "Atualizar"
-                        submitBtn.innerHTML = '<i class="fas fa-sync-alt"></i> ATUALIZAR';
-                        currentEditId = occurrenceId;
-                        
-                        // Rolar para o topo do formulário
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                        
-                        showNotification('success', 'Ocorrência carregada para edição');
-                    }, 500);
-                } catch (error) {
-                    console.error('Erro ao editar ocorrência:', error);
-                    showNotification('error', 'Erro ao carregar ocorrência para edição');
-                }
+            // Validar pelo menos uma irregularidade
+            const irregularities = document.querySelectorAll('input[name="irregularities"]:checked');
+            if (irregularities.length === 0) {
+                showError('Selecione pelo menos um tipo de irregularidade.');
+                isValid = false;
             }
 
-            // Função para excluir ocorrência
-            async function deleteOccurrence(occurrenceId) {
-                try {
-                    await occurrencesCollection.doc(occurrenceId).delete();
-                    showNotification('success', 'Ocorrência excluída com sucesso!');
-                    // Recarregar tabela
-                    loadRegistrosTable();
-                } catch (error) {
-                    console.error('Erro ao excluir ocorrência:', error);
-                    showNotification('error', 'Erro ao excluir ocorrência');
-                }
+            if (!isValid) {
+                showError('Preencha todos os campos obrigatórios.');
             }
 
-            // Inicializar gráficos com valores zero
-            document.querySelectorAll('.donut-chart').forEach(canvas => {
-                createDonutChart(canvas, 0);
+            return isValid;
+        }
+
+        function collectFormData() {
+            const irregularities = Array.from(document.querySelectorAll('input[name="irregularities"]:checked'))
+                .map(cb => cb.value);
+
+            return {
+                action: 'addOccurrence',
+                date: document.getElementById('date').value,
+                professor: document.getElementById('professor').value.trim(),
+                class: document.getElementById('class').value,
+                student: document.getElementById('student').value,
+                irregularities: irregularities.join(', '),
+                description: document.getElementById('description').value.trim()
+            };
+        }
+
+        function clearForm() {
+            document.getElementById('occurrenceForm').reset();
+            document.getElementById('date').valueAsDate = new Date();
+            
+            // Resetar dropdowns
+            document.getElementById('student').innerHTML = '<option value="">Primeiro selecione uma turma</option>';
+            document.getElementById('student').disabled = true;
+            
+            // Esconder cards
+            document.getElementById('classTotalCard').style.display = 'none';
+            document.getElementById('studentOccurrencesCard').style.display = 'none';
+            
+            // Resetar estado
+            appState.selectedClass = '';
+            appState.selectedStudent = '';
+            appState.students = [];
+            
+            // Limpar erros
+            document.querySelectorAll('.input-error').forEach(el => {
+                el.classList.remove('input-error');
+            });
+        }
+
+        // Funções de API
+        async function makeApiRequest(url, options = {}) {
+            const response = await fetch(url, {
+                method: options.method || 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                },
+                body: options.body ? JSON.stringify(options.body) : undefined
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            return await response.json();
+        }
+
+        async function loadStudents(className) {
+            const url = `${API_CONFIG.SCRIPT_URL}?action=getStudents&turma=${encodeURIComponent(className)}`;
+            const response = await makeApiRequest(url);
+            
+            if (response.status !== 'success') {
+                throw new Error(response.message || 'Erro ao carregar alunos');
+            }
+            
+            return response.alunos || [];
+        }
+
+        async function loadStudentStats(studentName) {
+            const url = `${API_CONFIG.SCRIPT_URL}?action=getStudentStats&student=${encodeURIComponent(studentName)}`;
+            const response = await makeApiRequest(url);
+            
+            if (response.status !== 'success') {
+                throw new Error(response.message || 'Erro ao carregar estatísticas');
+            }
+            
+            return {
+                totalOccurrences: response.totalOccurrences || 0,
+                detailedStats: response.detailedStats || {}
+            };
+        }
+
+        async function loadGeneralStats() {
+            const url = `${API_CONFIG.SCRIPT_URL}?action=getStudentPeriodStats`;
+            const response = await makeApiRequest(url);
+            
+            if (response.status !== 'success') {
+                throw new Error(response.message || 'Erro ao carregar estatísticas gerais');
+            }
+            
+            // Atualizar elementos da interface
+            document.getElementById('totalStudents').textContent = response.totalStudents || 0;
+            document.getElementById('morningStudents').textContent = response.morningCount || 0;
+            document.getElementById('afternoonStudents').textContent = response.afternoonCount || 0;
+            document.getElementById('nightStudents').textContent = response.nightCount || 0;
+        }
+
+        async function submitOccurrence(data) {
+            const response = await makeApiRequest(API_CONFIG.SCRIPT_URL, {
+                method: 'POST',
+                body: data
             });
             
-            // Carregar estatísticas iniciais
-            loadStudentPeriodStats();
-            loadOccurrenceStats();
+            if (response.status !== 'success') {
+                throw new Error(response.message || 'Erro ao registrar ocorrência');
+            }
             
-            // Carregar tabela de registros
-            loadRegistrosTable();
+            return response;
+        }
 
-            // Tornar funções globais para acesso
-            window.showNotification = showNotification;
-            window.loadFallbackStudents = loadFallbackStudents;
-            window.loadFallbackClasses = loadFallbackClasses;
-        });
+        // Funções de UI
+        function showLoading(show) {
+            appState.isLoading = show;
+            const submitBtn = document.querySelector('button[type="submit"]');
+            
+            if (show) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<div class="loading"></div> Registrando...';
+            } else {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-save"></i> Registrar Ocorrência';
+            }
+        }
+
+        function showAlert(type, message) {
+            const alertElement = document.getElementById(type === 'success' ? 'successAlert' : 'errorAlert');
+            const messageElement = document.getElementById(type === 'success' ? 'successMessage' : 'errorMessage');
+            
+            // Esconder outros alertas
+            document.querySelectorAll('.alert').forEach(alert => {
+                alert.style.display = 'none';
+            });
+            
+            messageElement.textContent = message;
+            alertElement.style.display = 'flex';
+            
+            // Auto-esconder após 5 segundos
+            setTimeout(() => {
+                alertElement.style.display = 'none';
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            showAlert('success', message);
+        }
+
+        function showError(message) {
+            showAlert('error', message);
+        }
+
+        function showWarning(message) {
+            showError(message); // Usar o mesmo estilo de erro para warnings
+        }
+
+        function updateConnectionStatus(connected) {
+            const statusIndicator = document.getElementById('connectionStatus');
+            const statusText = document.getElementById('connectionText');
+            
+            if (connected) {
+                statusIndicator.className = 'status-indicator status-connected';
+                statusText.textContent = 'Conectado ao Google Sheets';
+            } else {
+                statusIndicator.className = 'status-indicator status-disconnected';
+                statusText.textContent = 'Desconectado do Google Sheets';
+            }
+        }
+
+        // Função para testar conexão
+        async function testConnection() {
+            try {
+                const url = `${API_CONFIG.SCRIPT_URL}?action=testConnection`;
+                const response = await makeApiRequest(url);
+                return response.status === 'success';
+            } catch (error) {
+                console.error('Erro ao testar conexão:', error);
+                return false;
+            }
+        }
+
+        // Testar conexão periodicamente
+        setInterval(async () => {
+            const connected = await testConnection();
+            updateConnectionStatus(connected);
+        }, 30000); // Testar a cada 30 segundos
     </script>
 </body>
 </html>

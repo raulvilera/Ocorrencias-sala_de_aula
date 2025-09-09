@@ -1529,7 +1529,7 @@
     
    <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwHd29hP-vlyl28C02v5tfLBReU5OVW3m0xUvYiOhz7cc5XoPLVSMNngGRb0RFrIahH/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-pacC9DwifyFlbqpUukF_BbUW-F66GTPG_tYg2PMAhd7pFzrLALxmvXDNCxILqw1n/exec";
 
     // DOM
     const classSelect = document.getElementById('studentClass');
@@ -1565,7 +1565,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function loadClasses() {
-        const url = `${'https://script.google.com/macros/s/AKfycbwHd29hP-vlyl28C02v5tfLBReU5OVW3m0xUvYiOhz7cc5XoPLVSMNngGRb0RFrIahH/exec'}?action=getClasses`;
+        const url = `${"https://script.google.com/macros/s/AKfycby-pacC9DwifyFlbqpUukF_BbUW-F66GTPG_tYg2PMAhd7pFzrLALxmvXDNCxILqw1n/exec"}?action=getClasses`;
         const data = await safeFetch(url);
         if (data.status === "success") {
             classSelect.innerHTML = '<option value="">Selecione a turma</option>';
@@ -1579,7 +1579,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function loadStudents(className) {
-        const url = `${'https://script.google.com/macros/s/AKfycbwHd29hP-vlyl28C02v5tfLBReU5OVW3m0xUvYiOhz7cc5XoPLVSMNngGRb0RFrIahH/exec'}?action=getStudents&turma=${encodeURIComponent(className)}`;
+        const url = `${"https://script.google.com/macros/s/AKfycby-pacC9DwifyFlbqpUukF_BbUW-F66GTPG_tYg2PMAhd7pFzrLALxmvXDNCxILqw1n/exec"}?action=getStudents&turma=${encodeURIComponent(className)}`;
         const data = await safeFetch(url);
         if (data.status === "success") {
             studentSelect.innerHTML = '<option value="">Selecione o aluno</option>';
@@ -1596,7 +1596,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function loadSchoolStats() {
-        const url = `${'https://script.google.com/macros/s/AKfycbwHd29hP-vlyl28C02v5tfLBReU5OVW3m0xUvYiOhz7cc5XoPLVSMNngGRb0RFrIahH/exec'}?action=getSchoolStats`;
+        const url = `${"https://script.google.com/macros/s/AKfycby-pacC9DwifyFlbqpUukF_BbUW-F66GTPG_tYg2PMAhd7pFzrLALxmvXDNCxILqw1n/exec"}?action=getSchoolStats`;
         const data = await safeFetch(url);
         if (data.status === "success") {
             totalStudentsEl.textContent = data.totalStudents;
@@ -1608,7 +1608,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function loadIrregularitiesStats() {
-        const url = `${'https://script.google.com/macros/s/AKfycbwHd29hP-vlyl28C02v5tfLBReU5OVW3m0xUvYiOhz7cc5XoPLVSMNngGRb0RFrIahH/exec'}?action=getIrregularitiesStats`;
+        const url = `${"https://script.google.com/macros/s/AKfycby-pacC9DwifyFlbqpUukF_BbUW-F66GTPG_tYg2PMAhd7pFzrLALxmvXDNCxILqw1n/exec"}?action=getIrregularitiesStats`;
         const data = await safeFetch(url);
         if (data.status === "success") {
             updateIrregularitiesChart(data.irregularities);
@@ -1617,7 +1617,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function loadOccurrences() {
         registrosTableBody.innerHTML = '<tr><td colspan="7">Carregando registros...</td></tr>';
-        const url = `${'https://script.google.com/macros/s/AKfycbwHd29hP-vlyl28C02v5tfLBReU5OVW3m0xUvYiOhz7cc5XoPLVSMNngGRb0RFrIahH/exec'}?action=getOccurrences`;
+        const url = `${"https://script.google.com/macros/s/AKfycby-pacC9DwifyFlbqpUukF_BbUW-F66GTPG_tYg2PMAhd7pFzrLALxmvXDNCxILqw1n/exec"}?action=getOccurrences`;
         const data = await safeFetch(url);
         if (data.status === "success" && Array.isArray(data.occurrences)) {
             registrosTableBody.innerHTML = "";
@@ -1642,7 +1642,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function sendOccurrence(payload) {
-        const response = await safeFetch('https://script.google.com/macros/s/AKfycbwHd29hP-vlyl28C02v5tfLBReU5OVW3m0xUvYiOhz7cc5XoPLVSMNngGRb0RFrIahH/exec', {
+        const response = await safeFetch("https://script.google.com/macros/s/AKfycby-pacC9DwifyFlbqpUukF_BbUW-F66GTPG_tYg2PMAhd7pFzrLALxmvXDNCxILqw1n/exec", {
             method: "POST",
             body: JSON.stringify(payload)
         });

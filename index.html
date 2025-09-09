@@ -282,7 +282,7 @@
     // ==========================
     // CONFIGURAÇÃO
     // ==========================
-    const SCRIPT_URL = (document.currentScript.dataset.endpoint) || "https://script.google.com/macros/s/AKfycbwHd29hP-vlyl28C02v5tfLBReU5OVW3m0xUvYiOhz7cc5XoPLVSMNngGRb0RFrIahH/exec"; // substitua pela URL do Web App
+    const SCRIPT_URL = (document.currentScript.dataset.endpoint) || "https://script.google.com/macros/s/AKfycbyLXdbAEa1KLC8Qye6IZMEXhWIkAjhrtXZ8MxGo8XBkXKONwdqDqxDCR4bswl-Vtl5z/exec"; // substitua pela URL do Web App
 
     // ALIASES (espelham o back-end):
     // case "getClasses"                -> handleGetClasses()
@@ -292,12 +292,12 @@
     // case "getIrregularitiesStats"    -> handleGetIrregularityStats()
 
     const api = {
-      getClasses: () => fetchJson(`${'https://script.google.com/macros/s/AKfycbwHd29hP-vlyl28C02v5tfLBReU5OVW3m0xUvYiOhz7cc5XoPLVSMNngGRb0RFrIahH/exec'}?action=getClasses`),
-      getStudents: (turma) => fetchJson(`${'https://script.google.com/macros/s/AKfycbwHd29hP-vlyl28C02v5tfLBReU5OVW3m0xUvYiOhz7cc5XoPLVSMNngGRb0RFrIahH/exec'}?action=getStudents&turma=${encodeURIComponent(turma)}`),
-      getOccurrences: () => fetchJson(`${'https://script.google.com/macros/s/AKfycbwHd29hP-vlyl28C02v5tfLBReU5OVW3m0xUvYiOhz7cc5XoPLVSMNngGRb0RFrIahH/exec'}?action=getOccurrences`),
-      getSchoolStats: () => fetchJson(`${'https://script.google.com/macros/s/AKfycbwHd29hP-vlyl28C02v5tfLBReU5OVW3m0xUvYiOhz7cc5XoPLVSMNngGRb0RFrIahH/exec'}?action=getSchoolStats`),
-      getIrregularitiesStats: () => fetchJson(`${'https://script.google.com/macros/s/AKfycbwHd29hP-vlyl28C02v5tfLBReU5OVW3m0xUvYiOhz7cc5XoPLVSMNngGRb0RFrIahH/exec'}?action=getIrregularitiesStats`),
-      registerOccurrence: (payload) => fetchJson('https://script.google.com/macros/s/AKfycbwHd29hP-vlyl28C02v5tfLBReU5OVW3m0xUvYiOhz7cc5XoPLVSMNngGRb0RFrIahH/exec', { method:'POST', body: JSON.stringify({ action:'registerOccurrence', ...payload }) })
+      getClasses: () => fetchJson(`${'https://script.google.com/macros/s/AKfycbyLXdbAEa1KLC8Qye6IZMEXhWIkAjhrtXZ8MxGo8XBkXKONwdqDqxDCR4bswl-Vtl5z/exec'}?action=getClasses`),
+      getStudents: (turma) => fetchJson(`${'https://script.google.com/macros/s/AKfycbyLXdbAEa1KLC8Qye6IZMEXhWIkAjhrtXZ8MxGo8XBkXKONwdqDqxDCR4bswl-Vtl5z/exec'}?action=getStudents&turma=${encodeURIComponent(turma)}`),
+      getOccurrences: () => fetchJson(`${'https://script.google.com/macros/s/AKfycbyLXdbAEa1KLC8Qye6IZMEXhWIkAjhrtXZ8MxGo8XBkXKONwdqDqxDCR4bswl-Vtl5z/exec'}?action=getOccurrences`),
+      getSchoolStats: () => fetchJson(`${'https://script.google.com/macros/s/AKfycbyLXdbAEa1KLC8Qye6IZMEXhWIkAjhrtXZ8MxGo8XBkXKONwdqDqxDCR4bswl-Vtl5z/exec'}?action=getSchoolStats`),
+      getIrregularitiesStats: () => fetchJson(`${'https://script.google.com/macros/s/AKfycbyLXdbAEa1KLC8Qye6IZMEXhWIkAjhrtXZ8MxGo8XBkXKONwdqDqxDCR4bswl-Vtl5z/exec'}?action=getIrregularitiesStats`),
+      registerOccurrence: (payload) => fetchJson('https://script.google.com/macros/s/AKfycbyLXdbAEa1KLC8Qye6IZMEXhWIkAjhrtXZ8MxGo8XBkXKONwdqDqxDCR4bswl-Vtl5z/exec', { method:'POST', body: JSON.stringify({ action:'registerOccurrence', ...payload }) })
     };
 
     async function fetchJson(url, options={}) {

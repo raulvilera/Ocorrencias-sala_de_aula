@@ -30,12 +30,20 @@
     /* Layout */
     .flex-row{display:flex;gap:15px;align-items:flex-start;flex-wrap:wrap;}
     .flex-col{display:flex;flex-direction:column;gap:12px;}
-    .form-section{margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid #f0f0f0;}
+    
+    /* Form Sections with Gray Background */
+    .form-section{
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
     
     /* Form Elements */
     label{display:block;margin-bottom:6px;font-size:13px;font-weight:600;color:#444;}
     input[type="text"],input[type="email"],input[type="password"],select,textarea,input[type="date"]{
       width:100%;padding:12px;border-radius:8px;border:1px solid #ddd;font-size:14px;color:#333;
+      background-color: #fff;
       transition:border-color 0.3s;
     }
     input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, 
@@ -97,7 +105,7 @@
     .form-group-quarter {flex: 0 0 calc(25% - 10px);}
     
     /* Student Selection */
-    .student-selector {padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9; cursor: pointer; transition: all 0.2s;}
+    .student-selector {padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #fff; cursor: pointer; transition: all 0.2s;}
     .student-selector:hover {background: #f0f0f0; border-color: #2a5298;}
     
     /* Responsive */
@@ -116,6 +124,30 @@
     .student-checkbox {display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; transition: background 0.2s;}
     .student-checkbox:hover {background: #f0f4ff;}
     .student-checkbox input[type="checkbox"] {margin-right: 12px; transform: scale(1.2);}
+    
+    /* Custom styles for the redesign */
+    .form-row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      align-items: flex-start;
+    }
+    
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    
+    .date-field {
+      cursor: pointer;
+    }
+    
+    .date-field::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 3px;
+    }
   </style>
 </head>
 <body>
@@ -146,14 +178,19 @@
         </div>
         
         <div id="loginFormGestao" class="access-area">
-          <div class="form-group">
-            <label for="emailGestao">E-mail Gestão</label>
-            <input id="emailGestao" type="email" placeholder="gestao@escola.com">
+          <div class="form-section">
+            <div class="form-row">
+              <div class="field-group">
+                <label for="emailGestao">E-mail Gestão</label>
+                <input id="emailGestao" type="email" placeholder="gestao@escola.com">
+              </div>
+              <div class="field-group">
+                <label for="passwordGestao">Senha</label>
+                <input id="passwordGestao" type="password" placeholder="senha">
+              </div>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="passwordGestao">Senha</label>
-            <input id="passwordGestao" type="password" placeholder="senha">
-          </div>
+          
           <div class="flex-row">
             <button class="btn-primary" onclick="login('gestao')">Entrar como Gestão</button>
             <button class="btn-danger" onclick="fillDemo('gestao')">Demo Gestão</button>
@@ -161,14 +198,19 @@
         </div>
         
         <div id="loginFormProfessor" class="access-area">
-          <div class="form-group">
-            <label for="emailProfessor">E-mail Professor</label>
-            <input id="emailProfessor" type="email" placeholder="professor@escola.com">
+          <div class="form-section">
+            <div class="form-row">
+              <div class="field-group">
+                <label for="emailProfessor">E-mail Professor</label>
+                <input id="emailProfessor" type="email" placeholder="professor@escola.com">
+              </div>
+              <div class="field-group">
+                <label for="passwordProfessor">Senha</label>
+                <input id="passwordProfessor" type="password" placeholder="senha">
+              </div>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="passwordProfessor">Senha</label>
-            <input id="passwordProfessor" type="password" placeholder="senha">
-          </div>
+          
           <div class="flex-row">
             <button class="btn-primary" onclick="login('professor')">Entrar como Professor</button>
           </div>
@@ -184,86 +226,90 @@
           <div class="subtitle">CADASTRO — GESTÃO</div>
           
           <div class="form-section">
-            <div class="form-group">
-              <label>Série / Turma</label>
-              <select id="serie_gestao" onchange="carregarAlunosPorTurmaGestao(this.value)">
-                <option value="">Selecione a turma</option>
-                <option value="6° ANO A MANHA">6° ANO A MANHA</option>
-                <option value="6° ANO B MANHA">6° ANO B MANHA</option>
-                <option value="6° ANO C MANHA">6° ANO C MANHA</option>
-                <option value="6° ANO D MANHA">6° ANO D MANHA</option>
-                <option value="6° ANO E TARDE">6° ANO E TARDE</option>
-                <option value="6° ANO F TARDE">6° ANO F TARDE</option>
-                <option value="7° ANO A TARDE">7° ANO A TARDE</option>
-                <option value="7° ANO B TARDE">7° ANO B TARDE</option>
-                <option value="7° ANO C TARDE">7° ANO C TARDE</option>
-                <option value="7° ANO D TARDE">7° ANO D TARDE</option>
-                <option value="7° ANO E TARDE">7° ANO E TARDE</option>
-                <option value="7° ANO F TARDE">7° ANO F TARDE</option>
-                <option value="8° ANO A TARDE">8° ANO A TARDE</option>
-                <option value="8° ANO B TARDE">8° ANO B TARDE</option>
-                <option value="8° ANO C TARDE">8° ANO C TARDE</option>
-                <option value="8° ANO D TARDE">8° ANO D TARDE</option>
-                <option value="8° ANO E TARDE">8° ANO E TARDE</option>
-                <option value="9° ANO A TARDE">9° ANO A TARDE</option>
-                <option value="9° ANO B TARDE">9° ANO B TARDE</option>
-                <option value="9° ANO C TARDE">9° ANO C TARDE</option>
-                <option value="9° ANO D TARDE">9° ANO D TARDE</option>
-                <option value="1ª SERIE A MANHA">1ª SERIE A MANHA</option>
-                <option value="1ª SERIE B MANHA">1ª SERIE B MANHA</option>
-                <option value="1ª SERIE C MANHA">1ª SERIE C MANHA</option>
-                <option value="1ª SERIE D MANHA">1ª SERIE D MANHA</option>
-                <option value="1ª SERIE E MANHA">1ª SERIE E MANHA</option>
-                <option value="1ª SERIE F MANHA">1ª SERIE F MANHA</option>
-                <option value="1ª SERIE G TARDE">1ª SERIE G TARDE</option>
-                <option value="1ª SERIE H NOITE">1ª SERIE H NOITE</option>
-                <option value="1ª SERIE I NOITE">1ª SERIE I NOITE</option>
-                <option value="2ª SERIE A MANHA">2ª SERIE A MANHA</option>
-                <option value="2ª SERIE B MANHA">2ª SERIE B MANHA</option>
-                <option value="2ª SERIE C MANHA">2ª SERIE C MANHA</option>
-                <option value="2ª SERIE D MANHA">2ª SERIE D MANHA</option>
-                <option value="2ª SERIE E MANHA">2ª SERIE E MANHA</option>
-                <option value="2ª SERIE F NOITE">2ª SERIE F NOITE</option>
-                <option value="2ª SERIE G NOITE">2ª SERIE G NOITE</option>
-                <option value="2ª SERIE H NOITE">2ª SERIE H NOITE</option>
-                <option value="3ª SERIE A MANHA">3ª SERIE A MANHA</option>
-                <option value="3ª SERIE B MANHA">3ª SERIE B MANHA</option>
-                <option value="3ª SERIE C MANHA">3ª SERIE C MANHA</option>
-                <option value="3ª SERIE D NOITE">3ª SERIE D NOITE</option>
-                <option value="3ª SERIE E NOITE">3ª SERIE E NOITE</option>
-                <option value="3ª SERIE F NOITE">3ª SERIE F NOITE</option>
-                <option value="3ª SERIE G NOITE">3ª SERIE G NOITE</option>
-              </select>
-            </div>
-            
-            <div class="form-group">
-              <label>Aluno(s)</label>
-              <div class="student-selector" onclick="openStudentsModalGestao()">
-                <span id="aluno_gestao_placeholder">Selecione a turma e depois clique para escolher os alunos</span>
+            <div class="form-row">
+              <div class="field-group">
+                <label>Série / Turma</label>
+                <select id="serie_gestao" onchange="carregarAlunosPorTurmaGestao(this.value)">
+                  <option value="">Selecione a turma</option>
+                  <option value="6° ANO A MANHA">6° ANO A MANHA</option>
+                  <option value="6° ANO B MANHA">6° ANO B MANHA</option>
+                  <option value="6° ANO C MANHA">6° ANO C MANHA</option>
+                  <option value="6° ANO D MANHA">6° ANO D MANHA</option>
+                  <option value="6° ANO E TARDE">6° ANO E TARDE</option>
+                  <option value="6° ANO F TARDE">6° ANO F TARDE</option>
+                  <option value="7° ANO A TARDE">7° ANO A TARDE</option>
+                  <option value="7° ANO B TARDE">7° ANO B TARDE</option>
+                  <option value="7° ANO C TARDE">7° ANO C TARDE</option>
+                  <option value="7° ANO D TARDE">7° ANO D TARDE</option>
+                  <option value="7° ANO E TARDE">7° ANO E TARDE</option>
+                  <option value="7° ANO F TARDE">7° ANO F TARDE</option>
+                  <option value="8° ANO A TARDE">8° ANO A TARDE</option>
+                  <option value="8° ANO B TARDE">8° ANO B TARDE</option>
+                  <option value="8° ANO C TARDE">8° ANO C TARDE</option>
+                  <option value="8° ANO D TARDE">8° ANO D TARDE</option>
+                  <option value="8° ANO E TARDE">8° ANO E TARDE</option>
+                  <option value="9° ANO A TARDE">9° ANO A TARDE</option>
+                  <option value="9° ANO B TARDE">9° ANO B TARDE</option>
+                  <option value="9° ANO C TARDE">9° ANO C TARDE</option>
+                  <option value="9° ANO D TARDE">9° ANO D TARDE</option>
+                  <option value="1ª SERIE A MANHA">1ª SERIE A MANHA</option>
+                  <option value="1ª SERIE B MANHA">1ª SERIE B MANHA</option>
+                  <option value="1ª SERIE C MANHA">1ª SERIE C MANHA</option>
+                  <option value="1ª SERIE D MANHA">1ª SERIE D MANHA</option>
+                  <option value="1ª SERIE E MANHA">1ª SERIE E MANHA</option>
+                  <option value="1ª SERIE F MANHA">1ª SERIE F MANHA</option>
+                  <option value="1ª SERIE G TARDE">1ª SERIE G TARDE</option>
+                  <option value="1ª SERIE H NOITE">1ª SERIE H NOITE</option>
+                  <option value="1ª SERIE I NOITE">1ª SERIE I NOITE</option>
+                  <option value="2ª SERIE A MANHA">2ª SERIE A MANHA</option>
+                  <option value="2ª SERIE B MANHA">2ª SERIE B MANHA</option>
+                  <option value="2ª SERIE C MANHA">2ª SERIE C MANHA</option>
+                  <option value="2ª SERIE D MANHA">2ª SERIE D MANHA</option>
+                  <option value="2ª SERIE E MANHA">2ª SERIE E MANHA</option>
+                  <option value="2ª SERIE F NOITE">2ª SERIE F NOITE</option>
+                  <option value="2ª SERIE G NOITE">2ª SERIE G NOITE</option>
+                  <option value="2ª SERIE H NOITE">2ª SERIE H NOITE</option>
+                  <option value="3ª SERIE A MANHA">3ª SERIE A MANHA</option>
+                  <option value="3ª SERIE B MANHA">3ª SERIE B MANHA</option>
+                  <option value="3ª SERIE C MANHA">3ª SERIE C MANHA</option>
+                  <option value="3ª SERIE D NOITE">3ª SERIE D NOITE</option>
+                  <option value="3ª SERIE E NOITE">3ª SERIE E NOITE</option>
+                  <option value="3ª SERIE F NOITE">3ª SERIE F NOITE</option>
+                  <option value="3ª SERIE G NOITE">3ª SERIE G NOITE</option>
+                </select>
               </div>
-              <div id="selectedPillsGestao" style="margin-top:8px"></div>
+              
+              <div class="field-group">
+                <label>Aluno(s)</label>
+                <div class="student-selector" onclick="openStudentsModalGestao()">
+                  <span id="aluno_gestao_placeholder">Selecione a turma e depois clique para escolher os alunos</span>
+                </div>
+                <div id="selectedPillsGestao" style="margin-top:8px"></div>
+              </div>
             </div>
             
-            <div class="form-group">
-              <label>RA(s)</label>
-              <input id="ra_gestao" type="text" readonly>
+            <div class="form-row">
+              <div class="field-group">
+                <label>RA(s)</label>
+                <input id="ra_gestao" type="text" readonly>
+              </div>
             </div>
           </div>
           
           <div class="form-section">
-            <div class="flex-row">
-              <div class="form-group form-group-half">
+            <div class="form-row">
+              <div class="field-group">
                 <label>Professor</label>
                 <input id="professor_gestao" type="text">
               </div>
-              <div class="form-group form-group-half">
+              <div class="field-group">
                 <label>Disciplina</label>
                 <input id="disciplina_gestao" type="text">
               </div>
             </div>
             
-            <div class="flex-row">
-              <div class="form-group form-group-half">
+            <div class="form-row">
+              <div class="field-group">
                 <label>Classificação</label>
                 <select id="classificacao_gestao" onchange="toggleSuspension('gestao')">
                   <option value="">Selecione</option>
@@ -271,17 +317,19 @@
                   <option value="SUSPENSÃO">SUSPENSÃO</option>
                 </select>
               </div>
-              <div class="form-group form-group-half" id="suspensionRow_gestao" style="display:none">
+              <div class="field-group" id="suspensionRow_gestao" style="display:none">
                 <label>Data de retorno</label>
-                <input id="dataRetorno_gestao" type="date">
+                <input id="dataRetorno_gestao" type="date" class="date-field">
               </div>
             </div>
           </div>
           
           <div class="form-section">
-            <div class="form-group">
-              <label>Descrição</label>
-              <textarea id="descricao_gestao" placeholder="Descrição detalhada"></textarea>
+            <div class="form-row">
+              <div class="field-group">
+                <label>Descrição</label>
+                <textarea id="descricao_gestao" placeholder="Descrição detalhada"></textarea>
+              </div>
             </div>
           </div>
 
@@ -316,71 +364,75 @@
           <div class="subtitle">REGISTRO — PROFESSOR</div>
           
           <div class="form-section">
-            <div class="flex-row">
-              <div class="form-group form-group-half">
+            <div class="form-row">
+              <div class="field-group">
                 <label>Professor</label>
                 <select id="professor_select"></select>
               </div>
-              <div class="form-group form-group-half">
+              <div class="field-group">
                 <label>Turma</label>
                 <select id="turma_select" onchange="onTurmaChange()"></select>
               </div>
+              <div class="field-group">
+                <label>Data</label>
+                <input id="data_prof" type="date" class="date-field">
+              </div>
             </div>
 
-            <div class="flex-row">
-              <div class="form-group" style="flex: 2;">
+            <div class="form-row">
+              <div class="field-group">
                 <label>Alunos (clique para selecionar)</label>
                 <div class="student-selector" onclick="openStudentsModal()">
                   <span id="alunos_selected_placeholder">Clique para selecionar</span>
                 </div>
                 <div id="selectedPills" style="margin-top:8px"></div>
               </div>
-              <div class="form-group" style="flex: 1;">
-                <label>Data</label>
-                <input id="data_prof" type="date">
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <div class="form-row">
+              <div class="field-group">
+                <label>Irregularidades</label>
+                <div class="checkbox-group">
+                  <label class="checkbox-item">
+                    <input type="checkbox" name="irreg" value="Agressão"> Agressão
+                  </label>
+                  <label class="checkbox-item">
+                    <input type="checkbox" name="irreg" value="Danos ao patrimônio"> Danos ao patrimônio
+                  </label>
+                  <label class="checkbox-item">
+                    <input type="checkbox" name="irreg" value="Desacato"> Desacato
+                  </label>
+                  <label class="checkbox-item">
+                    <input type="checkbox" name="irreg" value="Estava fora da sala"> Estava fora da sala
+                  </label>
+                  <label class="checkbox-item">
+                    <input type="checkbox" name="irreg" value="Falta de material"> Falta de material
+                  </label>
+                  <label class="checkbox-item">
+                    <input type="checkbox" name="irreg" value="Indisciplina"> Indisciplina
+                  </label>
+                  <label class="checkbox-item">
+                    <input type="checkbox" name="irreg" value="Não realiza as atividades"> Não realiza as atividades
+                  </label>
+                  <label class="checkbox-item">
+                    <input type="checkbox" name="irreg" value="Saiu da sala sem autorização"> Saiu da sala sem autorização
+                  </label>
+                  <label class="checkbox-item">
+                    <input type="checkbox" name="irreg" value="Uso de celular"> Uso de celular
+                  </label>
+                </div>
               </div>
             </div>
           </div>
           
           <div class="form-section">
-            <div class="form-group">
-              <label>Irregularidades</label>
-              <div class="checkbox-group">
-                <label class="checkbox-item">
-                  <input type="checkbox" name="irreg" value="Agressão"> Agressão
-                </label>
-                <label class="checkbox-item">
-                  <input type="checkbox" name="irreg" value="Danos ao patrimônio"> Danos ao patrimônio
-                </label>
-                <label class="checkbox-item">
-                  <input type="checkbox" name="irreg" value="Desacato"> Desacato
-                </label>
-                <label class="checkbox-item">
-                  <input type="checkbox" name="irreg" value="Estava fora da sala"> Estava fora da sala
-                </label>
-                <label class="checkbox-item">
-                  <input type="checkbox" name="irreg" value="Falta de material"> Falta de material
-                </label>
-                <label class="checkbox-item">
-                  <input type="checkbox" name="irreg" value="Indisciplina"> Indisciplina
-                </label>
-                <label class="checkbox-item">
-                  <input type="checkbox" name="irreg" value="Não realiza as atividades"> Não realiza as atividades
-                </label>
-                <label class="checkbox-item">
-                  <input type="checkbox" name="irreg" value="Saiu da sala sem autorização"> Saiu da sala sem autorização
-                </label>
-                <label class="checkbox-item">
-                  <input type="checkbox" name="irreg" value="Uso de celular"> Uso de celular
-                </label>
+            <div class="form-row">
+              <div class="field-group">
+                <label>Descrição</label>
+                <textarea id="descricao_prof" placeholder="Descreva a ocorrência..."></textarea>
               </div>
-            </div>
-          </div>
-          
-          <div class="form-section">
-            <div class="form-group">
-              <label>Descrição</label>
-              <textarea id="descricao_prof" placeholder="Descreva a ocorrência..."></textarea>
             </div>
           </div>
 
@@ -1114,7 +1166,7 @@
         "ELISABETE APARECIDA PIRES","ELZA DE FARIA PEREIRA","EMERSON GABLER DE ALMEIDA","EUZELI ARAUJO DE OLIVEIRA",
         "FABIANO AUGUSTO PIEDADE","FABIO CAMILO","FERNANDO JOSE DA SILVA FILHO","FLAVIA CRISTINA APARECIDA BICHLER",
         "FLAVIO CARDOSO FLEURY","FRANCISCA EDIVANIA DE MORAIS COSTA","GABRIELA SERIGHELLI DE MELO","GELSON DE ALMEIDA BATISTA",
-        "GENILTON DE OLIVEIRA SILVA","GIANI CRISTINA DO PRADO","INGRYD CAROLINA SUGUIMOTO VIEIRA","IVANILDES DOS SANTOS OSHIKAWA",
+        "GENILTON DE OLIVEIRA SILVA","GIANI CRISTINA DO PRADO","INGRYD CAROLINE SUGUIMOTO VIEIRA","IVANILDES DOS SANTOS OSHIKAWA",
         "JANINA DOS PASSOS BRAGA DE ALMEIDA","JOSE APARECIDO DA SILVA","JUAREZ GOMES DE MAGALHAES FILHO","JUREMA SOLEDADE FURINI SANTOS",
         "KATIUSCIA ALVES BOMFIM","LUANA CAROLINE ALVES LIMA","LUANA DE FREITAS SILVA","LUCIANA NOVAIS CORREIA SANTOS",
         "LUCIANO MOREIRA DE AZEVEDO","MARCIEL DA SILVA","MARIA HELENA CUNHA MORO","MARIA QUITÉRIA FERREIRA DOS SANTOS",

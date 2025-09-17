@@ -59,6 +59,23 @@
       border-radius: 6px;
       text-align: center;
     }
+    .aluno-checkbox {
+      display: flex;
+      align-items: center;
+      margin: 5px 0;
+    }
+    .aluno-checkbox input[type="checkbox"] {
+      width: auto;
+      margin-right: 10px;
+    }
+    .aluno-list {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #555;
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 6px;
+    }
   </style>
 </head>
 <body>
@@ -78,20 +95,71 @@
   <div class="container hidden" id="gestao">
     <h2>Registro - Gestão</h2>
     <form id="formGestao">
-      <label>Nome do Aluno</label>
-      <input type="text" name="nome" required>
+      <!-- Campos invertidos conforme solicitado -->
+      <label>Série/Turma</label>
+      <select name="turma" id="turmaGestao" onchange="carregarAlunosGestao()" required>
+        <option value="">Selecione uma turma</option>
+        <option value="6° ANO A MANHA">6° ANO A MANHA</option>
+        <option value="6° ANO B MANHA">6° ANO B MANHA</option>
+        <option value="6° ANO C MANHA">6° ANO C MANHA</option>
+        <option value="6° ANO D MANHA">6° ANO D MANHA</option>
+        <option value="6° ANO E TARDE">6° ANO E TARDE</option>
+        <option value="6° ANO F TARDE">6° ANO F TARDE</option>
+        <option value="7° ANO A TARDE">7° ANO A TARDE</option>
+        <option value="7° ANO B TARDE">7° ANO B TARDE</option>
+        <option value="7° ANO C TARDE">7° ANO C TARDE</option>
+        <option value="7° ANO D TARDE">7° ANO D TARDE</option>
+        <option value="7° ANO E TARDE">7° ANO E TARDE</option>
+        <option value="7° ANO F TARDE">7° ANO F TARDE</option>
+        <option value="8° ANO A TARDE">8° ANO A TARDE</option>
+        <option value="8° ANO B TARDE">8° ANO B TARDE</option>
+        <option value="8° ANO C TARDE">8° ANO C TARDE</option>
+        <option value="8° ANO D TARDE">8° ANO D TARDE</option>
+        <option value="8° ANO E TARDE">8° ANO E TARDE</option>
+        <option value="9° ANO A TARDE">9° ANO A TARDE</option>
+        <option value="9° ANO B TARDE">9° ANO B TARDE</option>
+        <option value="9° ANO C TARDE">9° ANO C TARDE</option>
+        <option value="9° ANO D TARDE">9° ANO D TARDE</option>
+        <option value="1ª SERIE A MANHA">1ª SÉRIE A MANHA</option>
+        <option value="1ª SERIE B MANHA">1ª SÉRIE B MANHA</option>
+        <option value="1ª SERIE C MANHA">1ª SÉRIE C MANHA</option>
+        <option value="1ª SERIE D MANHA">1ª SÉRIE D MANHA</option>
+        <option value="1ª SERIE E MANHA">1ª SÉRIE E MANHA</option>
+        <option value="1ª SERIE F MANHA">1ª SÉRIE F MANHA</option>
+        <option value="1ª SERIE G TARDE">1ª SÉRIE G TARDE</option>
+        <option value="1ª SERIE H NOITE">1ª SÉRIE H NOITE</option>
+        <option value="1ª SERIE I NOITE">1ª SÉRIE I NOITE</option>
+        <option value="2ª SERIE A MANHA">2ª SÉRIE A MANHA</option>
+        <option value="2ª SERIE B MANHA">2ª SÉRIE B MANHA</option>
+        <option value="2ª SERIE C MANHA">2ª SÉRIE C MANHA</option>
+        <option value="2ª SERIE D MANHA">2ª SÉRIE D MANHA</option>
+        <option value="2ª SERIE E MANHA">2ª SÉRIE E MANHA</option>
+        <option value="2ª SERIE F NOITE">2ª SÉRIE F NOITE</option>
+        <option value="2ª SERIE G NOITE">2ª SÉRIE G NOITE</option>
+        <option value="2ª SERIE H NOITE">2ª SÉRIE H NOITE</option>
+        <option value="3ª SERIE A MANHA">3ª SÉRIE A MANHA</option>
+        <option value="3ª SERIE B MANHA">3ª SÉRIE B MANHA</option>
+        <option value="3ª SERIE C MANHA">3ª SÉRIE C MANHA</option>
+        <option value="3ª SERIE D NOITE">3ª SÉRIE D NOITE</option>
+        <option value="3ª SERIE E NOITE">3ª SÉRIE E NOITE</option>
+        <option value="3ª SERIE F NOITE">3ª SÉRIE F NOITE</option>
+        <option value="3ª SERIE G NOITE">3ª SÉRIE G NOITE</option>
+      </select>
 
-      <label>Ano/Série</label>
-      <input type="text" name="serie">
+      <label>Aluno(s)</label>
+      <div id="alunosContainer" class="aluno-list">
+        <!-- Lista de alunos será carregada dinamicamente -->
+        <p>Selecione uma turma primeiro</p>
+      </div>
+
+      <label>RA(s)</label>
+      <input type="text" name="ra" id="raInput" readonly>
 
       <label>Professor</label>
       <input type="text" name="professor">
 
       <label>Telefone</label>
       <input type="text" name="telefone">
-
-      <label>RA</label>
-      <input type="text" name="ra">
 
       <label>Disciplina</label>
       <input type="text" name="disciplina">
@@ -155,16 +223,31 @@
   <script>
     const SCRIPT_URL = "COLE_AQUI_URL_DO_SEU_WEBAPP"; // substitua pela URL do Apps Script publicado
 
+    // Dados simulados de alunos por turma (em um cenário real, isso viria do backend)
+    const alunosPorTurma = {
+      "6° ANO A MANHA": [
+        { nome: "Ana Silva", ra: "12345" },
+        { nome: "Bruno Santos", ra: "12346" },
+        { nome: "Carla Oliveira", ra: "12347" }
+      ],
+      "6° ANO B MANHA": [
+        { nome: "Daniel Costa", ra: "22345" },
+        { nome: "Eliana Pereira", ra: "22346" },
+        { nome: "Fabio Lima", ra: "22347" }
+      ],
+      // Adicione os dados para as demais turmas...
+    };
+
     // Login básico
     function login() {
       const user = document.getElementById("username").value.trim();
       const pass = document.getElementById("password").value.trim();
       const msg = document.getElementById("loginMsg");
 
-      if (user === "gestao" && pass === "123") {
+      if (user === "gestao@escola.com" && pass === "gestao123") {
         document.getElementById("login").classList.add("hidden");
         document.getElementById("gestao").classList.remove("hidden");
-      } else if (user === "professor" && pass === "123") {
+      } else if (user === "professor@escola.com" && pass === "prof123") {
         document.getElementById("login").classList.add("hidden");
         document.getElementById("professor").classList.remove("hidden");
         carregarProfessores();
@@ -172,6 +255,46 @@
       } else {
         msg.innerText = "Usuário ou senha inválidos!";
       }
+    }
+
+    // Carregar alunos na área de gestão
+    function carregarAlunosGestao() {
+      const turmaSelect = document.getElementById("turmaGestao");
+      const alunosContainer = document.getElementById("alunosContainer");
+      const turma = turmaSelect.value;
+      
+      alunosContainer.innerHTML = "";
+      
+      if (turma && alunosPorTurma[turma]) {
+        alunosPorTurma[turma].forEach(aluno => {
+          const div = document.createElement("div");
+          div.className = "aluno-checkbox";
+          
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.value = aluno.nome;
+          checkbox.dataset.ra = aluno.ra;
+          checkbox.addEventListener("change", atualizarRAs);
+          
+          const label = document.createElement("label");
+          label.textContent = aluno.nome;
+          
+          div.appendChild(checkbox);
+          div.appendChild(label);
+          alunosContainer.appendChild(div);
+        });
+      } else {
+        alunosContainer.innerHTML = "<p>Nenhum aluno encontrado para esta turma</p>";
+      }
+    }
+
+    // Atualizar RAs com base nos alunos selecionados
+    function atualizarRAs() {
+      const raInput = document.getElementById("raInput");
+      const checkboxes = document.querySelectorAll('#alunosContainer input[type="checkbox"]:checked');
+      const ras = Array.from(checkboxes).map(checkbox => checkbox.dataset.ra);
+      
+      raInput.value = ras.join(", ");
     }
 
     // Carregar professores
@@ -206,7 +329,7 @@
         });
     }
 
-    // Carregar alunos
+    // Carregar alunos (área do professor)
     function carregarAlunos() {
       const turma = document.getElementById("turmaSelect").value;
       fetch(`${SCRIPT_URL}?action=getAlunos&turma=${encodeURIComponent(turma)}`)
@@ -236,6 +359,7 @@
       }).then(() => {
         document.getElementById("msgGestao").innerText = "Registro salvo com sucesso!";
         e.target.reset();
+        document.getElementById("alunosContainer").innerHTML = "<p>Selecione uma turma primeiro</p>";
       });
     });
 

@@ -287,12 +287,12 @@
     /*******************************
      * CONFIGURAÇÕES
      *******************************/
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwF-jlZXf-PP-8AwCcGbmU57iyuO-W968ye8jSBR4PiIpQ6gTwCi52Zea2OUYOf9aTD0w/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz3hCjNWxqiH8q_KD4Vco5HWVcUtByyqIYJBuXaV25mMesf9cu91-44YMIiX1MS5jbW4g/exec';
     
     // Nomes das abas
     const SHEET_GERAL = 'BANCODEDADOSGERAL';
-    const SHEET_PROF = 'OCORRENCIADOSPROFESORES';
-    const SHEET_GESTAO = 'BANCODOSALUNOS';
+    const SHEET_PROF = 'OCORRENCIADOSPROFESSORES'; // CORREÇÃO: Nome da aba do professor
+    const SHEET_GESTAO = 'BANCODEALUNOS'; // CORREÇÃO: Nome da aba da gestão
 
     // estado
     let alunosDaTurmaAtual = [];
@@ -431,10 +431,10 @@
         
         console.log('Resposta completa do backend:', json);
 
-        // CORREÇÃO: Verificar a estrutura da resposta
+        // CORREÇÃO: Verificar a estrutura da resposta (o backend retorna studentsWithRa)
         if (json.status === 'success') {
-          if (json.studentsList && Array.isArray(json.studentsList)) {
-            alunosComRA = json.studentsList;
+          if (json.studentsWithRa && Array.isArray(json.studentsWithRa)) {
+            alunosComRA = json.studentsWithRa; // CORREÇÃO: Usar studentsWithRa
           } else {
             alunosComRA = [];
           }
@@ -768,18 +768,18 @@
       const irregs = Array.from(document.querySelectorAll('input[name="irreg"]:checked')).map(x=>x.value);
       
 // CORREÇÃO: Payload para OCORRENCIASDOSPROFESSORES (Professor) - Ajustado para colunas do professor
-	      const payload = { 
-	        endpoint: 'create-occurrence',
-	        sheet: SHEET_PROF, // OCORRENCIASDOSPROFESSORES
-	        date: dataOc, // Corresponde a DATA
-	        professor: professor, // Corresponde a PROFESSOR
-	        studentClass: turma, // Corresponde a TURMA
-	        student: alunosSelecionados.join(', '), // Corresponde a ALUNO
-	        ra: '', // RA não é enviado pelo professor, mas o backend pode precisar
-	        disciplina: '', // DISCIPLINA não é enviado pelo professor, mas o backend pode precisar
-	        irregularities: irregs.join(', '), // Corresponde a IRREGULARIDADES
-	        description: descricao 
-	      };
+		      const payload = { 
+		        endpoint: 'create-occurrence',
+		        sheet: SHEET_PROF, // OCORRENCIASDOSPROFESSORES
+		        date: dataOc, // Corresponde a DATA
+		        professor: professor, // Corresponde a PROFESSOR
+		        studentClass: turma, // Corresponde a TURMA
+		        student: alunosSelecionados.join(', '), // Corresponde a ALUNO
+		        ra: '', // RA não é enviado pelo professor
+		        disciplina: '', // Disciplina não é enviado pelo professor
+		        irregularities: irregs.join(', '), // Corresponde a IRREGULARIDADES
+		        description: descricao 
+		      };
       
       console.log('Enviando payload professor:', payload);
 

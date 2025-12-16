@@ -287,7 +287,7 @@
     /*******************************
      * CONFIGURAÇÕES
      *******************************/
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaCKVSMbmLnBZIS85ePeHHX_D7BhytsRHEPagme7fhukVRUGDESgX2Z6qWP-3EMK4UWQ/exec';
+    const SCRIPT_URL = 'COLOQUE_AQUI_A_URL_DE_IMPLANTAÇÃO_DO_SEU_APP_SCRIPT'; // <--- VOCÊ DEVE INSERIR A URL DE IMPLANTAÇÃO AQUI
     
     // Nomes das abas
     const SHEET_GERAL = 'BANCODEDADOSGERAL';
@@ -324,16 +324,43 @@
     }
 
     // Login unificado
-    function login(){
+    async function login(){
       const email = document.getElementById('emailLogin').value.trim();
       const password = document.getElementById('passwordLogin').value.trim();
       
-      if(email === 'gestao@escola.com' && password === 'gestao123'){
-        showAppAs('gestao', email);
-      } else if(email === 'professor@escola.com' && password === 'prof123'){
-        showAppAs('professor', email);
-      } else {
-        alert('E-mail ou senha incorretos.');
+      if(!email || !password){
+        showNotification('error', 'Preencha e-mail e senha.');
+        return;
+      }
+
+      try {
+        const resp = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            endpoint: 'login', // CORREÇÃO: Adição do parâmetro 'endpoint'
+            email: email,
+            password: password
+          })
+        });
+
+        const j = await resp.json();
+        console.log('Resposta login:', j);
+
+        if(j && j.status === 'success'){
+          // Se o login for bem-sucedido, armazena o token e exibe a tela principal
+          localStorage.setItem('userToken', j.token);
+          localStorage.setItem('userEmail', email);
+          localStorage.setItem('userRole', j.role);
+          
+          showAppAs(j.role, email); // Usa a função showAppAs para exibir a interface
+          showNotification('success', 'Login realizado com sucesso!');
+        } else {
+          showNotification('error', j.message || 'Erro de login. Verifique suas credenciais.');
+        }
+      } catch(err){
+        console.error('Erro POST login:', err);
+        showNotification('error', 'Falha na comunicação com servidor');
       }
     }
 

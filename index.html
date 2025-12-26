@@ -7,7 +7,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
-    /* (MANTIDO O MESMO CSS ANTERIOR) */
     * { box-sizing: border-box; margin:0; padding:0; }
     html,body{height:100%}
     body{
@@ -55,6 +54,9 @@
     .modal-root{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);z-index:2000}
     .modal{width:92%;max-width:780px;background:#fff;color:#111;border-radius:12px;padding:14px;max-height:84vh;overflow:auto}
     .studentList{display:flex;flex-direction:column;gap:8px}
+    .student-row{display:flex;justify-content:space-between;align-items:center;padding:10px;border:1px solid #ddd;border-radius:8px;cursor:pointer}
+    .student-row.selected{background:#e9f3ff}
+    .student-name{font-weight:800}
     .pill{background:linear-gradient(90deg,#2a5298,#3a6bd1);color:#fff;padding:6px 10px;border-radius:999px;font-weight:800;display:inline-block}
     .muted{opacity:.9;font-weight:700;color:#e7f7ff}
     .notification {
@@ -63,6 +65,7 @@
     }
     .notification.success { background: linear-gradient(90deg, #4CAF50, #2E7D32); }
     .notification.error { background: linear-gradient(90deg, #e94b4b, #c62828); }
+
     @media(max-width:980px){
       .flex{flex-direction:column}
       header{flex-direction:column;gap:8px;align-items:flex-start} 
@@ -79,12 +82,12 @@
     <header>
       <h1>2025 — Cadastro de Ocorrências</h1>
       <div class="header-controls">
-        <div id="userDisplay" class="muted"></div>
+        <div id="userDisplay" class="muted">Não autenticado</div>
         <button id="btnLogout" class="btn-danger" style="display:none" onclick="logout()">Sair</button>
       </div>
     </header>
 
-    <!-- LOGIN UNIFICADO -->
+    <!-- LOGIN -->
     <div id="loginScreen" class="card" style="display:block">
       <div style="max-width: 480px; margin: 0 auto;">
         <div class="subtitle">Acesso ao Sistema</div>
@@ -113,6 +116,7 @@
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
             <div style="font-size:18px;font-weight:800">CADASTRO — GESTÃO</div>
           </div>
+
           <div class="col gestao-form">
             <div class="form-row double">
               <div class="form-group">
@@ -128,7 +132,7 @@
                 </select>
               </div>
             </div>
-            
+
             <div class="form-row triple">
               <div class="form-group">
                 <label>RA</label>
@@ -143,7 +147,7 @@
                 <input id="disciplina_gestao" type="text">
               </div>
             </div>
-            
+
             <div class="form-row double">
               <div class="form-group">
                 <label>Classificação</label>
@@ -160,7 +164,7 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="form-row full">
               <div class="form-group">
                 <label>Descrição</label>
@@ -194,6 +198,7 @@
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
             <div style="font-size:18px;font-weight:800">REGISTRO — PROFESSOR</div>
           </div>
+
           <div class="col">
             <div class="form-row double">
               <div class="form-group">
@@ -287,14 +292,11 @@
     /*******************************
      * CONFIGURAÇÕES
      *******************************/
-    const SCRIPT_URL = ''https://script.google.com/macros/s/AKfycbzmmc0i28l-Oqmn9Tp2dnUqR35KpvVLRf3uezzKlCiQFQHDdm4hSz32hkYwOY8olg8n/exec'
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzmmc0i28l-Oqmn9Tp2dnUqR35KpvVLRf3uezzKlCiQFQHDdm4hSz32hkYwOY8olg8n/exec';
+    // 👆 TROQUE pela URL do seu WebApp (/exec)
 
-'; // <--- VOCÊ DEVE INSERIR A URL DE IMPLANTAÇÃO AQUI
-    
-    // Nomes das abas
-    const SHEET_GERAL = 'BANCODEDADOSGERAL';
-    const SHEET_PROF = 'OCORRENCIADOSPROFESSORES'; // CORREÇÃO: Nome da aba do professor
-    const SHEET_GESTAO = 'BANCODEALUNOS'; // CORREÇÃO: Nome da aba da gestão
+    const SHEET_PROF = 'OCORRENCIASDOSPROFESSORES';
+    const SHEET_GESTAO = 'BANCODEALUNOS';
 
     // estado
     let alunosDaTurmaAtual = [];
@@ -304,75 +306,144 @@
     let currentUserRole = null;
     let alunosComRA = [];
 
-    // inicial
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('data_prof').value = new Date().toISOString().split('T')[0];
-      carregarTurmasGestao();
-    });
-
-    // Função para exibir notificações
+    /*******************************
+     * HELPERS
+     *******************************/
     function showNotification(type, message) {
-      const existingNotifications = document.querySelectorAll('.notification');
-      existingNotifications.forEach(notification => notification.remove());
-      
+      const existing = document.querySelectorAll('.notification');
+      existing.forEach(n => n.remove());
+
       const notification = document.createElement('div');
       notification.className = `notification ${type}`;
       notification.textContent = message;
       document.body.appendChild(notification);
-      
-      setTimeout(() => {
-        notification.remove();
-      }, 5000);
+
+      setTimeout(() => notification.remove(), 5000);
     }
 
-    // Login unificado
+    function getToken(){ return localStorage.getItem('userToken') || ''; }
+
+    function buildApiUrl(endpoint, params = {}) {
+      const url = new URL(SCRIPT_URL);
+      url.searchParams.set('endpoint', endpoint);
+
+      const token = getToken();
+      if (token) url.searchParams.set('token', token);
+
+      Object.entries(params).forEach(([k,v]) => {
+        if (v !== undefined && v !== null && String(v) !== '') url.searchParams.set(k, v);
+      });
+
+      return url.toString();
+    }
+
+    async function apiGet(endpoint, params = {}) {
+      const resp = await fetch(buildApiUrl(endpoint, params), { method: 'GET' });
+      return await resp.json();
+    }
+
+    // POST como x-www-form-urlencoded para reduzir CORS/preflight
+    async function apiPost(endpoint, body = {}) {
+      const token = getToken();
+      const payload = { endpoint, ...body };
+      if (token) payload.token = token;
+
+      const form = new URLSearchParams();
+      Object.entries(payload).forEach(([k,v]) => form.append(k, v ?? ''));
+
+      const resp = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: form
+      });
+
+      return await resp.json();
+    }
+
+    function pick(obj, keys) {
+      for (const k of keys) {
+        if (obj && obj[k] !== undefined && obj[k] !== null && String(obj[k]).trim() !== '') return obj[k];
+      }
+      return '';
+    }
+
+    function formatDateBr(value, withTime = true) {
+      if (!value) return '';
+      const d = new Date(value);
+      if (isNaN(d.getTime())) return String(value);
+      const dd = String(d.getDate()).padStart(2,'0');
+      const mm = String(d.getMonth()+1).padStart(2,'0');
+      const yyyy = d.getFullYear();
+      if (!withTime) return `${dd}/${mm}/${yyyy}`;
+      const hh = String(d.getHours()).padStart(2,'0');
+      const mi = String(d.getMinutes()).padStart(2,'0');
+      const ss = String(d.getSeconds()).padStart(2,'0');
+      return `${dd}/${mm}/${yyyy} ${hh}:${mi}:${ss}`;
+    }
+
+    function extractIrregAndCleanDesc(descRaw) {
+      const s = String(descRaw || '');
+      // padrão: "[IRREG] descrição..."
+      const m = s.match(/^\s*\[([^\]]+)\]\s*(.*)$/);
+      if (m) return { irreg: m[1].trim(), desc: (m[2] || '').trim() };
+      return { irreg: '', desc: s };
+    }
+
+    /*******************************
+     * INIT
+     *******************************/
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('data_prof').value = new Date().toISOString().split('T')[0];
+
+      const token = localStorage.getItem('userToken');
+      const email = localStorage.getItem('userEmail');
+      const role  = localStorage.getItem('userRole');
+      if (token && email && role) {
+        showAppAs(role, email);
+      }
+    });
+
+    /*******************************
+     * LOGIN / LOGOUT
+     *******************************/
     async function login(){
       const email = document.getElementById('emailLogin').value.trim();
       const password = document.getElementById('passwordLogin').value.trim();
-      
+
       if(!email || !password){
         showNotification('error', 'Preencha e-mail e senha.');
         return;
       }
 
       try {
-        const resp = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            endpoint: 'login', // CORREÇÃO: Adição do parâmetro 'endpoint'
-            email: email,
-            password: password
-          })
-        });
-
-        const j = await resp.json();
-        console.log('Resposta login:', j);
+        const j = await apiPost('login', { email, password });
 
         if(j && j.status === 'success'){
-          // Se o login for bem-sucedido, armazena o token e exibe a tela principal
           localStorage.setItem('userToken', j.token);
           localStorage.setItem('userEmail', email);
           localStorage.setItem('userRole', j.role);
-          
-          showAppAs(j.role, email); // Usa a função showAppAs para exibir a interface
+
+          showAppAs(j.role, email);
           showNotification('success', 'Login realizado com sucesso!');
         } else {
-          showNotification('error', j.message || 'Erro de login. Verifique suas credenciais.');
+          showNotification('error', j.message || 'Erro de login.');
         }
       } catch(err){
-        console.error('Erro POST login:', err);
+        console.error('Erro login:', err);
         showNotification('error', 'Falha na comunicação com servidor');
       }
     }
 
     function showAppAs(role, email){
       currentUserRole = role;
+
       document.getElementById('loginScreen').style.display = 'none';
-      
+      document.getElementById('btnLogout').style.display = 'inline-block';
+      document.getElementById('userDisplay').textContent = email + (role==='gestao'?' (Gestão)':' (Professor)');
+
       if (role === 'gestao') {
         document.getElementById('mainAppGestao').style.display = 'flex';
         document.getElementById('mainAppProfessor').style.display = 'none';
+        carregarTurmasGestao();
         carregarHistoricoGestao();
       } else {
         document.getElementById('mainAppGestao').style.display = 'none';
@@ -380,42 +451,36 @@
         carregarProfessoresETurmas();
         carregarHistoricoProfessor();
       }
-      
-      document.getElementById('userDisplay').textContent = email + (role==='gestao'?' (Gestão)':' (Professor)');
-      document.getElementById('btnLogout').style.display = 'inline-block';
     }
 
     function logout(){
       currentUserRole = null;
+
+      localStorage.removeItem('userToken');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userRole');
+
       document.getElementById('loginScreen').style.display = 'block';
       document.getElementById('mainAppGestao').style.display = 'none';
       document.getElementById('mainAppProfessor').style.display = 'none';
       document.getElementById('userDisplay').textContent = 'Não autenticado';
       document.getElementById('btnLogout').style.display = 'none';
-      alunosDaTurmaAtual = []; 
-      alunosSelecionados = []; 
-      document.getElementById('selectedPills').innerHTML='';
-      
+
+      alunosDaTurmaAtual = [];
+      alunosSelecionados = [];
+      document.getElementById('selectedPills').innerHTML = '';
       document.getElementById('emailLogin').value = '';
       document.getElementById('passwordLogin').value = '';
     }
 
     /*******************************
-     * ÁREA DE GESTÃO - COMPLETA
+     * GESTÃO
      *******************************/
-    
-    // Carregar turmas para a área de gestão
     async function carregarTurmasGestao() {
       try {
-        const r = await fetch(`${SCRIPT_URL}?endpoint=classes`);
-        const j = await r.json();
-        
-        if(j && j.status === 'success' && Array.isArray(j.classes)) {
-          turmas = j.classes;
-        } else {
-          turmas = Object.keys(_getClassRanges());
-        }
-        
+        const j = await apiGet('classes');
+        turmas = (j && j.status === 'success' && Array.isArray(j.classes)) ? j.classes : Object.keys(_getClassRanges());
+
         const turmaSelect = document.getElementById('serie_gestao');
         turmaSelect.innerHTML = '<option value="">-- Selecione a turma --</option>';
         turmas.forEach(t => {
@@ -424,8 +489,6 @@
           option.textContent = t;
           turmaSelect.appendChild(option);
         });
-        
-        console.log(`Carregadas ${turmas.length} turmas`);
       } catch(err) {
         console.error('Erro ao carregar turmas (gestão):', err);
         turmas = Object.keys(_getClassRanges());
@@ -439,37 +502,24 @@
         });
       }
     }
-    
-    // CORREÇÃO: Carregar alunos por turma na área de gestão
+
     async function carregarAlunosPorTurmaGestao(turma) {
       if (!turma) {
         document.getElementById('aluno_gestao').innerHTML = '<option value="">-- Selecione o aluno --</option>';
         document.getElementById('ra_gestao').value = '';
         return;
       }
-      
-      console.log('Carregando alunos para turma:', turma);
 
       try {
-        // Mostrar loading
         const alunoSelect = document.getElementById('aluno_gestao');
         alunoSelect.innerHTML = '<option value="">Carregando alunos...</option>';
-        
-        const resp = await fetch(`${SCRIPT_URL}?endpoint=students&turma=${encodeURIComponent(turma)}`);
-        const json = await resp.json();
-        
-        console.log('Resposta completa do backend:', json);
 
-        // CORREÇÃO: Verificar a estrutura da resposta (o backend retorna studentsWithRa)
+        const json = await apiGet('students', { turma });
+
         if (json.status === 'success') {
-          if (json.studentsWithRa && Array.isArray(json.studentsWithRa)) {
-            alunosComRA = json.studentsWithRa; // CORREÇÃO: Usar studentsWithRa
-          } else {
-            alunosComRA = [];
-          }
-          
+          alunosComRA = (json.studentsWithRa || json.studentsList || []);
           alunoSelect.innerHTML = '<option value="">-- Selecione o aluno --</option>';
-          
+
           if (alunosComRA.length > 0) {
             alunosComRA.forEach(aluno => {
               const option = document.createElement('option');
@@ -478,56 +528,43 @@
               option.setAttribute('data-ra', aluno.ra || '');
               alunoSelect.appendChild(option);
             });
-            console.log(`Carregados ${alunosComRA.length} alunos`);
           } else {
             alunoSelect.innerHTML = '<option value="">Nenhum aluno encontrado</option>';
             showNotification('error', 'Nenhum aluno encontrado para esta turma');
           }
         } else {
-          // CORREÇÃO: Mostrar mensagem de erro específica
           alunoSelect.innerHTML = '<option value="">Erro ao carregar</option>';
-          const errorMsg = json.message || 'Erro desconhecido';
-          showNotification('error', `Erro: ${errorMsg}`);
-          console.error('Erro na resposta:', json);
+          showNotification('error', json.message || 'Erro ao carregar alunos');
         }
-        
       } catch(err) {
         console.error('Erro ao carregar alunos (gestão):', err);
         document.getElementById('aluno_gestao').innerHTML = '<option value="">Erro ao carregar</option>';
         showNotification('error', 'Erro de conexão ao carregar alunos');
       }
     }
-    
-    // CORREÇÃO: Preencher RA quando selecionar um aluno
+
     function preencherRAGestao() {
       const alunoSelect = document.getElementById('aluno_gestao');
       const selectedOption = alunoSelect.options[alunoSelect.selectedIndex];
-      
       if (selectedOption && selectedOption.value) {
-        // CORREÇÃO: Pegar o RA do atributo data-ra
         const ra = selectedOption.getAttribute('data-ra') || '';
         document.getElementById('ra_gestao').value = ra;
-        console.log('RA preenchido:', ra);
       } else {
         document.getElementById('ra_gestao').value = '';
       }
     }
 
-    /*******************************
-     * POST cadastrar ocorrência (gestão) - CORRIGIDO
-     *******************************/
     async function cadastrarOcorrenciaGestao(){
       const aluno = document.getElementById('aluno_gestao').value;
-      const serie = document.getElementById('serie_gestao').value;
+      const turma = document.getElementById('serie_gestao').value;
       const professor = document.getElementById('professor_gestao').value.trim();
       const disciplina = document.getElementById('disciplina_gestao').value.trim();
       const classificacao = document.getElementById('classificacao_gestao').value;
       const descricao = document.getElementById('descricao_gestao').value.trim();
       const dataRetorno = document.getElementById('dataRetorno_gestao').value || '';
-      const ra = document.getElementById('ra_gestao').value;
+      const ra = document.getElementById('ra_gestao').value || '';
 
-      // Validação
-      if(!aluno || !serie || !professor || !disciplina || !classificacao || !descricao){ 
+      if(!aluno || !turma || !professor || !disciplina || !classificacao || !descricao){ 
         showNotification('error', 'Preencha todos os campos obrigatórios.');
         return; 
       }
@@ -536,36 +573,22 @@
         return; 
       }
 
-      // CORREÇÃO: Payload simplificado e correto
-      const payload = {
-        endpoint: 'create-occurrence',
-        sheet: 'BANCODEALUNOS',
-        studentName: aluno,
-        studentClass: serie,
-        professor: professor,
-        ra: ra,
-        disciplina: disciplina,
-        date: new Date().toISOString(),
-        description: descricao,
-        irregularities: classificacao,
-        dataRetorno: dataRetorno
-      };
-
-      console.log('Enviando payload gestão:', payload);
-
       try {
-        const resp = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(payload)
+        const j = await apiPost('create-occurrence', {
+          role: 'gestao',
+          professor,
+          turma,
+          aluno,
+          ra,
+          disciplina,
+          irregularidades: classificacao,
+          descricao,
+          dataRetorno
         });
-        
-        const j = await resp.json();
-        console.log('Resposta backend gestão:', j);
-        
+
         if(j && j.status === 'success'){
           showNotification('success', 'Ocorrência registrada com sucesso!');
-          // Limpar formulário
+
           document.getElementById('serie_gestao').value = '';
           document.getElementById('aluno_gestao').innerHTML = '<option value="">-- Selecione o aluno --</option>';
           document.getElementById('ra_gestao').value = '';
@@ -575,9 +598,8 @@
           document.getElementById('descricao_gestao').value = '';
           document.getElementById('dataRetorno_gestao').value = '';
           document.getElementById('suspensionRow_gestao').style.display = 'none';
-          
-          // Recarregar histórico
-          setTimeout(() => carregarHistoricoGestao(), 1000);
+
+          setTimeout(() => carregarHistoricoGestao(), 800);
         } else {
           showNotification('error', j.message || 'Erro ao registrar ocorrência!');
         }
@@ -587,98 +609,148 @@
       }
     }
 
-    /*******************************
-     * ÁREA DO PROFESSOR - COMPLETA
-     *******************************/
+    function toggleSuspension(area){
+      if(area === 'gestao'){ 
+        const val = document.getElementById('classificacao_gestao').value; 
+        document.getElementById('suspensionRow_gestao').style.display = (val === 'SUSPENSÃO') ? 'flex' : 'none'; 
+      }
+    }
 
+    async function carregarHistoricoGestao(){
+      const container = document.getElementById('historyListGestao');
+      container.innerHTML = `<div style="display:flex;align-items:center;gap:8px">Carregando histórico...</div>`;
+
+      try {
+        const json = await apiGet('occurrences', { sheet: SHEET_GESTAO });
+        const ocorrs = json.occurrences || [];
+
+        container.innerHTML = '';
+        if(!ocorrs.length){
+          container.innerHTML = '<div class="muted">Nenhuma ocorrência encontrada.</div>';
+          return;
+        }
+
+        ocorrs.slice().reverse().forEach(r => {
+          const dateRaw = pick(r, ['DATA DO REGISTRO/HORA', 'DATA', 'Data']);
+          const prof = pick(r, ['PROFESSOR']);
+          const turma = pick(r, ['SÉRIE', 'SERIE', 'TURMA']);
+          const aluno = pick(r, ['NOME', 'ALUNO']);
+          const ra = pick(r, ['RA']);
+          const disciplina = pick(r, ['DISCIPLINA']);
+          const descRaw = pick(r, ['DESCRIÇÃO', 'DESCRICAO']);
+          const urlDoc = pick(r, ['URL DO DOCUMENTO', 'URL DO DOCUMENTO ', 'URL']);
+          const retorno = pick(r, ['DATA DE RETORNO']);
+
+          // tenta extrair irregularidade da descrição caso tenha sido prefixada
+          const { irreg, desc } = extractIrregAndCleanDesc(descRaw);
+
+          const div = document.createElement('div');
+          div.className='historyItem';
+
+          const meta = document.createElement('div');
+          meta.className='meta';
+          meta.innerHTML = `<div><strong>${formatDateBr(dateRaw,true)}</strong> — <span class="muted">${prof || '-'}</span></div>`;
+
+          const ddesc = document.createElement('div');
+          ddesc.className='desc';
+
+          let docLine = '';
+          if (urlDoc) {
+            docLine = `<br/><strong>Documento:</strong> <a href="${urlDoc}" target="_blank" style="color:#bfe7ff;text-decoration:underline">abrir</a>`;
+          }
+
+          let retornoLine = '';
+          if (retorno) {
+            retornoLine = `<br/><strong>Data de retorno:</strong> ${formatDateBr(retorno,false)}`;
+          }
+
+          ddesc.innerHTML = `
+            <strong>Aluno:</strong> ${aluno || 'N/A'}<br/>
+            <strong>Turma:</strong> ${turma || 'N/A'}<br/>
+            <strong>RA:</strong> ${ra || 'N/A'}<br/>
+            <strong>Disciplina:</strong> ${disciplina || 'N/A'}<br/>
+            <strong>Classificação/Irregularidades:</strong> ${irreg || 'N/A'}<br/>
+            <em>${desc || ''}</em>
+            ${retornoLine}
+            ${docLine}
+          `;
+
+          div.appendChild(meta);
+          div.appendChild(ddesc);
+          container.appendChild(div);
+        });
+      } catch(err){
+        console.error('Erro carregarHistoricoGestao:', err);
+        container.innerHTML = '<div class="muted">Erro ao carregar histórico</div>';
+      }
+    }
+
+    /*******************************
+     * PROFESSOR
+     *******************************/
     async function carregarProfessoresETurmas(){
       try {
-        // Carregar professores
-        const r1 = await fetch(`${SCRIPT_URL}?endpoint=teachers`);
-        const j1 = await r1.json();
-        if(j1 && j1.status === 'success' && Array.isArray(j1.teachers)) {
-          professores = j1.teachers;
-        } else {
-          professores = getFallbackProfessores();
-        }
+        const j1 = await apiGet('teachers');
+        professores = (j1 && j1.status === 'success' && Array.isArray(j1.teachers)) ? j1.teachers : getFallbackProfessores();
 
         const profSel = document.getElementById('professor_select');
         profSel.innerHTML = '<option value="">-- selecione --</option>';
-        professores.forEach(p => { 
-          const o = document.createElement('option'); 
-          o.value = p; 
-          o.textContent = p; 
-          profSel.appendChild(o); 
+        professores.forEach(p => {
+          const o = document.createElement('option');
+          o.value = p;
+          o.textContent = p;
+          profSel.appendChild(o);
         });
 
-        // Carregar turmas
-        const r2 = await fetch(`${SCRIPT_URL}?endpoint=classes`);
-        const j2 = await r2.json();
-        if(j2 && j2.status === 'success' && Array.isArray(j2.classes)) {
-          turmas = j2.classes;
-        } else {
-          turmas = Object.keys(_getClassRanges());
-        }
+        const j2 = await apiGet('classes');
+        turmas = (j2 && j2.status === 'success' && Array.isArray(j2.classes)) ? j2.classes : Object.keys(_getClassRanges());
 
         const turmaSel = document.getElementById('turma_select');
         turmaSel.innerHTML = '<option value="">-- selecione --</option>';
-        turmas.forEach(t => { 
-          const o = document.createElement('option'); 
-          o.value = t; 
-          o.textContent = t; 
-          turmaSel.appendChild(o); 
+        turmas.forEach(t => {
+          const o = document.createElement('option');
+          o.value = t;
+          o.textContent = t;
+          turmaSel.appendChild(o);
         });
-        
       } catch(err){
         console.error('Erro carregar professores/turmas:', err);
-        // fallback
         professores = getFallbackProfessores();
         turmas = Object.keys(_getClassRanges());
-        
+
         const profSel = document.getElementById('professor_select');
         profSel.innerHTML = '<option value="">-- selecione --</option>';
-        professores.forEach(p => { 
-          const o = document.createElement('option'); 
-          o.value = p; 
-          o.textContent = p; 
-          profSel.appendChild(o); 
+        professores.forEach(p => {
+          const o = document.createElement('option');
+          o.value = p;
+          o.textContent = p;
+          profSel.appendChild(o);
         });
-        
+
         const turmaSel = document.getElementById('turma_select');
         turmaSel.innerHTML = '<option value="">-- selecione --</option>';
-        turmas.forEach(t => { 
-          const o = document.createElement('option'); 
-          o.value = t; 
-          o.textContent = t; 
-          turmaSel.appendChild(o); 
+        turmas.forEach(t => {
+          const o = document.createElement('option');
+          o.value = t;
+          o.textContent = t;
+          turmaSel.appendChild(o);
         });
       }
     }
 
     async function onTurmaChange(){
       const turma = document.getElementById('turma_select').value;
-      if(!turma){ 
-        alunosDaTurmaAtual = []; 
-        return; 
-      }
+      if(!turma){ alunosDaTurmaAtual = []; return; }
       await carregarAlunosPorTurma(turma);
     }
 
-    // CORREÇÃO: Função para carregar alunos do professor
     async function carregarAlunosPorTurma(turma){
       try {
-        const resp = await fetch(`${SCRIPT_URL}?endpoint=students&turma=${encodeURIComponent(turma)}`);
-        const json = await resp.json();
-        
-        console.log('Resposta alunos professor:', json);
-        
+        const json = await apiGet('students', { turma });
         if (json.status === 'success') {
-          // Usar students para professores (apenas nomes)
           alunosDaTurmaAtual = json.students || [];
-          console.log(`Carregados ${alunosDaTurmaAtual.length} alunos para professor`);
         } else {
           alunosDaTurmaAtual = [];
-          console.error('Erro ao carregar alunos:', json.message);
           showNotification('error', `Erro ao carregar alunos: ${json.message}`);
         }
       } catch(err){
@@ -688,48 +760,43 @@
       }
     }
 
-    /*******************************
-     * Modal alunos (professor) - COMPLETO
-     *******************************/
     function openStudentsModal(){
-      if(!alunosDaTurmaAtual || alunosDaTurmaAtual.length === 0){ 
-        showNotification('error', 'Nenhum aluno encontrado para a turma selecionada.'); 
-        return; 
+      if(!alunosDaTurmaAtual || alunosDaTurmaAtual.length === 0){
+        showNotification('error', 'Nenhum aluno encontrado para a turma selecionada.');
+        return;
       }
       document.getElementById('modalRoot').style.display = 'flex';
       renderStudentList(alunosDaTurmaAtual);
       document.getElementById('studentSearch').value = '';
     }
-    
-    function closeStudentsModal(){ 
-      document.getElementById('modalRoot').style.display = 'none'; 
+
+    function closeStudentsModal(){
+      document.getElementById('modalRoot').style.display = 'none';
     }
 
     function renderStudentList(list){
-      const container = document.getElementById('studentList'); 
+      const container = document.getElementById('studentList');
       container.innerHTML = '';
-      
+
       list.forEach(nome => {
-        const row = document.createElement('div'); 
+        const row = document.createElement('div');
         row.className = 'student-row';
-        if (alunosSelecionados.includes(nome)) {
-          row.classList.add('selected');
-        }
-        
-        const lbl = document.createElement('div'); 
+        if (alunosSelecionados.includes(nome)) row.classList.add('selected');
+
+        const lbl = document.createElement('div');
         lbl.className = 'student-name';
         lbl.textContent = nome;
-        
-        const cb = document.createElement('input'); 
-        cb.type='checkbox'; 
-        cb.value = nome; 
+
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.value = nome;
         cb.checked = alunosSelecionados.includes(nome);
-        
-        cb.onchange = (e) => { 
+
+        cb.onchange = (e) => {
           toggleStudentSelection(nome, e.target.checked);
           updateStudentRowStyle(row, nome);
         };
-        
+
         row.onclick = (e) => {
           if (e.target !== cb) {
             const newState = !alunosSelecionados.includes(nome);
@@ -738,94 +805,77 @@
             updateStudentRowStyle(row, nome);
           }
         };
-        
-        row.appendChild(lbl); 
-        row.appendChild(cb); 
+
+        row.appendChild(lbl);
+        row.appendChild(cb);
         container.appendChild(row);
       });
     }
-    
+
     function toggleStudentSelection(nome, isSelected) {
-      if(isSelected){ 
-        if(!alunosSelecionados.includes(nome)) alunosSelecionados.push(nome); 
+      if(isSelected){
+        if(!alunosSelecionados.includes(nome)) alunosSelecionados.push(nome);
       } else {
-        alunosSelecionados = alunosSelecionados.filter(x => x !== nome); 
-      }
-    }
-    
-    function updateStudentRowStyle(row, nome) {
-      if (alunosSelecionados.includes(nome)) {
-        row.classList.add('selected');
-      } else {
-        row.classList.remove('selected');
+        alunosSelecionados = alunosSelecionados.filter(x => x !== nome);
       }
     }
 
-    function filterStudentList(){ 
-      const q = document.getElementById('studentSearch').value.toLowerCase(); 
-      const filtered = alunosDaTurmaAtual.filter(s => s.toLowerCase().includes(q)); 
-      renderStudentList(filtered); 
+    function updateStudentRowStyle(row, nome) {
+      if (alunosSelecionados.includes(nome)) row.classList.add('selected');
+      else row.classList.remove('selected');
+    }
+
+    function filterStudentList(){
+      const q = document.getElementById('studentSearch').value.toLowerCase();
+      const filtered = alunosDaTurmaAtual.filter(s => s.toLowerCase().includes(q));
+      renderStudentList(filtered);
     }
 
     function confirmStudents(){
       document.getElementById('alunos_selected_input').value = alunosSelecionados.join(', ');
-      const pills = document.getElementById('selectedPills'); 
+      const pills = document.getElementById('selectedPills');
       pills.innerHTML = '';
-      alunosSelecionados.forEach(a => { 
-        const el = document.createElement('div'); 
-        el.className='pill'; 
-        el.textContent = a; 
-        pills.appendChild(el); 
+      alunosSelecionados.forEach(a => {
+        const el = document.createElement('div');
+        el.className='pill';
+        el.textContent = a;
+        pills.appendChild(el);
       });
       closeStudentsModal();
     }
 
-    /*******************************
-     * POST registrar ocorrência (professor) - CORRIGIDO
-     *******************************/
     async function registrarOcorrenciaProfessor(){
       const professor = document.getElementById('professor_select').value;
       const turma = document.getElementById('turma_select').value;
       const dataOc = document.getElementById('data_prof').value;
       const descricao = document.getElementById('descricao_prof').value.trim();
-      
-      if(!professor || !turma || !dataOc || alunosSelecionados.length === 0){ 
-        showNotification('error', 'Preencha todos os campos obrigatórios e selecione ao menos um aluno.');
-        return; 
+
+      if(!professor || !turma || !dataOc || alunosSelecionados.length === 0 || !descricao){
+        showNotification('error', 'Preencha todos os campos obrigatórios, selecione aluno(s) e escreva a descrição.');
+        return;
       }
-      
+
       const irregs = Array.from(document.querySelectorAll('input[name="irreg"]:checked')).map(x=>x.value);
-      
-// CORREÇÃO: Payload para OCORRENCIASDOSPROFESSORES (Professor) - Ajustado para colunas do professor
-		      const payload = { 
-		        endpoint: 'create-occurrence',
-		        sheet: SHEET_PROF, // OCORRENCIASDOSPROFESSORES
-		        date: dataOc, // Corresponde a DATA
-		        professor: professor, // Corresponde a PROFESSOR
-		        studentClass: turma, // Corresponde a TURMA
-		        student: alunosSelecionados.join(', '), // Corresponde a ALUNO
-		        ra: '', // RA não é enviado pelo professor
-		        disciplina: '', // Disciplina não é enviado pelo professor
-		        irregularities: irregs.join(', '), // Corresponde a IRREGULARIDADES
-		        description: descricao 
-		      };
-      
-      console.log('Enviando payload professor:', payload);
+      if(irregs.length === 0){
+        showNotification('error', 'Selecione ao menos uma irregularidade.');
+        return;
+      }
 
       try {
-        const resp = await fetch(SCRIPT_URL, { 
-          method: 'POST', 
-          headers: {'Content-Type': 'application/json'}, 
-          body: JSON.stringify(payload) 
+        const j = await apiPost('create-occurrence', {
+          role: 'professor',
+          professor,
+          turma,
+          aluno: alunosSelecionados.join(', '),
+          irregularidades: irregs.join(', '),
+          descricao,
+          date: dataOc
         });
-        
-        const j = await resp.json();
-        console.log('Resposta backend professor:', j);
-        
+
         if(j && j.status === 'success'){
           showNotification('success', 'Ocorrência registrada com sucesso!');
           clearProfessorForm();
-          setTimeout(() => carregarHistoricoProfessor(), 1000);
+          setTimeout(() => carregarHistoricoProfessor(), 800);
         } else {
           showNotification('error', j.message || 'Erro ao registrar ocorrência!');
         }
@@ -836,122 +886,59 @@
     }
 
     function clearProfessorForm(){
-      document.getElementById('professor_select').value = ''; 
-      document.getElementById('turma_select').value = ''; 
-      document.getElementById('alunos_selected_input').value = ''; 
-      document.getElementById('selectedPills').innerHTML = ''; 
-      document.getElementById('descricao_prof').value = ''; 
-      alunosSelecionados = []; 
-      Array.from(document.querySelectorAll('input[name="irreg"]')).forEach(cb => cb.checked = false); 
+      document.getElementById('professor_select').value = '';
+      document.getElementById('turma_select').value = '';
+      document.getElementById('alunos_selected_input').value = '';
+      document.getElementById('selectedPills').innerHTML = '';
+      document.getElementById('descricao_prof').value = '';
+      alunosSelecionados = [];
+      Array.from(document.querySelectorAll('input[name="irreg"]')).forEach(cb => cb.checked = false);
       document.getElementById('data_prof').value = new Date().toISOString().split('T')[0];
-    }
-
-    /*******************************
-     * Toggle suspensão (gestão)
-     *******************************/
-    function toggleSuspension(area){
-      if(area === 'gestao'){ 
-        const val = document.getElementById('classificacao_gestao').value; 
-        document.getElementById('suspensionRow_gestao').style.display = (val === 'SUSPENSÃO') ? 'flex' : 'none'; 
-      }
-    }
-
-    /*******************************
-     * Históricos - COMPLETOS
-     *******************************/
-    async function carregarHistoricoGestao(){
-      const container = document.getElementById('historyListGestao');
-      container.innerHTML = `<div style="display:flex;align-items:center;gap:8px">Carregando histórico...</div>`;
-      
-      try {
-        // CORREÇÃO: Especificar a aba correta
-        const resp = await fetch(`${SCRIPT_URL}?endpoint=occurrences&sheet=${SHEET_GESTAO}`);
-        const json = await resp.json();
-        const ocorrs = json.occurrences || [];
-        
-        container.innerHTML = '';
-        if(!ocorrs || ocorrs.length === 0){ 
-          container.innerHTML = '<div class="muted">Nenhuma ocorrência encontrada.</div>'; 
-          return; 
-        }
-
-        ocorrs.slice().reverse().forEach(r => {
-          const id = r.id || '';
-          const date = r.data || r.DATA || '';
-          const prof = r.professor || r.PROFESSOR || '';
-          const turma = r.studentclass || r.TURMA || '';
-          const aluno = r.student || r.ALUNO || '';
-          const irreg = r.irregularities || r.IRREGULARIDADES || '';
-          const desc = r.description || r.DESCRICAO || '';
-
-          const div = document.createElement('div'); 
-          div.className='historyItem';
-          
-          const meta = document.createElement('div'); 
-          meta.className='meta';
-          meta.innerHTML = `<div><strong>${date}</strong> — <span class="muted">${prof}</span></div>`;
-          
-          const ddesc = document.createElement('div'); 
-          ddesc.className='desc';
-          ddesc.innerHTML = `
-            <strong>Aluno(s):</strong> ${aluno || 'N/A'}<br/>
-            <strong>Turma:</strong> ${turma || 'N/A'}<br/>
-            <strong>Irregularidades:</strong> ${irreg || 'N/A'}<br/>
-            <em>${desc || ''}</em>
-          `;
-
-          div.appendChild(meta); 
-          div.appendChild(ddesc);
-          container.appendChild(div);
-        });
-      } catch(err){
-        console.error('Erro carregarHistoricoGestao:', err);
-        container.innerHTML = '<div class="muted">Erro ao carregar histórico</div>';
-      }
     }
 
     async function carregarHistoricoProfessor(){
       const container = document.getElementById('historyListProfessor');
       container.innerHTML = `<div style="display:flex;align-items:center;gap:8px">Carregando histórico...</div>`;
-      
+
       try {
-        // CORREÇÃO: Especificar a aba correta
-        const resp = await fetch(`${SCRIPT_URL}?endpoint=occurrences&sheet=${SHEET_PROF}`);
-        const json = await resp.json();
+        const json = await apiGet('occurrences', { sheet: SHEET_PROF });
         const ocorrs = json.occurrences || [];
-        
+
         container.innerHTML = '';
-        if(!ocorrs || ocorrs.length === 0){ 
-          container.innerHTML = '<div class="muted">Nenhuma ocorrência encontrada.</div>'; 
-          return; 
+        if(!ocorrs.length){
+          container.innerHTML = '<div class="muted">Nenhuma ocorrência encontrada.</div>';
+          return;
         }
 
         ocorrs.slice().reverse().forEach(r => {
-          const id = r.id || '';
-          const date = r.data || r.DATA || '';
-          const prof = r.professor || r.PROFESSOR || '';
-          const turma = r.studentclass || r.TURMA || '';
-          const aluno = r.student || r.ALUNO || '';
-          const irreg = r.irregularities || r.IRREGULARIDADES || '';
-          const desc = r.description || r.DESCRICAO || '';
+          const dateRaw = pick(r, ['DATA', 'Data']);
+          const prof = pick(r, ['PROFESSOR']);
+          const turma = pick(r, ['TURMA']);
+          const aluno = pick(r, ['ALUNO']);
+          const irreg = pick(r, ['IRREGULARIDADES']);
+          const desc = pick(r, ['DESCRICAO', 'DESCRIÇÃO']);
+          const ra = pick(r, ['RA']);
+          const disciplina = pick(r, ['DISCIPLINA']);
 
-          const div = document.createElement('div'); 
+          const div = document.createElement('div');
           div.className='historyItem';
-          
-          const meta = document.createElement('div'); 
+
+          const meta = document.createElement('div');
           meta.className='meta';
-          meta.innerHTML = `<div><strong>${date}</strong> — <span class="muted">${prof}</span></div>`;
-          
-          const ddesc = document.createElement('div'); 
+          meta.innerHTML = `<div><strong>${formatDateBr(dateRaw,true)}</strong> — <span class="muted">${prof || '-'}</span></div>`;
+
+          const ddesc = document.createElement('div');
           ddesc.className='desc';
           ddesc.innerHTML = `
             <strong>Aluno(s):</strong> ${aluno || 'N/A'}<br/>
             <strong>Turma:</strong> ${turma || 'N/A'}<br/>
+            <strong>RA:</strong> ${ra || 'N/A'}<br/>
+            <strong>Disciplina:</strong> ${disciplina || 'N/A'}<br/>
             <strong>Irregularidades:</strong> ${irreg || 'N/A'}<br/>
             <em>${desc || ''}</em>
           `;
 
-          div.appendChild(meta); 
+          div.appendChild(meta);
           div.appendChild(ddesc);
           container.appendChild(div);
         });
@@ -962,7 +949,7 @@
     }
 
     /*******************************
-     * Geração de PDF local
+     * PDF local
      *******************************/
     function generatePDFLocal(){
       try {
@@ -970,51 +957,41 @@
         const doc = new jsPDF();
         doc.setFontSize(16);
         doc.text('Registro de Ocorrência', 14, 20);
+
         const aluno = document.getElementById('aluno_gestao').value || '';
         const turma = document.getElementById('serie_gestao').value || '';
         const prof = document.getElementById('professor_gestao').value || '';
         const desc = document.getElementById('descricao_gestao').value || '';
+
         let y = 36;
         if(aluno){ doc.text(`Aluno: ${aluno}`, 14, y); y+=8; }
         if(turma){ doc.text(`Turma: ${turma}`, 14, y); y+=8; }
         if(prof){ doc.text(`Professor: ${prof}`, 14, y); y+=8; }
+
         doc.text('Descrição:', 14, y); y+=8;
         const split = doc.splitTextToSize(desc || 'Sem descrição', 180);
         doc.text(split, 14, y);
+
         doc.save(`ocorrencia_${Date.now()}.pdf`);
-      } catch(err){ 
-        console.error('Erro gerar PDF local:', err); 
+      } catch(err){
+        console.error('Erro gerar PDF local:', err);
         showNotification('error', 'Erro ao gerar PDF local');
       }
     }
 
     /*******************************
-     * utilitários / fallbacks - COMPLETOS
+     * FALLBACKS
      *******************************/
     function _getClassRanges() {
+      // fallback de nomes (caso a API "classes" falhe)
       return {
-        "6° ANO A MANHA":"6° ANO A MANHA","6° ANO B MANHA":"6° ANO B MANHA",
-        "6° ANO C MANHA":"6° ANO C MANHA","6° ANO D MANHA":"6° ANO D MANHA",
-        "6° ANO E TARDE":"6° ANO E TARDE","6° ANO F TARDE":"6° ANO F TARDE",
-        "7° ANO A TARDE":"7° ANO A TARDE","7° ANO B TARDE":"7° ANO B TARDE",
-        "7° ANO C TARDE":"7° ANO C TARDE","7° ANO D TARDE":"7° ANO D TARDE",
-        "7° ANO E TARDE":"7° ANO E TARDE","7° ANO F TARDE":"7° ANO F TARDE",
-        "8° ANO A TARDE":"8° ANO A TARDE","8° ANO B TARDE":"8° ANO B TARDE",
-        "8° ANO C TARDE":"8° ANO C TARDE","8° ANO D TARDE":"8° ANO D TARDE",
-        "9° ANO A TARDE":"9° ANO A TARDE","9° ANO B TARDE":"9° ANO B TARDE",
-        "9° ANO C TARDE":"9° ANO C TARDE","9° ANO D TARDE":"9° ANO D TARDE",
-        "1ª SERIE A MANHA":"1ª SERIE A MANHA","1ª SERIE B MANHA":"1ª SERIE B MANHA",
-        "1ª SERIE C MANHA":"1ª SERIE C MANHA","1ª SERIE D MANHA":"1ª SERIE D MANHA",
-        "1ª SERIE E MANHA":"1ª SERIE E MANHA","1ª SERIE F MANHA":"1ª SERIE F MANHA",
-        "1ª SERIE G TARDE":"1ª SERIE G TARDE","1ª SERIE H NOITE":"1ª SERIE H NOITE",
-        "1ª SERIE I NOITE":"1ª SERIE I NOITE","2ª SERIE A MANHA":"2ª SERIE A MANHA",
-        "2ª SERIE B MANHA":"2ª SERIE B MANHA","2ª SERIE C MANHA":"2ª SERIE C MANHA",
-        "2ª SERIE D MANHA":"2ª SERIE D MANHA","2ª SERIE E MANHA":"2ª SERIE E MANHA",
-        "2ª SERIE F NOITE":"2ª SERIE F NOITE","2ª SERIE G NOITE":"2ª SERIE G NOITE",
-        "2ª SERIE H NOITE":"2ª SERIE H NOITE","3ª SERIE A MANHA":"3ª SERIE A MANHA",
-        "3ª SERIE B MANHA":"3ª SERIE B MANHA","3ª SERIE C MANHA":"3ª SERIE C MANHA",
-        "3ª SERIE D NOITE":"3ª SERIE D NOITE","3ª SERIE E NOITE":"3ª SERIE E NOITE",
-        "3ª SERIE F NOITE":"3ª SERIE F NOITE"
+        "6º ANO A":"6º ANO A","6º ANO B":"6º ANO B","6º ANO C":"6º ANO C","6º ANO D":"6º ANO D","6º ANO E":"6º ANO E","6º ANO F":"6º ANO F",
+        "7º ANO A":"7º ANO A","7º ANO B":"7º ANO B","7º ANO C":"7º ANO C","7º ANO D":"7º ANO D","7º ANO E":"7º ANO E","7º ANO F":"7º ANO F",
+        "8º ANO A":"8º ANO A","8º ANO B":"8º ANO B","8º ANO C":"8º ANO C","8º ANO D":"8º ANO D","8º ANO E":"8º ANO E",
+        "9º ANO A":"9º ANO A","9º ANO B":"9º ANO B","9º ANO C":"9º ANO C","9º ANO D":"9º ANO D",
+        "1ª SÉRIE A":"1ª SÉRIE A","1ª SÉRIE B":"1ª SÉRIE B","1ª SÉRIE C":"1ª SÉRIE C","1ª SÉRIE D":"1ª SÉRIE D","1ª SÉRIE E":"1ª SÉRIE E","1ª SÉRIE F":"1ª SÉRIE F","1ª SÉRIE G":"1ª SÉRIE G","1ª SÉRIE H":"1ª SÉRIE H","1ª SÉRIE I":"1ª SÉRIE I",
+        "2ª SÉRIE A":"2ª SÉRIE A","2ª SÉRIE B":"2ª SÉRIE B","2ª SÉRIE C":"2ª SÉRIE C","2ª SÉRIE D":"2ª SÉRIE D","2ª SÉRIE E":"2ª SÉRIE E","2ª SÉRIE F":"2ª SÉRIE F","2ª SÉRIE G":"2ª SÉRIE G","2ª SÉRIE H":"2ª SÉRIE H",
+        "3ª SÉRIE A":"3ª SÉRIE A","3ª SÉRIE B":"3ª SÉRIE B","3ª SÉRIE C":"3ª SÉRIE C","3ª SÉRIE D":"3ª SÉRIE D","3ª SÉRIE E":"3ª SÉRIE E","3ª SÉRIE F":"3ª SÉRIE F","3ª SÉRIE G":"3ª SÉRIE G"
       };
     }
 
@@ -1042,7 +1019,6 @@
         "VANESSA IVETE GOMES DOS SANTOS","VANIA PENHA DE BARROS","VIVIANE LEAL CAMERA DE MORAES","WILSON RODRIGUES MOTA"
       ];
     }
-
   </script>
 </body>
 </html>
